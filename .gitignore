@@ -8,3 +8,9 @@ build/classes/sdkServiceTesting.xml
 src/main/resources/pgServiceProduction.xml
 
 WebContent/WEB-INF/projectNing-servlet.xml
+
+src/main/resources/pnServiceProduction.xml
+
+src/test/resources/pnServiceTesting.xml
+
+src/test/resources/pnServiceTesting.xml
