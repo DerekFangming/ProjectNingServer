@@ -1,0 +1,10 @@
+
+*.class
+
+build/classes/pgServiceProduction.xml
+
+build/classes/sdkServiceTesting.xml
+
+src/main/resources/pgServiceProduction.xml
+
+WebContent/WEB-INF/projectNing-servlet.xml
