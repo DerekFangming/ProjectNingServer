@@ -2,7 +2,7 @@
  * Copyright (c) 2010, 2011 Worcester Polytechnic Institute
  * All rights reserved. 
  *******************************************************************************/
-package org.assistments.util;
+package com.projectning.util;
 
 /*
 import java.io.IOException;

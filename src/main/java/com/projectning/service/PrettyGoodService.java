@@ -1,4 +1,4 @@
-package org.assistments.service;
+package com.projectning.service;
 
 public class PrettyGoodService
 {
