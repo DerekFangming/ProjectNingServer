@@ -36,5 +36,7 @@
 	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/aspectjrt-1.8.7.jar"/>
 	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/aspectjweaver-1.8.7.jar"/>
 	<classpathentry kind="lib" path="/Users/Cyan/Tools/apache-tomcat-8.0.30/lib/servlet-api.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/javax-crypto.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/commons-codec-1.10.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>
