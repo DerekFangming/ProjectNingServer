@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:context="http://www.springframework.org/schema/context"
+    xmlns:aop="http://www.springframework.org/schema/aop"
+    xmlns:tx="http://www.springframework.org/schema/tx"
+    xsi:schemaLocation="
+        http://www.springframework.org/schema/beans 
+        http://www.springframework.org/schema/beans/spring-beans-4.2.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context-4.2.xsd
+        http://www.springframework.org/schema/aop
+        http://www.springframework.org/schema/aop/spring-aop-4.2.xsd
+        http://www.springframework.org/schema/tx
+        http://www.springframework.org/schema/tx/spring-tx-4.2.xsd">
+
+        
+    <context:component-scan base-package="com.projectning.service"/>
+    <aop:aspectj-autoproxy/>
+
+    <tx:annotation-driven transaction-manager="txManagerCore"/>
+  
+    <bean id="txManagerCore" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+      <property name="dataSource" ref="dataSourceCore"/>
+    </bean>
+
+    <tx:annotation-driven transaction-manager="txManagerLegacy"/>
+    
+    <bean id="txManagerLegacy" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+      <property name="dataSource" ref="dataSourceLegacy"/>
+    </bean>
+  
+  <bean id="dataSourceCore" class="com.projectning.service.dao.impl.SdkDataSourceImpl">
+      <property name="driverClassName" value="org.postgresql.Driver"/>
+      <property name="url" value="jdbc:postgresql://localhost:5432/projectNing"/>
+      <property name="username" value="postgres"/>
+      <property name="password" value="flashvb6"/>
+      <property name="dbNickname" value="CORE"/>
+  </bean>
+ 
+  <bean id="dataSourceLegacy" class="com.projectning.service.dao.impl.SdkDataSourceImpl">
+      <property name="driverClassName" value="org.postgresql.Driver"/>
+      <property name="url" value="jdbc:postgresql://localhost:5432/projectNing"/>
+      <property name="username" value="postgres"/>
+      <property name="password" value="flashvb6"/>
+      <property name="dbNickname" value="LEGACY"/>
+  </bean>
+
+  <bean id="dataSourceRegistry" class="com.projectning.service.dao.impl.DataSourceRegistryImpl" />
+
+</beans>
+ 
