@@ -2,6 +2,10 @@ package com.projectning.manager;
 
 import static org.junit.Assert.*;
 
+import java.security.SecureRandom;
+import java.util.Random;
+
+import org.apache.commons.codec.binary.Base64;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +16,7 @@ import com.projectning.service.exceptions.NotFoundException;
 import com.projectning.service.manager.UserManager;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations="/sdkServiceTesting.xml")
+@ContextConfiguration(locations="/pnServiceTesting.xml")
 public class UserManagerTests {
 	@Autowired private UserManager userManager;
 	
@@ -29,8 +33,11 @@ public class UserManagerTests {
 	@Test
 	public void createUser()
 	  {
-		 userManager.adduser();
-		 assertEquals(1, 1);
+		final Random r = new SecureRandom();
+		byte[] salt = new byte[32];
+		r.nextBytes(salt);
+		String encodedSalt = Base64.encodeBase64String(salt);
+		assertEquals("", encodedSalt.substring(0, 32));
 	  }
 
 }

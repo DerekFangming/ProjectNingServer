@@ -30,7 +30,7 @@ public class AuthController {
 		
         System.out.println(request.getRequestURI());
         
-        Map authToken = new HashMap<String, String>();
+        Map<String, Object> authToken = new HashMap<String, Object>();
         authToken.put("username", "admin");
         authToken.put("expire", 20101010);
         authToken.put("username2", "admin");
@@ -52,7 +52,7 @@ public class AuthController {
         
         try {
 			decode = verifier.verify(b);
-			Iterator it = decode.entrySet().iterator();
+			Iterator<?> it = decode.entrySet().iterator();
 			while (it.hasNext()) {
 		        Map.Entry pair = (Map.Entry)it.next();
 		        System.out.println(pair.getKey() + " = " + pair.getValue());
