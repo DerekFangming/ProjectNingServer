@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import com.projectning.auth.JWTSigner;
 import com.projectning.auth.JWTVerifier;
 import com.projectning.auth.JWTVerifyException;
+import com.projectning.service.exceptions.NotFoundException;
 import com.projectning.service.manager.HelperManager;
 import com.projectning.service.manager.UserManager;
 
@@ -54,19 +55,25 @@ public class AuthController {
 	
 	@RequestMapping("/register")
     public ResponseEntity<String> register(@RequestBody String request) {
-		
+		JsonObjectBuilder respond = Json.createObjectBuilder();
 		try{
 			JsonObject jsonObj = helperManager.stringToJsonHelper(request);
 			String username = jsonObj.getString("username");
 			String password = jsonObj.getString("password");
-			System.out.println(username + " " + password);
+			userManager.register(username, password);
+			respond.add("status", "ok");
+			respond.add("error", "");
 		}catch(JsonParsingException e){
-			
+			respond.add("error", "Request format incorrest");
 		}catch(NullPointerException e){
-			
+			respond.add("error", "Request parameters incorrest");
+		}catch(IllegalStateException e){
+			respond.add("error", e.getMessage());
+		}catch(NotFoundException e){
+			respond.add("error", "Request format incorrest");
 		}
 	
-		return new ResponseEntity<String>("", HttpStatus.OK);
+		return new ResponseEntity<String>(respond.build().toString(), HttpStatus.OK);
 		
 	}
 	
