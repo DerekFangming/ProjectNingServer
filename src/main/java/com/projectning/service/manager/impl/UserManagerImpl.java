@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.projectning.service.dao.UserDao;
+import com.projectning.service.dao.impl.NVPair;
 import com.projectning.service.dao.impl.QueryTerm;
 import com.projectning.service.domain.User;
 import com.projectning.service.exceptions.NotFoundException;
@@ -61,7 +62,12 @@ public class UserManagerImpl implements UserManager{
 		
 		List<QueryTerm> values = new ArrayList<QueryTerm>();
 		values.add(UserDao.Field.USERNAME.getQueryTerm(username));
+		values.add(UserDao.Field.PASSWORD.getQueryTerm("password"));
 		User user = userDao.findObject(values);
+		
+		NVPair pair = new NVPair("password", password);
+		
+		userDao.update(user.getId(), pair);
 	}
 
 	@Override

@@ -8,24 +8,64 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
+import javax.json.Json;
+import javax.json.JsonObject;
+import javax.json.JsonObjectBuilder;
+import javax.json.stream.JsonParsingException;
 import javax.servlet.http.HttpServletRequest;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.projectning.auth.JWTSigner;
 import com.projectning.auth.JWTVerifier;
 import com.projectning.auth.JWTVerifyException;
+import com.projectning.service.manager.HelperManager;
+import com.projectning.service.manager.UserManager;
 
 @Controller
-@RequestMapping("/auth/*")
 public class AuthController {
 	
+	@Autowired private HelperManager helperManager;
+	@Autowired private UserManager userManager;
 	
-	@RequestMapping(method = RequestMethod.GET)
+	@RequestMapping("/register_for_salt")
+    public ResponseEntity<String> registerForSalt(@RequestBody String request) {
+		String salt = "";
+		JsonObjectBuilder respond = Json.createObjectBuilder();
+		try{
+			JsonObject jsonObj = helperManager.stringToJsonHelper(request);
+			salt = userManager.registerForSalt(jsonObj.getString("username"));
+			respond.add("salt", salt);
+		}catch(JsonParsingException e){
+			return new ResponseEntity<String>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+		}catch(IllegalStateException e){
+			return new ResponseEntity<String>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	
+		return new ResponseEntity<String>(salt, HttpStatus.OK);
+		
+	}
+	
+	@RequestMapping("/register")
+    public ResponseEntity<String> register(@RequestBody String request) {
+		String username = "";
+		try{
+			JsonObject jsonObj = helperManager.stringToJsonHelper(request);
+			username = userManager.registerForSalt(jsonObj.getString("username"));
+		}catch(JsonParsingException e){
+			
+		}
+	
+		return new ResponseEntity<String>(username, HttpStatus.OK);
+		
+	}
+	
+	@RequestMapping("/auth/*")
     public ResponseEntity<String> home(HttpServletRequest request) {
 		
         System.out.println(request.getRequestURI());
