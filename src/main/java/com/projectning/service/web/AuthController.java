@@ -41,27 +41,32 @@ public class AuthController {
 			JsonObject jsonObj = helperManager.stringToJsonHelper(request);
 			salt = userManager.registerForSalt(jsonObj.getString("username"));
 			respond.add("salt", salt);
+			respond.add("error", "");
 		}catch(JsonParsingException e){
-			return new ResponseEntity<String>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+			respond.add("error", "Request format incorrest");
 		}catch(IllegalStateException e){
-			return new ResponseEntity<String>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+			respond.add("error", e.getMessage());
 		}
 	
-		return new ResponseEntity<String>(salt, HttpStatus.OK);
+		return new ResponseEntity<String>(respond.build().toString(), HttpStatus.OK);
 		
 	}
 	
 	@RequestMapping("/register")
     public ResponseEntity<String> register(@RequestBody String request) {
-		String username = "";
+		
 		try{
 			JsonObject jsonObj = helperManager.stringToJsonHelper(request);
-			username = userManager.registerForSalt(jsonObj.getString("username"));
+			String username = jsonObj.getString("username");
+			String password = jsonObj.getString("password");
+			System.out.println(username + " " + password);
 		}catch(JsonParsingException e){
+			
+		}catch(NullPointerException e){
 			
 		}
 	
-		return new ResponseEntity<String>(username, HttpStatus.OK);
+		return new ResponseEntity<String>("", HttpStatus.OK);
 		
 	}
 	
