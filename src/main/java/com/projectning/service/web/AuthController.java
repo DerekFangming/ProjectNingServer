@@ -70,7 +70,7 @@ public class AuthController {
 		}catch(IllegalStateException e){
 			respond.add("error", e.getMessage());
 		}catch(NotFoundException e){
-			respond.add("error", "Request format incorrest");
+			respond.add("error", "User not found");
 		}
 	
 		return new ResponseEntity<String>(respond.build().toString(), HttpStatus.OK);
@@ -79,7 +79,7 @@ public class AuthController {
 	
 	@RequestMapping("/auth/*")
     public ResponseEntity<String> home(HttpServletRequest request) {
-		
+		helperManager.emailConfirm("synfm123@gmail.com", "test", "body");
         System.out.println(request.getRequestURI());
         
         Map<String, Object> authToken = new HashMap<String, Object>();
