@@ -1,6 +1,10 @@
 package com.projectning.service.manager.impl;
 
 import java.io.StringReader;
+import java.time.Duration;
+import java.time.Instant;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Properties;
 
 import javax.json.Json;
@@ -16,10 +20,13 @@ import javax.mail.internet.MimeMessage;
 
 import org.springframework.stereotype.Component;
 
+import com.projectning.auth.JWTSigner;
 import com.projectning.service.manager.HelperManager;
 
 @Component
 public class HelperManagerImpl implements HelperManager{
+
+	public static final String SECRET = "PJNing";
 
 	@Override
 	public JsonObject stringToJsonHelper(String jsonStr) throws JsonParsingException {
@@ -33,13 +40,13 @@ public class HelperManagerImpl implements HelperManager{
 	public void emailConfirm(String to, String code) {
 		String message = "Hi,";
 		message += "\n";
-		message += "Thank you for registration. Please click on the following link to confirm your email address.";
-		message += "<br />";
+		message += "Thank you for registration Project Ning. Please click on the following link to confirm your email address.";
+		message += "\n\n";
 		message += code;
-		message += "<br />";
+		message += "\n\n";
 		message += "Thank you.";
-		message += "<br />";
-		message += "Project Ning";
+		message += "\n";
+		message += "ProjectNing Team";
 		sendEmail("no-reply@fmning.com", to, "ProjectNing Email Confirmation", message);
 	}
 	
@@ -69,6 +76,17 @@ public class HelperManagerImpl implements HelperManager{
 	      }catch (MessagingException mex) {
 	         mex.printStackTrace();
 	      }
+	}
+
+	@Override
+	public String getEmailConfirmCode(String username) {
+		String exp = Instant.now().plus(Duration.ofDays(1)).toString();
+		Map<String, Object> authToken = new HashMap<String, Object>();
+		authToken.put("username", "username");
+		authToken.put("action", "emailVeri");
+		authToken.put("expire", exp);
+		JWTSigner signer = new JWTSigner(SECRET);
+		return signer.sign(authToken);
 	}
 
 }

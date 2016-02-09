@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.SignatureException;
+import java.time.Instant;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -79,22 +80,11 @@ public class AuthController {
 	
 	@RequestMapping("/auth/*")
     public ResponseEntity<String> home(HttpServletRequest request) {
-		helperManager.emailConfirm("synfm123@gmail.com", "www.google.com");
-        System.out.println(request.getRequestURI());
+		//helperManager.emailConfirm("synfm123@gmail.com", "www.google.com");
+        //System.out.println(request.getRequestURI());
         
-        Map<String, Object> authToken = new HashMap<String, Object>();
-        authToken.put("username", "admin");
-        authToken.put("expire", 20101010);
-        authToken.put("username2", "admin");
-        authToken.put("expire2", 20101010);
-        authToken.put("username3", "admin");
-        authToken.put("expire3", 20101010);
-        authToken.put("username4", "admin");
-        authToken.put("expire4", 20101010);
+		System.out.println(helperManager.getEmailConfirmCode("haha"));
         
-        JWTSigner signer = new JWTSigner("ProjectNing");
-        
-        String a = signer.sign(authToken);
         
         String b = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHBpcmUzIjoyMDEwMTAxMCwiZXhwaXJlNCI6MjAxMDEwMTAsImV4cGlyZTIiOjIwMTAxMDEwLCJleHBpcmUiOjIwMTAxMDEwLCJ1c2VybmFtZTQiOiJhZG1pbiIsInVzZXJuYW1lMyI6ImFkbWluIiwidXNlcm5hbWUyIjoiYWRtaW4iLCJ1c2VybmFtZSI6ImFkbWluIn0.2FYRg1Qd035JLNwAOz7MRcZ8iQEuV3ZjpWEmzByiOQ8";
 
@@ -117,7 +107,7 @@ public class AuthController {
 		}
         
         
-        return new ResponseEntity<String>(a, HttpStatus.OK);
+        return new ResponseEntity<String>("", HttpStatus.OK);
     }
 
 }
