@@ -7,5 +7,7 @@ public interface HelperManager {
 
 	public JsonObject stringToJsonHelper(String jsonStr) throws JsonParsingException;
 	
-	public void emailConfirm(String to, String subject, String content);
+	public void emailConfirm(String to, String code);
+	
+	public void sendEmail(String from, String to, String subject, String content);
 }

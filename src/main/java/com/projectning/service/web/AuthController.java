@@ -79,7 +79,7 @@ public class AuthController {
 	
 	@RequestMapping("/auth/*")
     public ResponseEntity<String> home(HttpServletRequest request) {
-		helperManager.emailConfirm("synfm123@gmail.com", "test", "body");
+		helperManager.emailConfirm("synfm123@gmail.com", "www.google.com");
         System.out.println(request.getRequestURI());
         
         Map<String, Object> authToken = new HashMap<String, Object>();

@@ -30,9 +30,21 @@ public class HelperManagerImpl implements HelperManager{
 	}
 
 	@Override
-	public void emailConfirm(String to, String subject, String content) {
-
-	      String from = "no-reply@fmning.com";
+	public void emailConfirm(String to, String code) {
+		String message = "Hi,";
+		message += "\n";
+		message += "Thank you for registration. Please click on the following link to confirm your email address.";
+		message += "<br />";
+		message += code;
+		message += "<br />";
+		message += "Thank you.";
+		message += "<br />";
+		message += "Project Ning";
+		sendEmail("no-reply@fmning.com", to, "ProjectNing Email Confirmation", message);
+	}
+	
+	@Override
+	public void sendEmail(String from, String to, String subject, String content){
 
 	      String host = "localhost";
 
@@ -54,7 +66,6 @@ public class HelperManagerImpl implements HelperManager{
 	         message.setText(content);
 
 	         Transport.send(message);
-	         System.out.println("Sent message successfully....");
 	      }catch (MessagingException mex) {
 	         mex.printStackTrace();
 	      }
