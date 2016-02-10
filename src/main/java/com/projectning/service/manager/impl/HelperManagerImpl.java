@@ -42,6 +42,7 @@ public class HelperManagerImpl implements HelperManager{
 		message += "\n";
 		message += "Thank you for registration Project Ning. Please click on the following link to confirm your email address.";
 		message += "\n\n";
+		message += "http://www.fmning.com:8080/projectNing/email/";
 		message += code;
 		message += "\n\n";
 		message += "Thank you.";
@@ -86,7 +87,7 @@ public class HelperManagerImpl implements HelperManager{
 		authToken.put("action", "emailVeri");
 		authToken.put("expire", exp);
 		JWTSigner signer = new JWTSigner(SECRET);
-		return signer.sign(authToken);
+		return signer.sign(authToken).replace(".", "=");
 	}
 
 }

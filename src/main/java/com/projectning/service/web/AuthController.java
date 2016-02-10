@@ -62,7 +62,12 @@ public class AuthController {
 			String username = jsonObj.getString("username");
 			String password = jsonObj.getString("password");
 			userManager.register(username, password);
+			String code = helperManager.getEmailConfirmCode(username);
+			helperManager.emailConfirm(username, code);
+			userManager.updateVeriCode(username, code);
 			respond.add("status", "ok");
+			respond.add("username", username);
+			respond.add("emailConfirmed","false");
 			respond.add("error", "");
 		}catch(JsonParsingException e){
 			respond.add("error", "Request format incorrest");
@@ -78,16 +83,23 @@ public class AuthController {
 		
 	}
 	
+	@RequestMapping("/email/*")
+    public ResponseEntity<String> emailVerifivation(HttpServletRequest request) {
+		System.out.println(request.getRequestURI());
+		return new ResponseEntity<String>("sucess", HttpStatus.OK);
+	}
+	
 	@RequestMapping("/auth/*")
     public ResponseEntity<String> home(HttpServletRequest request) {
 		//helperManager.emailConfirm("synfm123@gmail.com", "www.google.com");
         //System.out.println(request.getRequestURI());
         
-		System.out.println(helperManager.getEmailConfirmCode("haha"));
+		helperManager.getEmailConfirmCode("synfm123@gmail.com");
         
-        
-        String b = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHBpcmUzIjoyMDEwMTAxMCwiZXhwaXJlNCI6MjAxMDEwMTAsImV4cGlyZTIiOjIwMTAxMDEwLCJleHBpcmUiOjIwMTAxMDEwLCJ1c2VybmFtZTQiOiJhZG1pbiIsInVzZXJuYW1lMyI6ImFkbWluIiwidXNlcm5hbWUyIjoiYWRtaW4iLCJ1c2VybmFtZSI6ImFkbWluIn0.2FYRg1Qd035JLNwAOz7MRcZ8iQEuV3ZjpWEmzByiOQ8";
+        String b = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9=eyJleHBpcmUzIjoyMDEwMTAxMCwiZXhwaXJlNCI6MjAxMDEwMTAsImV4cGlyZTIiOjIwMTAxMDEwLCJleHBpcmUiOjIwMTAxMDEwLCJ1c2VybmFtZTQiOiJhZG1pbiIsInVzZXJuYW1lMyI6ImFkbWluIiwidXNlcm5hbWUyIjoiYWRtaW4iLCJ1c2VybmFtZSI6ImFkbWluIn0=2FYRg1Qd035JLNwAOz7MRcZ8iQEuV3ZjpWEmzByiOQ8";
 
+        helperManager.emailConfirm("synfm123@gmail.com", b);
+        
         JWTVerifier verifier = new JWTVerifier("ProjectNing");
         
         Map decode;
