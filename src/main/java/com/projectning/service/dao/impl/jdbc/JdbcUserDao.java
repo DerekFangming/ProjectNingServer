@@ -1,5 +1,6 @@
 package com.projectning.service.dao.impl.jdbc;
 
+import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
@@ -28,7 +29,7 @@ public class JdbcUserDao extends JdbcBaseDao<User> implements UserDao{
 	    params.addValue(UserDao.Field.PASSWORD.name, obj.getPassword());
 	    params.addValue(UserDao.Field.AUTH_TOKEN.name, obj.getAuthToken());
 	    params.addValue(UserDao.Field.VERI_TOKEN.name, obj.getVeriToken());
-	    params.addValue(UserDao.Field.CREATED_AT.name, obj.getCreatedAt());
+	    params.addValue(UserDao.Field.CREATED_AT.name, Date.from(obj.getCreatedAt()));
 	    params.addValue(UserDao.Field.EMAIL_CONFIRMED.name, obj.getEmailConfirmed());
 	    params.addValue(UserDao.Field.SALT.name, obj.getSalt());
 	        
@@ -44,7 +45,7 @@ public class JdbcUserDao extends JdbcBaseDao<User> implements UserDao{
 	      public User mapRow(ResultSet rs, int row) throws SQLException
 	      {
 	    	  User user = new User();
-	    	  user.setId(rs.getLong(UserDao.Field.ID.name));
+	    	  user.setId(rs.getInt(UserDao.Field.ID.name));
 	    	  user.setUsername(rs.getString(UserDao.Field.USERNAME.name));
 	    	  user.setPassword(rs.getString(UserDao.Field.PASSWORD.name));
 	    	  user.setAuthToken(rs.getString(UserDao.Field.AUTH_TOKEN.name));

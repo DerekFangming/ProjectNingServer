@@ -14,3 +14,7 @@ src/main/resources/pnServiceProduction.xml
 src/test/resources/pnServiceTesting.xml
 
 src/test/resources/pnServiceTesting.xml
+
+build/classes/pnServiceProduction.xml
+
+build/classes/pnServiceTesting.xml

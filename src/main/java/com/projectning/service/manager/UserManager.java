@@ -37,5 +37,13 @@ public interface UserManager {
 	 * @throws NotFoundException if the user is not found
 	 */
 	public void updateVeriCode(String username, String code) throws NotFoundException;
+	
+	/**
+	 * Check if the verification code matches what exists on the user
+	 * @param username the user to be checked
+	 * @param code the verification code
+	 * @throws NotFoundException if the user with the verification code does not exist
+	 */
+	public void checkVeriCode(String username, String code) throws NotFoundException;
 
 }

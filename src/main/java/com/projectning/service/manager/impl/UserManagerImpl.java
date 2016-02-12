@@ -89,6 +89,15 @@ public class UserManagerImpl implements UserManager{
 		userDao.update(user.getId(), pair);
 	}
 
+	@Override
+	public void checkVeriCode(String username, String code) throws NotFoundException {
+		List<QueryTerm> values = new ArrayList<QueryTerm>();
+		values.add(UserDao.Field.USERNAME.getQueryTerm(username));
+		values.add(UserDao.Field.VERI_TOKEN.getQueryTerm(code));
+		userDao.findObject(values);
+		
+	}
+
 }
 
 	

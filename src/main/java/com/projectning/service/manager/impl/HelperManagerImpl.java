@@ -93,12 +93,12 @@ public class HelperManagerImpl implements HelperManager{
 		authToken.put("action", "emailVeri");
 		authToken.put("expire", exp);
 		JWTSigner signer = new JWTSigner(SECRET);
-		return signer.sign(authToken).replace(".", "=");
+		return signer.sign(authToken);
 	}
 
 	@Override
 	public Map<String, Object> decodeJWT(String JWTStr) throws IllegalStateException{
-		JWTVerifier verifier = new JWTVerifier("ProjectNing");
+		JWTVerifier verifier = new JWTVerifier(SECRET);
 		Map<String,Object> result = new HashMap<String, Object>();
 		try {
 			result = verifier.verify(JWTStr);

@@ -1,12 +1,7 @@
 package com.projectning.service.web;
 
-import java.io.IOException;
-import java.security.InvalidKeyException;
-import java.security.NoSuchAlgorithmException;
-import java.security.SignatureException;
 import java.time.Instant;
-import java.util.HashMap;
-import java.util.Iterator;
+import java.time.format.DateTimeParseException;
 import java.util.Map;
 
 import javax.json.Json;
@@ -22,9 +17,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.projectning.auth.JWTSigner;
-import com.projectning.auth.JWTVerifier;
-import com.projectning.auth.JWTVerifyException;
 import com.projectning.service.exceptions.NotFoundException;
 import com.projectning.service.manager.HelperManager;
 import com.projectning.service.manager.UserManager;
@@ -45,9 +37,11 @@ public class AuthController {
 			respond.add("salt", salt);
 			respond.add("error", "");
 		}catch(JsonParsingException e){
-			respond.add("error", "Request format incorrest");
+			respond.add("error", "Request format incorrect");
 		}catch(IllegalStateException e){
 			respond.add("error", e.getMessage());
+		}catch(NullPointerException e){
+			respond.add("error", "Request parameters incorrect");
 		}
 	
 		return new ResponseEntity<String>(respond.build().toString(), HttpStatus.OK);
@@ -63,8 +57,9 @@ public class AuthController {
 			String password = jsonObj.getString("password");
 			userManager.register(username, password);
 			String code = helperManager.getEmailConfirmCode(username);
-			helperManager.emailConfirm(username, code);
 			userManager.updateVeriCode(username, code);
+			helperManager.emailConfirm(username, code.replace(".", "="));
+			
 			respond.add("status", "ok");
 			respond.add("username", username);
 			respond.add("emailConfirmed","false");
@@ -86,7 +81,19 @@ public class AuthController {
 	@RequestMapping("/email/*")
     public ResponseEntity<String> emailVerifivation(HttpServletRequest request) {
 		String code = request.getRequestURI().split("/email/")[1];
-		System.out.println(code.replace("=", "."));
+		code = code.replace("=", ".");
+		
+		try{
+			Map<String, Object> result = helperManager.decodeJWT(code);
+			Instant expTime = Instant.parse((String) result.get("expire"));
+			if(expTime.compareTo(Instant.now()) < 0){
+				System.out.println("false");
+			}
+		}catch(IllegalStateException e){
+			e.printStackTrace();
+		}catch(DateTimeParseException e){
+			e.printStackTrace();
+		}
 		
 		return new ResponseEntity<String>(helperManager.getPage(), HttpStatus.OK);
 	}
