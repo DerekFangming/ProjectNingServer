@@ -45,5 +45,12 @@ public interface UserManager {
 	 * @throws NotFoundException if the user with the verification code does not exist
 	 */
 	public void checkVeriCode(String username, String code) throws NotFoundException;
+	
+	/**
+	 * Confirm that the email address of the user has been confirmed
+	 * @param username the user name to set email flag to be true
+	 * @throws NotFoundException if the user is not found
+	 */
+	public void confirmEmail(String username) throws NotFoundException;
 
 }

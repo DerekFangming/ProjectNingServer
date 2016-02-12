@@ -98,6 +98,20 @@ public class UserManagerImpl implements UserManager{
 		
 	}
 
+	@Override
+	public void confirmEmail(String username) throws NotFoundException {
+		List<QueryTerm> values = new ArrayList<QueryTerm>();
+		values.add(UserDao.Field.USERNAME.getQueryTerm(username));
+		User user = userDao.findObject(values);
+		
+		List<NVPair> pairs = new ArrayList<NVPair>();
+		pairs.add(new NVPair("veri_token", ""));
+		pairs.add(new NVPair("email_confirmed", true));
+		
+		userDao.update(user.getId(), pairs);
+		
+	}
+
 }
 
 	

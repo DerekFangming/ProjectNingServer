@@ -82,20 +82,28 @@ public class AuthController {
     public ResponseEntity<String> emailVerifivation(HttpServletRequest request) {
 		String code = request.getRequestURI().split("/email/")[1];
 		code = code.replace("=", ".");
-		
+		String respond = "";
 		try{
 			Map<String, Object> result = helperManager.decodeJWT(code);
+			String username = (String)result.get("username");
+			userManager.checkVeriCode(username, code);
 			Instant expTime = Instant.parse((String) result.get("expire"));
-			if(expTime.compareTo(Instant.now()) < 0){
-				System.out.println("false");
+			if(expTime.compareTo(Instant.now()) > 0){
+				userManager.confirmEmail(username);
+				respond = "success";
 			}
 		}catch(IllegalStateException e){
 			e.printStackTrace();
+			respond = "jwt decode error";
 		}catch(DateTimeParseException e){
 			e.printStackTrace();
+			respond = "date format incorrect";
+		}catch(NotFoundException e){
+			e.printStackTrace();
+			respond = "invalid code";
 		}
 		
-		return new ResponseEntity<String>(helperManager.getPage(), HttpStatus.OK);
+		return new ResponseEntity<String>(respond, HttpStatus.OK);
 	}
 	
 	@RequestMapping("/auth/*")

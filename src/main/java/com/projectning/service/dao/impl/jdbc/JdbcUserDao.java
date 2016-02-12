@@ -27,8 +27,8 @@ public class JdbcUserDao extends JdbcBaseDao<User> implements UserDao{
 	    
 	    params.addValue(UserDao.Field.USERNAME.name, obj.getUsername());
 	    params.addValue(UserDao.Field.PASSWORD.name, obj.getPassword());
-	    params.addValue(UserDao.Field.AUTH_TOKEN.name, obj.getAuthToken());
-	    params.addValue(UserDao.Field.VERI_TOKEN.name, obj.getVeriToken());
+	    params.addValue(UserDao.Field.AUTH_TOKEN.name, obj.getAuthToken() == "" ? null : obj.getAuthToken());
+	    params.addValue(UserDao.Field.VERI_TOKEN.name, obj.getVeriToken() == "" ? null : obj.getVeriToken());
 	    params.addValue(UserDao.Field.CREATED_AT.name, Date.from(obj.getCreatedAt()));
 	    params.addValue(UserDao.Field.EMAIL_CONFIRMED.name, obj.getEmailConfirmed());
 	    params.addValue(UserDao.Field.SALT.name, obj.getSalt());

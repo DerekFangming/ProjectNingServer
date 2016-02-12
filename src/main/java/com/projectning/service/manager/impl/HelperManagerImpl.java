@@ -89,7 +89,7 @@ public class HelperManagerImpl implements HelperManager{
 	public String getEmailConfirmCode(String username) {
 		String exp = Instant.now().plus(Duration.ofDays(1)).toString();
 		Map<String, Object> authToken = new HashMap<String, Object>();
-		authToken.put("username", "username");
+		authToken.put("username", username);
 		authToken.put("action", "emailVeri");
 		authToken.put("expire", exp);
 		JWTSigner signer = new JWTSigner(SECRET);
