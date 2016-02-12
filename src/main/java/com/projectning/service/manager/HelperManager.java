@@ -1,5 +1,7 @@
 package com.projectning.service.manager;
 
+import java.util.Map;
+
 import javax.json.JsonObject;
 import javax.json.stream.JsonParsingException;
 
@@ -35,4 +37,13 @@ public interface HelperManager {
 	 * @return JWT code
 	 */
 	public String getEmailConfirmCode(String username);
+
+	/**
+	 * Decode string formed JWT to a Java Map object containing all the key value pairs
+	 * @param JWTStr the string formed JWT
+	 * @return decoded Hashmap with key value pairs
+	 */
+	public Map<String, Object> decodeJWT(String JWTStr) throws IllegalStateException;
+	
+	public String getPage();
 }

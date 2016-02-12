@@ -85,8 +85,10 @@ public class AuthController {
 	
 	@RequestMapping("/email/*")
     public ResponseEntity<String> emailVerifivation(HttpServletRequest request) {
-		System.out.println(request.getRequestURI());
-		return new ResponseEntity<String>("sucess", HttpStatus.OK);
+		String code = request.getRequestURI().split("/email/")[1];
+		System.out.println(code.replace("=", "."));
+		
+		return new ResponseEntity<String>(helperManager.getPage(), HttpStatus.OK);
 	}
 	
 	@RequestMapping("/auth/*")
@@ -100,23 +102,6 @@ public class AuthController {
 
         helperManager.emailConfirm("synfm123@gmail.com", b);
         
-        JWTVerifier verifier = new JWTVerifier("ProjectNing");
-        
-        Map decode;
-        
-        try {
-			decode = verifier.verify(b);
-			Iterator<?> it = decode.entrySet().iterator();
-			while (it.hasNext()) {
-		        Map.Entry pair = (Map.Entry)it.next();
-		        System.out.println(pair.getKey() + " = " + pair.getValue());
-		        it.remove(); // avoids a ConcurrentModificationException
-		    }
-		} catch (InvalidKeyException | NoSuchAlgorithmException | IllegalStateException | SignatureException
-				| IOException | JWTVerifyException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
         
         
         return new ResponseEntity<String>("", HttpStatus.OK);

@@ -1,6 +1,10 @@
 package com.projectning.service.manager.impl;
 
+import java.io.IOException;
 import java.io.StringReader;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
+import java.security.SignatureException;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.HashMap;
@@ -21,6 +25,8 @@ import javax.mail.internet.MimeMessage;
 import org.springframework.stereotype.Component;
 
 import com.projectning.auth.JWTSigner;
+import com.projectning.auth.JWTVerifier;
+import com.projectning.auth.JWTVerifyException;
 import com.projectning.service.manager.HelperManager;
 
 @Component
@@ -88,6 +94,25 @@ public class HelperManagerImpl implements HelperManager{
 		authToken.put("expire", exp);
 		JWTSigner signer = new JWTSigner(SECRET);
 		return signer.sign(authToken).replace(".", "=");
+	}
+
+	@Override
+	public Map<String, Object> decodeJWT(String JWTStr) throws IllegalStateException{
+		JWTVerifier verifier = new JWTVerifier("ProjectNing");
+		Map<String,Object> result = new HashMap<String, Object>();
+		try {
+			result = verifier.verify(JWTStr);
+		}catch(InvalidKeyException | NoSuchAlgorithmException | IllegalStateException | SignatureException
+				| IOException | JWTVerifyException e){
+			throw new IllegalStateException(e.getMessage());
+		}
+		return result;
+	}
+
+	@Override
+	public String getPage() {
+		// TODO Auto-generated method stub
+		return "";
 	}
 
 }
