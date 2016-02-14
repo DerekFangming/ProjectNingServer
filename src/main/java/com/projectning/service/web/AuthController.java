@@ -2,6 +2,7 @@ package com.projectning.service.web;
 
 import java.time.Instant;
 import java.time.format.DateTimeParseException;
+import java.util.HashMap;
 import java.util.Map;
 
 import javax.json.Json;
@@ -28,29 +29,29 @@ public class AuthController {
 	@Autowired private UserManager userManager;
 	
 	@RequestMapping("/register_for_salt")
-    public ResponseEntity<String> registerForSalt(@RequestBody String request) {
+    public ResponseEntity<Map<String, Object>> registerForSalt(@RequestBody String request) {
 		String salt = "";
-		JsonObjectBuilder respond = Json.createObjectBuilder();
+		Map<String, Object> respond = new HashMap<String, Object>();
 		try{
 			JsonObject jsonObj = helperManager.stringToJsonHelper(request);
 			salt = userManager.registerForSalt(jsonObj.getString("username"));
-			respond.add("salt", salt);
-			respond.add("error", "");
+			respond.put("salt", salt);
+			respond.put("error", "");
 		}catch(JsonParsingException e){
-			respond.add("error", "Request format incorrect");
+			respond.put("error", "Request format incorrect");
 		}catch(IllegalStateException e){
-			respond.add("error", e.getMessage());
+			respond.put("error", e.getMessage());
 		}catch(NullPointerException e){
-			respond.add("error", "Request parameters incorrect");
+			respond.put("error", "Request parameters incorrect");
 		}
 	
-		return new ResponseEntity<String>(respond.build().toString(), HttpStatus.OK);
+		return new ResponseEntity<Map<String, Object>>(respond, HttpStatus.OK);
 		
 	}
 	
 	@RequestMapping("/register")
-    public ResponseEntity<String> register(@RequestBody String request) {
-		JsonObjectBuilder respond = Json.createObjectBuilder();
+    public ResponseEntity<Map<String, Object>> register(@RequestBody String request) {
+		Map<String, Object> respond = new HashMap<String, Object>();
 		try{
 			JsonObject jsonObj = helperManager.stringToJsonHelper(request);
 			String username = jsonObj.getString("username");
@@ -60,21 +61,21 @@ public class AuthController {
 			userManager.updateVeriCode(username, code);
 			helperManager.emailConfirm(username, code.replace(".", "="));
 			
-			respond.add("status", "ok");
-			respond.add("username", username);
-			respond.add("emailConfirmed","false");
-			respond.add("error", "");
+			respond.put("status", "ok");
+			respond.put("username", username);
+			respond.put("emailConfirmed","false");
+			respond.put("error", "");
 		}catch(JsonParsingException e){
-			respond.add("error", "Request format incorrest");
+			respond.put("error", "Request format incorrest");
 		}catch(NullPointerException e){
-			respond.add("error", "Request parameters incorrest");
+			respond.put("error", "Request parameters incorrest");
 		}catch(IllegalStateException e){
-			respond.add("error", e.getMessage());
+			respond.put("error", e.getMessage());
 		}catch(NotFoundException e){
-			respond.add("error", "User not found");
+			respond.put("error", "User not found");
 		}
 	
-		return new ResponseEntity<String>(respond.build().toString(), HttpStatus.OK);
+		return new ResponseEntity<Map<String, Object>>(respond, HttpStatus.OK);
 		
 	}
 	
@@ -83,6 +84,7 @@ public class AuthController {
 		String code = request.getRequestURI().split("/email/")[1];
 		code = code.replace("=", ".");
 		String respond = "";
+		
 		try{
 			Map<String, Object> result = helperManager.decodeJWT(code);
 			String username = (String)result.get("username");

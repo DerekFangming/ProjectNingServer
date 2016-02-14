@@ -24,8 +24,6 @@ public class AboutController
 
     info.put("appVersion", "Project Ning Server Ver 0.1");
     
-    System.out.println("haha");
-    
     return new ResponseEntity<Map<String, Object>>(info, HttpStatus.OK);
   }
 }
