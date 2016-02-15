@@ -11,6 +11,7 @@ public class User {
 	private Instant createdAt;
 	private boolean emailConfirmed;
 	private String salt;
+	private int timezoneOffset;
 	
 	public int getId(){
 		return id;
@@ -74,6 +75,14 @@ public class User {
 	
 	public void setSalt(String salt){
 		this.salt = salt;
+	}
+	
+	public int getTimezoneOffset(){
+		return timezoneOffset;
+	}
+	
+	public void setTimezoneOffset(int timezoneOffset){
+		this.timezoneOffset = timezoneOffset;
 	}
 	
 }

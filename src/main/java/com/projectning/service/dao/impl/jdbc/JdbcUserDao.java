@@ -32,6 +32,7 @@ public class JdbcUserDao extends JdbcBaseDao<User> implements UserDao{
 	    params.addValue(UserDao.Field.CREATED_AT.name, Date.from(obj.getCreatedAt()));
 	    params.addValue(UserDao.Field.EMAIL_CONFIRMED.name, obj.getEmailConfirmed());
 	    params.addValue(UserDao.Field.SALT.name, obj.getSalt());
+	    params.addValue(UserDao.Field.TIMEZONE_OFFSET.name, obj.getTimezoneOffset());
 	        
 	    return params;
 	  }
@@ -53,6 +54,7 @@ public class JdbcUserDao extends JdbcBaseDao<User> implements UserDao{
 	    	  user.setCreatedAt(rs.getTimestamp(UserDao.Field.CREATED_AT.name).toInstant());
 	    	  user.setEmailConfirmed(rs.getBoolean(UserDao.Field.EMAIL_CONFIRMED.name));
 	    	  user.setSalt(rs.getString(UserDao.Field.SALT.name));
+	    	  user.setTimezoneOffset(rs.getInt(UserDao.Field.TIMEZONE_OFFSET.name));
 	        
 	        return user;
 	      }
