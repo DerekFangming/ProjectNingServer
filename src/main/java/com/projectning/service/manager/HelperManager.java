@@ -50,9 +50,10 @@ public interface HelperManager {
 	
 	/**
 	 * The respond page for the email confirmation
+	 * @param msg message string for email confirmation
 	 * @return string form of the confirm web page
 	 */
-	public String getEmailConfirmedPage();
+	public String getEmailConfirmedPage(String msg);
 	
 	/**
 	 * Create access token base on the username

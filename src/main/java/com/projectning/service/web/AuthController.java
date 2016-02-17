@@ -110,13 +110,13 @@ public class AuthController {
 			}
 		}catch(IllegalStateException e){
 			e.printStackTrace();
-			respond = "Jwt decode error";
+			respond = "Verification code is not valid";
 		}catch(DateTimeParseException e){
 			e.printStackTrace();
-			respond = "date format incorrect";
+			respond = "Expiration date format incorrect";
 		}catch(NotFoundException e){
 			e.printStackTrace();
-			respond = "invalid code";
+			respond = "User name is not found in database";
 		}
 		
 		return new ResponseEntity<String>(respond, HttpStatus.OK);
@@ -124,18 +124,11 @@ public class AuthController {
 	
 	@RequestMapping("/auth/*")
     public ResponseEntity<String> home(HttpServletRequest request) {
-		//helperManager.emailConfirm("synfm123@gmail.com", "www.google.com");
-        //System.out.println(request.getRequestURI());
-        
-		helperManager.getEmailConfirmCode("synfm123@gmail.com");
-        
-        String b = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9=eyJleHBpcmUzIjoyMDEwMTAxMCwiZXhwaXJlNCI6MjAxMDEwMTAsImV4cGlyZTIiOjIwMTAxMDEwLCJleHBpcmUiOjIwMTAxMDEwLCJ1c2VybmFtZTQiOiJhZG1pbiIsInVzZXJuYW1lMyI6ImFkbWluIiwidXNlcm5hbWUyIjoiYWRtaW4iLCJ1c2VybmFtZSI6ImFkbWluIn0=2FYRg1Qd035JLNwAOz7MRcZ8iQEuV3ZjpWEmzByiOQ8";
-
-        helperManager.emailConfirm("synfm123@gmail.com", b);
+		
         
         
         
-        return new ResponseEntity<String>("", HttpStatus.OK);
+        return new ResponseEntity<String>(helperManager.getEmailConfirmedPage("Invalid code"), HttpStatus.OK);
     }
 
 }
