@@ -25,7 +25,7 @@ public class UserManagerImpl implements UserManager{
 	@Autowired UserDao userDao;
 	
 	@Override
-	public String registerForSalt(String username) throws IllegalStateException {
+	public String registerForSalt(String username, int offset) throws IllegalStateException {
 		if(checkUsername(username))
 			throw new IllegalStateException("Username already exist");
 		if (username.length() > 32)
@@ -48,6 +48,7 @@ public class UserManagerImpl implements UserManager{
 		user.setCreatedAt(Instant.now());
 		user.setEmailConfirmed(false);
 		user.setSalt(encodedSalt);
+		user.setTimezoneOffset(offset);
 		userDao.persist(user);
 		
 		return encodedSalt;
@@ -109,6 +110,18 @@ public class UserManagerImpl implements UserManager{
 		pairs.add(new NVPair("email_confirmed", true));
 		
 		userDao.update(user.getId(), pairs);
+		
+	}
+
+	@Override
+	public void updateAccessToken(String username, String token) throws NotFoundException {
+		List<QueryTerm> values = new ArrayList<QueryTerm>();
+		values.add(UserDao.Field.USERNAME.getQueryTerm(username));
+		User user = userDao.findObject(values);
+		
+		NVPair pair = new NVPair("auth_token", token);
+		
+		userDao.update(user.getId(), pair);
 		
 	}
 

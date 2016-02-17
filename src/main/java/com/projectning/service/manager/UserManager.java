@@ -9,10 +9,11 @@ public interface UserManager {
 	 * Password was set to a temporary one in this method
 	 * Username is checked to be not existed, looks like email address, and less than 32 digits
 	 * @param username the username
+	 * @param offset the time zone offset from GMT
 	 * @return 32 digit salt 
 	 * @throws IllegalStateException if any of the username check fails
 	 */
-	public String registerForSalt(String username) throws IllegalStateException ;
+	public String registerForSalt(String username, int offset) throws IllegalStateException ;
 	
 	/**
 	 * Update the password that client sends. Do some check on the username and password
@@ -52,5 +53,13 @@ public interface UserManager {
 	 * @throws NotFoundException if the user is not found
 	 */
 	public void confirmEmail(String username) throws NotFoundException;
+	
+	/**
+	 * Update access token for a given user
+	 * @param username the user
+	 * @param token the access token code
+	 * @throws NotFoundException id the user is not found by its username
+	 */
+	public void updateAccessToken(String username, String token) throws NotFoundException;
 
 }

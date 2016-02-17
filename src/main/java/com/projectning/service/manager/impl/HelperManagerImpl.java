@@ -110,9 +110,18 @@ public class HelperManagerImpl implements HelperManager{
 	}
 
 	@Override
-	public String getPage() {
+	public String getEmailConfirmedPage() {
 		// TODO Auto-generated method stub
 		return "";
+	}
+
+	@Override
+	public String createAccessToken(String username, Instant expDate) {
+		Map<String, Object> authToken = new HashMap<String, Object>();
+		authToken.put("username", username);
+		authToken.put("expire", expDate.toString());
+		JWTSigner signer = new JWTSigner(SECRET);
+		return signer.sign(authToken);
 	}
 
 }

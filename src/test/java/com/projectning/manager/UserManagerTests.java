@@ -3,6 +3,7 @@ package com.projectning.manager;
 import static org.junit.Assert.*;
 
 import java.security.SecureRandom;
+import java.time.Instant;
 import java.util.Random;
 
 import org.apache.commons.codec.binary.Base64;
@@ -20,24 +21,24 @@ import com.projectning.service.manager.UserManager;
 public class UserManagerTests {
 	@Autowired private UserManager userManager;
 	
-//	@Test
-//	public void testFindSequenceBySequenceId()
-//	  {
-//		 try {
-//			 
-//		} catch (NotFoundException e) {
-//			fail(e.toString());
-//		}
-//	  }
-	
 	@Test
-	public void createUser()
+	public void testGenerateDateString()
 	  {
-		final Random r = new SecureRandom();
-		byte[] salt = new byte[32];
-		r.nextBytes(salt);
-		String encodedSalt = Base64.encodeBase64String(salt);
-		assertEquals("", encodedSalt.substring(0, 32));
+		 try {
+			 System.out.println(Instant.now().toString());
+		} catch (NotFoundException e) {
+			fail(e.toString());
+		}
 	  }
+	
+//	@Test
+//	public void createUser()
+//	  {
+//		final Random r = new SecureRandom();
+//		byte[] salt = new byte[32];
+//		r.nextBytes(salt);
+//		String encodedSalt = Base64.encodeBase64String(salt);
+//		assertEquals("", encodedSalt.substring(0, 32));
+//	  }
 
 }

@@ -1,9 +1,12 @@
 package com.projectning.service.manager;
 
+import java.time.Instant;
 import java.util.Map;
 
 import javax.json.JsonObject;
 import javax.json.stream.JsonParsingException;
+
+import com.projectning.service.exceptions.NotFoundException;
 
 public interface HelperManager {
 
@@ -45,5 +48,19 @@ public interface HelperManager {
 	 */
 	public Map<String, Object> decodeJWT(String JWTStr) throws IllegalStateException;
 	
-	public String getPage();
+	/**
+	 * The respond page for the email confirmation
+	 * @return string form of the confirm web page
+	 */
+	public String getEmailConfirmedPage();
+	
+	/**
+	 * Create access token base on the username
+	 * @param username the user that the access token is generated for
+	 * @param expDate the expiration date when this access token becomes invalid
+	 * @return string formed JWT encrypted access token
+	 */
+	public String createAccessToken(String username, Instant expDate);
+	
+	
 }

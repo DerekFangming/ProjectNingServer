@@ -1,5 +1,6 @@
 package com.projectning.service.web;
 
+import java.time.Duration;
 import java.time.Instant;
 import java.time.format.DateTimeParseException;
 import java.util.HashMap;
@@ -34,7 +35,8 @@ public class AuthController {
 		Map<String, Object> respond = new HashMap<String, Object>();
 		try{
 			JsonObject jsonObj = helperManager.stringToJsonHelper(request);
-			salt = userManager.registerForSalt(jsonObj.getString("username"));
+			salt = userManager.registerForSalt(jsonObj.getString("username"), 
+					jsonObj.getInt("offset"));
 			respond.put("salt", salt);
 			respond.put("error", "");
 		}catch(JsonParsingException e){
@@ -57,12 +59,19 @@ public class AuthController {
 			String username = jsonObj.getString("username");
 			String password = jsonObj.getString("password");
 			userManager.register(username, password);
+			
 			String code = helperManager.getEmailConfirmCode(username);
 			userManager.updateVeriCode(username, code);
 			helperManager.emailConfirm(username, code.replace(".", "="));
 			
-			respond.put("status", "ok");
+			Instant exp = Instant.now().plus(Duration.ofDays(1));
+			//Convert to ISO8601 formatted string such as 2013-06-25T16:22:52.966Z
+			String accessToken = helperManager.createAccessToken(username, exp);
+			userManager.updateAccessToken(username, accessToken);
+			
 			respond.put("username", username);
+			respond.put("accessToken", accessToken);
+			respond.put("expire", exp.toString());
 			respond.put("emailConfirmed","false");
 			respond.put("error", "");
 		}catch(JsonParsingException e){
@@ -93,10 +102,15 @@ public class AuthController {
 			if(expTime.compareTo(Instant.now()) > 0){
 				userManager.confirmEmail(username);
 				respond = "success";
+			}else{
+				code = helperManager.getEmailConfirmCode(username);
+				userManager.updateVeriCode(username, code);
+				helperManager.emailConfirm(username, code.replace(".", "="));
+				respond = "resend";
 			}
 		}catch(IllegalStateException e){
 			e.printStackTrace();
-			respond = "jwt decode error";
+			respond = "Jwt decode error";
 		}catch(DateTimeParseException e){
 			e.printStackTrace();
 			respond = "date format incorrect";
