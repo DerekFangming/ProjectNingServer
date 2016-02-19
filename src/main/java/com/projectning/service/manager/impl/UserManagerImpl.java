@@ -125,6 +125,13 @@ public class UserManagerImpl implements UserManager{
 		
 	}
 
+	@Override
+	public String loginForSalt(String username) throws NotFoundException {
+		List<QueryTerm> values = new ArrayList<QueryTerm>();
+		values.add(UserDao.Field.USERNAME.getQueryTerm(username));
+		return userDao.findObject(values).getSalt();
+	}
+
 }
 
 	

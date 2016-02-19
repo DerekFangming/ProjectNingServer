@@ -61,5 +61,13 @@ public interface UserManager {
 	 * @throws NotFoundException id the user is not found by its username
 	 */
 	public void updateAccessToken(String username, String token) throws NotFoundException;
+	
+	/**
+	 * Return salt string of a given username for login purpose
+	 * @param username the user
+	 * @return the salt string of that user
+	 * @throws NotFoundException if the user name is not found
+	 */
+	public String loginForSalt(String username) throws NotFoundException;
 
 }

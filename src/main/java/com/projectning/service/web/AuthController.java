@@ -122,6 +122,25 @@ public class AuthController {
 		return new ResponseEntity<String>(respond, HttpStatus.OK);
 	}
 	
+	@RequestMapping("/register")
+    public ResponseEntity<Map<String, Object>> loginForSalt(@RequestBody String request) {
+		Map<String, Object> respond = new HashMap<String, Object>();
+		try{
+			JsonObject jsonObj = helperManager.stringToJsonHelper(request);
+			String username = jsonObj.getString("username");
+			respond.put("salt", userManager.loginForSalt(username));
+			respond.put("error", "");
+		}catch(JsonParsingException e){
+			respond.put("error", "Request format incorrest");
+		}catch(NullPointerException e){
+			respond.put("error", "Request parameters incorrest");
+		}catch(NotFoundException e){
+			respond.put("error", "User not found");
+		}
+		return new ResponseEntity<Map<String, Object>>(respond, HttpStatus.OK);
+		
+	}
+	
 	@RequestMapping("/auth/*")
     public ResponseEntity<String> home(HttpServletRequest request) {
 		
