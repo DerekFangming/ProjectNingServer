@@ -122,7 +122,7 @@ public class AuthController {
 		return new ResponseEntity<String>(respond, HttpStatus.OK);
 	}
 	
-	@RequestMapping("/register")
+	@RequestMapping("/login_for_salt")
     public ResponseEntity<Map<String, Object>> loginForSalt(@RequestBody String request) {
 		Map<String, Object> respond = new HashMap<String, Object>();
 		try{
