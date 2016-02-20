@@ -1,6 +1,7 @@
 package com.projectning.service.manager.impl;
 
 import java.security.SecureRandom;
+import java.time.Duration;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
@@ -17,12 +18,14 @@ import com.projectning.service.dao.impl.NVPair;
 import com.projectning.service.dao.impl.QueryTerm;
 import com.projectning.service.domain.User;
 import com.projectning.service.exceptions.NotFoundException;
+import com.projectning.service.manager.HelperManager;
 import com.projectning.service.manager.UserManager;
 
 @Component
 public class UserManagerImpl implements UserManager{
 
 	@Autowired UserDao userDao;
+	@Autowired HelperManager helperManager;
 	
 	@Override
 	public String registerForSalt(String username, int offset) throws IllegalStateException {
@@ -131,6 +134,7 @@ public class UserManagerImpl implements UserManager{
 		values.add(UserDao.Field.USERNAME.getQueryTerm(username));
 		return userDao.findObject(values).getSalt();
 	}
+	
 
 }
 

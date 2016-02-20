@@ -141,6 +141,33 @@ public class AuthController {
 		
 	}
 	
+	@RequestMapping("/login")
+    public ResponseEntity<Map<String, Object>> login(@RequestBody String request) {
+		Map<String, Object> respond = new HashMap<String, Object>();
+		try{
+			JsonObject jsonObj = helperManager.stringToJsonHelper(request);
+			String username = jsonObj.getString("username");
+			String password = jsonObj.getString("password");
+			
+			Instant exp = Instant.now().plus(Duration.ofDays(1));
+			String accessToken = helperManager.createAccessToken(username, exp);
+			
+			respond.put("username", username);
+			respond.put("accessToken", accessToken);
+			respond.put("expire", exp.toString());
+			respond.put("emailConfirmed","false");
+			respond.put("error", "");
+		}catch(JsonParsingException e){
+			respond.put("error", "Request format incorrest");
+		}catch(NullPointerException e){
+			respond.put("error", "Request parameters incorrest");
+		}catch(NotFoundException e){
+			respond.put("error", "User not found");
+		}
+		return new ResponseEntity<Map<String, Object>>(respond, HttpStatus.OK);
+		
+	}
+	
 	@RequestMapping("/auth/*")
     public ResponseEntity<String> home(HttpServletRequest request) {
 		

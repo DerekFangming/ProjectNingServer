@@ -69,5 +69,6 @@ public interface UserManager {
 	 * @throws NotFoundException if the user name is not found
 	 */
 	public String loginForSalt(String username) throws NotFoundException;
+	
 
 }
