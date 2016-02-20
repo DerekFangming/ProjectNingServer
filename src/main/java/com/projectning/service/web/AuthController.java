@@ -152,6 +152,8 @@ public class AuthController {
 			Instant exp = Instant.now().plus(Duration.ofDays(1));
 			String accessToken = helperManager.createAccessToken(username, exp);
 			
+			userManager.login(username, password, accessToken);
+			
 			respond.put("username", username);
 			respond.put("accessToken", accessToken);
 			respond.put("expire", exp.toString());

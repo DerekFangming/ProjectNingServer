@@ -134,6 +134,19 @@ public class UserManagerImpl implements UserManager{
 		values.add(UserDao.Field.USERNAME.getQueryTerm(username));
 		return userDao.findObject(values).getSalt();
 	}
+
+	@Override
+	public void login(String username, String password, String accessToken) throws NotFoundException {
+		List<QueryTerm> values = new ArrayList<QueryTerm>();
+		values.add(UserDao.Field.USERNAME.getQueryTerm(username));
+		values.add(UserDao.Field.PASSWORD.getQueryTerm(password));
+		User user = userDao.findObject(values);
+		
+		NVPair pair = new NVPair("auth_token", accessToken);
+		
+		userDao.update(user.getId(), pair);
+		
+	}
 	
 
 }

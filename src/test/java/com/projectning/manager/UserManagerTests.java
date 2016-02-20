@@ -22,10 +22,10 @@ public class UserManagerTests {
 	@Autowired private UserManager userManager;
 	
 	@Test
-	public void testGenerateDateString()
+	public void testLogin()
 	  {
 		 try {
-			 System.out.println(Instant.now().toString());
+			 userManager.login("test1", "test2", "null");
 		} catch (NotFoundException e) {
 			fail(e.toString());
 		}

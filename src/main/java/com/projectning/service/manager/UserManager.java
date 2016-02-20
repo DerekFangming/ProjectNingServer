@@ -70,5 +70,13 @@ public interface UserManager {
 	 */
 	public String loginForSalt(String username) throws NotFoundException;
 	
+	/**
+	 * Check if the login username and password is correct
+	 * @param username the user
+	 * @param password the hashed password
+	 * @param accessToken the token string that need to be updated
+	 * @throws NotFoundException
+	 */
+	public void login (String username, String password, String accessToken) throws NotFoundException;
 
 }
