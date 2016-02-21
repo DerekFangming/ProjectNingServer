@@ -1,15 +1,5 @@
-/*******************************************************************************
- * Copyright (c) 2010, 2011 Worcester Polytechnic Institute
- * All rights reserved. 
- *******************************************************************************/
 package com.projectning.util;
 
-/*
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.Serializable;
-*/
 
 /**
 * <code>Pair</code> provides a convenient means for pairing

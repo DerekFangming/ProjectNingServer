@@ -15,6 +15,7 @@ import org.springframework.stereotype.Component;
 
 import com.projectning.service.dao.UserDao;
 import com.projectning.service.dao.impl.NVPair;
+import com.projectning.service.dao.impl.NVPairList;
 import com.projectning.service.dao.impl.QueryTerm;
 import com.projectning.service.domain.User;
 import com.projectning.service.exceptions.NotFoundException;
@@ -69,7 +70,7 @@ public class UserManagerImpl implements UserManager{
 		values.add(UserDao.Field.PASSWORD.getQueryTerm("password"));
 		User user = userDao.findObject(values);
 		
-		NVPair pair = new NVPair("password", password);
+		NVPair pair = new NVPair(UserDao.Field.PASSWORD.name, password);
 		
 		userDao.update(user.getId(), pair);
 	}
@@ -88,7 +89,7 @@ public class UserManagerImpl implements UserManager{
 		values.add(UserDao.Field.USERNAME.getQueryTerm(username));
 		User user = userDao.findObject(values);
 		
-		NVPair pair = new NVPair("veri_token", code);
+		NVPair pair = new NVPair(UserDao.Field.VERI_TOKEN.name, code);
 		
 		userDao.update(user.getId(), pair);
 	}
@@ -122,7 +123,7 @@ public class UserManagerImpl implements UserManager{
 		values.add(UserDao.Field.USERNAME.getQueryTerm(username));
 		User user = userDao.findObject(values);
 		
-		NVPair pair = new NVPair("auth_token", token);
+		NVPair pair = new NVPair(UserDao.Field.AUTH_TOKEN.name, token);
 		
 		userDao.update(user.getId(), pair);
 		
@@ -142,10 +143,18 @@ public class UserManagerImpl implements UserManager{
 		values.add(UserDao.Field.PASSWORD.getQueryTerm(password));
 		User user = userDao.findObject(values);
 		
-		NVPair pair = new NVPair("auth_token", accessToken);
+		NVPair pair = new NVPair(UserDao.Field.AUTH_TOKEN.name, accessToken);
 		
 		userDao.update(user.getId(), pair);
 		
+	}
+
+	@Override
+	public int getUserId(String username, String accessToken) throws NotFoundException {
+		List<QueryTerm> values = new ArrayList<QueryTerm>();
+		values.add(UserDao.Field.USERNAME.getQueryTerm(username));
+		values.add(UserDao.Field.AUTH_TOKEN.getQueryTerm(accessToken));
+		return userDao.findObject(values).getId();
 	}
 	
 

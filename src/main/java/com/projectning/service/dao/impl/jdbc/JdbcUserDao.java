@@ -45,18 +45,18 @@ public class JdbcUserDao extends JdbcBaseDao<User> implements UserDao{
 	      @Override
 	      public User mapRow(ResultSet rs, int row) throws SQLException
 	      {
-	    	  User user = new User();
-	    	  user.setId(rs.getInt(UserDao.Field.ID.name));
-	    	  user.setUsername(rs.getString(UserDao.Field.USERNAME.name));
-	    	  user.setPassword(rs.getString(UserDao.Field.PASSWORD.name));
-	    	  user.setAuthToken(rs.getString(UserDao.Field.AUTH_TOKEN.name));
-	    	  user.setVeriToken(rs.getString(UserDao.Field.VERI_TOKEN.name));
-	    	  user.setCreatedAt(rs.getTimestamp(UserDao.Field.CREATED_AT.name).toInstant());
-	    	  user.setEmailConfirmed(rs.getBoolean(UserDao.Field.EMAIL_CONFIRMED.name));
-	    	  user.setSalt(rs.getString(UserDao.Field.SALT.name));
-	    	  user.setTimezoneOffset(rs.getInt(UserDao.Field.TIMEZONE_OFFSET.name));
+	    	  User obj = new User();
+	    	  obj.setId(rs.getInt(UserDao.Field.ID.name));
+	    	  obj.setUsername(rs.getString(UserDao.Field.USERNAME.name));
+	    	  obj.setPassword(rs.getString(UserDao.Field.PASSWORD.name));
+	    	  obj.setAuthToken(rs.getString(UserDao.Field.AUTH_TOKEN.name));
+	    	  obj.setVeriToken(rs.getString(UserDao.Field.VERI_TOKEN.name));
+	    	  obj.setCreatedAt(rs.getTimestamp(UserDao.Field.CREATED_AT.name).toInstant());
+	    	  obj.setEmailConfirmed(rs.getBoolean(UserDao.Field.EMAIL_CONFIRMED.name));
+	    	  obj.setSalt(rs.getString(UserDao.Field.SALT.name));
+	    	  obj.setTimezoneOffset(rs.getInt(UserDao.Field.TIMEZONE_OFFSET.name));
 	        
-	        return user;
+	        return obj;
 	      }
 	    };
 	    

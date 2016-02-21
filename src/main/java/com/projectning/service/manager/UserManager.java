@@ -79,4 +79,12 @@ public interface UserManager {
 	 */
 	public void login (String username, String password, String accessToken) throws NotFoundException;
 
+	/**
+	 * Return the database id for the given user
+	 * @param username the user
+	 * @param accessToken the accessToken of the user
+	 * @return the database did
+	 * @throws NotFoundException if the user is not found
+	 */
+	public int getUserId(String username, String accessToken) throws NotFoundException;
 }

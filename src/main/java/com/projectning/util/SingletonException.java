@@ -1,7 +1,3 @@
-/*******************************************************************************
- * Copyright (c) 2010, 2011 Worcester Polytechnic Institute
- * All rights reserved. 
- *******************************************************************************/
 package com.projectning.util;
 
 public class SingletonException extends IllegalStateException
