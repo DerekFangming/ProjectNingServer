@@ -29,6 +29,7 @@ public class JdbcImageDao extends JdbcBaseDao<Image> implements ImageDao{
 	    params.addValue(ImageDao.Field.OWNER_ID.name, obj.getOwnerId());
 	    params.addValue(ImageDao.Field.TYPE.name, obj.getType() == "" ? null : obj.getType());
 	    params.addValue(ImageDao.Field.CREATED_AT.name, Date.from(obj.getCreatedAt()));
+	    params.addValue(ImageDao.Field.ENABLED.name, obj.getEnabled());
 	        
 	    return params;
 	  }
@@ -47,6 +48,7 @@ public class JdbcImageDao extends JdbcBaseDao<Image> implements ImageDao{
 	    	  obj.setType(rs.getString(ImageDao.Field.TYPE.name));
 	    	  obj.setOwnerId(rs.getInt(ImageDao.Field.OWNER_ID.name));
 	    	  obj.setCreatedAt(rs.getTimestamp(ImageDao.Field.CREATED_AT.name).toInstant());
+	    	  obj.setEnabled(rs.getBoolean(ImageDao.Field.ENABLED.name));
 	        
 	        return obj;
 	      }

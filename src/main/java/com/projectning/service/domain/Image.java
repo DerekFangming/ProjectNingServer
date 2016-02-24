@@ -8,6 +8,7 @@ public class Image {
 	private String type;
 	private int ownerId;
 	private Instant createdAt;
+	private boolean enabled;
 	
 	public int getId(){
 		return id;
@@ -47,6 +48,14 @@ public class Image {
 	
 	public void setCreatedAt(Instant createdAt){
 		this.createdAt = createdAt;
+	}
+	
+	public boolean getEnabled(){
+		return enabled;
+	}
+	
+	public void setEnabled(boolean enabled){
+		this.enabled = enabled;
 	}
 
 }
