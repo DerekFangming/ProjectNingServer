@@ -7,6 +7,7 @@ import javax.json.JsonObject;
 import javax.json.stream.JsonParsingException;
 
 import com.projectning.service.exceptions.NotFoundException;
+import com.projectning.service.exceptions.SessionExpiredException;
 
 public interface HelperManager {
 
@@ -63,5 +64,11 @@ public interface HelperManager {
 	 */
 	public String createAccessToken(String username, Instant expDate);
 	
+	/**
+	 * Check if the expire time in the accessToken has expired.
+	 * @param time a string format time
+	 * @throws SessionExpiredException if the session has expired
+	 */
+	public void checkSessionTimeOut(String time) throws SessionExpiredException;
 	
 }

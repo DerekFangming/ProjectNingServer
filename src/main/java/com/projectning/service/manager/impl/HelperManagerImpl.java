@@ -27,6 +27,7 @@ import org.springframework.stereotype.Component;
 import com.projectning.auth.JWTSigner;
 import com.projectning.auth.JWTVerifier;
 import com.projectning.auth.JWTVerifyException;
+import com.projectning.service.exceptions.SessionExpiredException;
 import com.projectning.service.manager.HelperManager;
 
 @Component
@@ -104,7 +105,7 @@ public class HelperManagerImpl implements HelperManager{
 			result = verifier.verify(JWTStr);
 		}catch(InvalidKeyException | NoSuchAlgorithmException | IllegalStateException | SignatureException
 				| IOException | JWTVerifyException e){
-			throw new IllegalStateException(e.getMessage());
+			throw new IllegalStateException("Broken access token");
 		}
 		return result;
 	}
@@ -134,6 +135,14 @@ public class HelperManagerImpl implements HelperManager{
 		authToken.put("expire", expDate.toString());
 		JWTSigner signer = new JWTSigner(SECRET);
 		return signer.sign(authToken);
+	}
+
+	@Override
+	public void checkSessionTimeOut(String time) throws SessionExpiredException {
+		Instant exp = Instant.parse(time);
+		if(exp.compareTo(Instant.now()) > 0)
+			throw new SessionExpiredException();
+		
 	}
 
 }

@@ -107,17 +107,14 @@ public class AuthController {
 				respond = "resend";
 			}
 		}catch(IllegalStateException e){
-			e.printStackTrace();
-			respond = "Verification code is not valid";
+			respond = e.getMessage();
 		}catch(DateTimeParseException e){
-			e.printStackTrace();
 			respond = "Expiration date format incorrect";
 		}catch(NotFoundException e){
-			e.printStackTrace();
 			respond = "User name is not found in database";
 		}
 		
-		return new ResponseEntity<String>(respond, HttpStatus.OK);
+		return new ResponseEntity<String>(helperManager.getEmailConfirmedPage(respond), HttpStatus.OK);
 	}
 	
 	@RequestMapping("/login_for_salt")

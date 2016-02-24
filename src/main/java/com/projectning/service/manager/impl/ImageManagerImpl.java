@@ -1,10 +1,14 @@
 package com.projectning.service.manager.impl;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.time.Instant;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.commons.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +16,9 @@ import org.springframework.stereotype.Component;
 
 import com.projectning.service.dao.ImageDao;
 import com.projectning.service.dao.impl.NVPair;
+import com.projectning.service.dao.impl.QueryTerm;
 import com.projectning.service.domain.Image;
+import com.projectning.service.exceptions.NotFoundException;
 import com.projectning.service.manager.ImageManager;
 
 @Component
@@ -27,6 +33,7 @@ public class ImageManagerImpl implements ImageManager{
 		image.setType(type);
 		image.setCreatedAt(Instant.now());
 		image.setOwnerId(ownerId);
+		image.setEnabled(true);
 		
 		int id = (int) imageDao.persist(image);
 		NVPair pair = new NVPair(ImageDao.Field.LOCATION.name, "/Volumes/Data/images/" + Integer.toString(id) + ".bmp");
@@ -39,6 +46,37 @@ public class ImageManagerImpl implements ImageManager{
 		try (OutputStream stream = new FileOutputStream("/Volumes/Data/images/" + Integer.toString(id) + ".bmp")) {
 		    stream.write(data);
 		}
+	}
+
+	@Override
+	public void softDeleteImage(int imageId, int ownerId) throws NotFoundException, IllegalStateException {
+		
+		QueryTerm value = ImageDao.Field.ID.getQueryTerm(imageId);
+		Image image = imageDao.findObject(value);
+		
+		if(image.getOwnerId() != ownerId)
+			throw new IllegalStateException("You cannot delete an image that is not yours.");
+		
+		NVPair pair = new NVPair(ImageDao.Field.ENABLED.name, false);
+		imageDao.update(image.getId(), pair);
+	}
+
+	@Override
+	public String retrieveImage(int imageId, int ownerId) throws NotFoundException, FileNotFoundException,IOException{
+		
+		List<QueryTerm> values = new ArrayList<QueryTerm>();
+		values.add(ImageDao.Field.ID.getQueryTerm(imageId));
+		values.add(ImageDao.Field.OWNER_ID.getQueryTerm(ownerId));
+		String path = imageDao.findObject(values).getLocation();
+		
+		File originalFile = new File(path);
+		String encodedBase64 = null;
+		FileInputStream fileInputStreamReader = new FileInputStream(originalFile);
+        byte[] bytes = new byte[(int)originalFile.length()];
+        fileInputStreamReader.read(bytes);
+        encodedBase64 = new String(Base64.encodeBase64(bytes));
+        fileInputStreamReader.close();
+		return encodedBase64;
 	}
 
 }
