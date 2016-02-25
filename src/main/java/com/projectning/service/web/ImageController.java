@@ -5,9 +5,6 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.json.JsonObject;
-import javax.json.stream.JsonParsingException;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -29,22 +26,19 @@ public class ImageController {
 	@Autowired private UserManager userManager;
 	
 	@RequestMapping("/upload_image")
-    public ResponseEntity<Map<String, Object>> uploadImage(@RequestBody String request) {
+    public ResponseEntity<Map<String, Object>> uploadImage(@RequestBody Map<String, Object> request) {
 		Map<String, Object> respond = new HashMap<String, Object>();
 		try{
-			JsonObject jsonObj = helperManager.stringToJsonHelper(request);
-			String accessToken = jsonObj.getString("accessToken");
+			String accessToken = (String) request.get("accessToken");
 			Map<String, Object> result = helperManager.decodeJWT(accessToken);
 			
 			helperManager.checkSessionTimeOut((String)result.get("expire"));
 			
 			int id = userManager.getUserId((String)result.get("username"), accessToken);
 			
-			imageManager.saveImage(jsonObj.getString("image"), "portrait", id);
+			imageManager.saveImage((String)request.get("image"), "portrait", id);
 			
 			respond.put("error", "");
-		}catch(JsonParsingException e){
-			respond.put("error", "Request format incorrest");
 		}catch(NullPointerException e){
 			respond.put("error", "Request parameters incorrest");
 		}catch(IllegalStateException e){
@@ -83,8 +77,6 @@ public class ImageController {
 			
 			respond.put("error", "");
 			respond.put("image", image);
-		}catch(JsonParsingException e){
-			respond.put("error", "Request format incorrest");
 		}catch(NullPointerException e){
 			respond.put("error", "Request parameters incorrest");
 		}catch(IllegalStateException e){
@@ -102,12 +94,11 @@ public class ImageController {
 	}
 	
 	@RequestMapping("/delete_image")
-    public ResponseEntity<Map<String, Object>> deleteImage(@RequestBody String request) {
+    public ResponseEntity<Map<String, Object>> deleteImage(@RequestBody Map<String, Object> request) {
 		Map<String, Object> respond = new HashMap<String, Object>();
 		try{
-			JsonObject jsonObj = helperManager.stringToJsonHelper(request);
-			String accessToken = jsonObj.getString("accessToken");
-			int imageId = jsonObj.getInt("imageId");
+			String accessToken = (String)request.get("accessToken");
+			int imageId = (int)request.get("imageId");
 			Map<String, Object> result = helperManager.decodeJWT(accessToken);
 			
 			helperManager.checkSessionTimeOut((String)result.get("expire"));
@@ -117,8 +108,6 @@ public class ImageController {
 			imageManager.softDeleteImage(imageId, id);
 			
 			respond.put("error", "");
-		}catch(JsonParsingException e){
-			respond.put("error", "Request format incorrest");
 		}catch(NullPointerException e){
 			respond.put("error", "Request parameters incorrest");
 		}catch(IllegalStateException e){
