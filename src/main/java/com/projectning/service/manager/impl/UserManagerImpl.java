@@ -1,7 +1,6 @@
 package com.projectning.service.manager.impl;
 
 import java.security.SecureRandom;
-import java.time.Duration;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
@@ -15,7 +14,6 @@ import org.springframework.stereotype.Component;
 
 import com.projectning.service.dao.UserDao;
 import com.projectning.service.dao.impl.NVPair;
-import com.projectning.service.dao.impl.NVPairList;
 import com.projectning.service.dao.impl.QueryTerm;
 import com.projectning.service.domain.User;
 import com.projectning.service.exceptions.NotFoundException;

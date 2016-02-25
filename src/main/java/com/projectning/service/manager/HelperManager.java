@@ -3,21 +3,9 @@ package com.projectning.service.manager;
 import java.time.Instant;
 import java.util.Map;
 
-import javax.json.JsonObject;
-import javax.json.stream.JsonParsingException;
-
-import com.projectning.service.exceptions.NotFoundException;
 import com.projectning.service.exceptions.SessionExpiredException;
 
 public interface HelperManager {
-
-	/**
-	 * Translate json string to json object
-	 * @param jsonStr input json string
-	 * @return parsed json object
-	 * @throws JsonParsingException if the string is not in json format. This should not happen.
-	 */
-	public JsonObject stringToJsonHelper(String jsonStr) throws JsonParsingException;
 	
 	/**
 	 * Send email confirmation after the registration

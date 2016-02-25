@@ -6,8 +6,6 @@ import java.time.format.DateTimeParseException;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.json.JsonObject;
-import javax.json.stream.JsonParsingException;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,17 +26,14 @@ public class AuthController {
 	@Autowired private UserManager userManager;
 	
 	@RequestMapping("/register_for_salt")
-    public ResponseEntity<Map<String, Object>> registerForSalt(@RequestBody String request) {
+    public ResponseEntity<Map<String, Object>> registerForSalt(@RequestBody Map<String, Object> request) {
 		String salt = "";
 		Map<String, Object> respond = new HashMap<String, Object>();
 		try{
-			JsonObject jsonObj = helperManager.stringToJsonHelper(request);
-			salt = userManager.registerForSalt(jsonObj.getString("username"), 
-					jsonObj.getInt("offset"));
+			salt = userManager.registerForSalt((String)request.get("username"), 
+					(int)request.get("offset"));
 			respond.put("salt", salt);
 			respond.put("error", "");
-		}catch(JsonParsingException e){
-			respond.put("error", "Request format incorrect");
 		}catch(IllegalStateException e){
 			respond.put("error", e.getMessage());
 		}catch(NullPointerException e){
@@ -50,12 +45,11 @@ public class AuthController {
 	}
 	
 	@RequestMapping("/register")
-    public ResponseEntity<Map<String, Object>> register(@RequestBody String request) {
+    public ResponseEntity<Map<String, Object>> register(@RequestBody Map<String, Object> request) {
 		Map<String, Object> respond = new HashMap<String, Object>();
 		try{
-			JsonObject jsonObj = helperManager.stringToJsonHelper(request);
-			String username = jsonObj.getString("username");
-			String password = jsonObj.getString("password");
+			String username = (String)request.get("username");
+			String password = (String)request.get("password");
 			userManager.register(username, password);
 			
 			String code = helperManager.getEmailConfirmCode(username);
@@ -72,8 +66,6 @@ public class AuthController {
 			respond.put("expire", exp.toString());
 			respond.put("emailConfirmed","false");
 			respond.put("error", "");
-		}catch(JsonParsingException e){
-			respond.put("error", "Request format incorrest");
 		}catch(NullPointerException e){
 			respond.put("error", "Request parameters incorrest");
 		}catch(IllegalStateException e){
@@ -118,15 +110,12 @@ public class AuthController {
 	}
 	
 	@RequestMapping("/login_for_salt")
-    public ResponseEntity<Map<String, Object>> loginForSalt(@RequestBody String request) {
+    public ResponseEntity<Map<String, Object>> loginForSalt(@RequestBody Map<String, Object> request) {
 		Map<String, Object> respond = new HashMap<String, Object>();
 		try{
-			JsonObject jsonObj = helperManager.stringToJsonHelper(request);
-			String username = jsonObj.getString("username");
+			String username = (String)request.get("username");
 			respond.put("salt", userManager.loginForSalt(username));
 			respond.put("error", "");
-		}catch(JsonParsingException e){
-			respond.put("error", "Request format incorrest");
 		}catch(NullPointerException e){
 			respond.put("error", "Request parameters incorrest");
 		}catch(NotFoundException e){
@@ -137,12 +126,11 @@ public class AuthController {
 	}
 	
 	@RequestMapping("/login")
-    public ResponseEntity<Map<String, Object>> login(@RequestBody String request) {
+    public ResponseEntity<Map<String, Object>> login(@RequestBody Map<String, Object> request) {
 		Map<String, Object> respond = new HashMap<String, Object>();
 		try{
-			JsonObject jsonObj = helperManager.stringToJsonHelper(request);
-			String username = jsonObj.getString("username");
-			String password = jsonObj.getString("password");
+			String username = (String)request.get("username");
+			String password = (String)request.get("password");
 			
 			Instant exp = Instant.now().plus(Duration.ofDays(1));
 			String accessToken = helperManager.createAccessToken(username, exp);
@@ -154,8 +142,6 @@ public class AuthController {
 			respond.put("expire", exp.toString());
 			respond.put("emailConfirmed","false");
 			respond.put("error", "");
-		}catch(JsonParsingException e){
-			respond.put("error", "Request format incorrest");
 		}catch(NullPointerException e){
 			respond.put("error", "Request parameters incorrest");
 		}catch(NotFoundException e){

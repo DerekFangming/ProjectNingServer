@@ -1,7 +1,6 @@
 package com.projectning.service.manager.impl;
 
 import java.io.IOException;
-import java.io.StringReader;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.SignatureException;
@@ -11,10 +10,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 
-import javax.json.Json;
-import javax.json.JsonObject;
-import javax.json.JsonReader;
-import javax.json.stream.JsonParsingException;
 import javax.mail.Message;
 import javax.mail.MessagingException;
 import javax.mail.Session;
@@ -34,14 +29,6 @@ import com.projectning.service.manager.HelperManager;
 public class HelperManagerImpl implements HelperManager{
 
 	public static final String SECRET = "PJNing";
-
-	@Override
-	public JsonObject stringToJsonHelper(String jsonStr) throws JsonParsingException {
-		JsonReader reader = Json.createReader(new StringReader(jsonStr));
-		JsonObject jsonObj = reader.readObject();
-		reader.close();
-		return jsonObj;
-	}
 
 	@Override
 	public void emailConfirm(String to, String code) {
