@@ -79,7 +79,7 @@ public class ImageController {
 			Image image = imageManager.retrieveImage(imageId, id);
 			
 			respond.put("error", "");
-			respond.put("id", image.getId());
+			respond.put("createdAt", image.getCreatedAt().toString());
 			respond.put("image", image.getLocation());
 			respond.put("title", image.getTitle());
 		}catch(NullPointerException e){
