@@ -27,13 +27,14 @@ public class ImageManagerImpl implements ImageManager{
 	@Autowired private ImageDao imageDao;
 	
 	@Override
-	public void saveImage(String base64, String type, int ownerId) throws FileNotFoundException, IOException {
+	public void saveImage(String base64, String type, int ownerId, String title) throws FileNotFoundException, IOException {
 		Image image = new Image();
 		image.setLocation("temp");
 		image.setType(type);
 		image.setCreatedAt(Instant.now());
 		image.setOwnerId(ownerId);
 		image.setEnabled(true);
+		image.setTitle(title);
 		
 		int id = (int) imageDao.persist(image);
 		NVPair pair = new NVPair(ImageDao.Field.LOCATION.name, "/Volumes/Data/images/" + Integer.toString(id) + ".bmp");
@@ -62,21 +63,23 @@ public class ImageManagerImpl implements ImageManager{
 	}
 
 	@Override
-	public String retrieveImage(int imageId, int ownerId) throws NotFoundException, FileNotFoundException,IOException{
+	public Image retrieveImage(int imageId, int ownerId) throws NotFoundException, FileNotFoundException,IOException{
 		
 		List<QueryTerm> values = new ArrayList<QueryTerm>();
 		values.add(ImageDao.Field.ID.getQueryTerm(imageId));
 		values.add(ImageDao.Field.OWNER_ID.getQueryTerm(ownerId));
-		String path = imageDao.findObject(values).getLocation();
+		Image img = imageDao.findObject(values);
 		
-		File originalFile = new File(path);
+		File originalFile = new File(img.getLocation());
 		String encodedBase64 = null;
 		FileInputStream fileInputStreamReader = new FileInputStream(originalFile);
         byte[] bytes = new byte[(int)originalFile.length()];
         fileInputStreamReader.read(bytes);
         encodedBase64 = new String(Base64.encodeBase64(bytes));
         fileInputStreamReader.close();
-		return encodedBase64;
+        
+        img.setLocation(encodedBase64);
+        return img;
 	}
 
 }

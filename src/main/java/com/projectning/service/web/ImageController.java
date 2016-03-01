@@ -12,6 +12,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.projectning.service.domain.Image;
 import com.projectning.service.exceptions.NotFoundException;
 import com.projectning.service.exceptions.SessionExpiredException;
 import com.projectning.service.manager.HelperManager;
@@ -36,7 +37,14 @@ public class ImageController {
 			
 			int id = userManager.getUserId((String)result.get("username"), accessToken);
 			
-			imageManager.saveImage((String)request.get("image"), "portrait", id);
+			String title = "";
+			try{
+				title = (String)request.get("title");
+			}catch(NullPointerException e){
+				
+			}
+			
+			imageManager.saveImage((String)request.get("image"), "portrait", id, title);
 			
 			respond.put("error", "");
 		}catch(NullPointerException e){
@@ -56,27 +64,24 @@ public class ImageController {
 		
 	}
 	
-	@RequestMapping("/download_image")
-    public ResponseEntity<Map<String, Object>> downloadImage(@RequestBody Map<String, Object> request) {
+	@RequestMapping("/download_image_by_id")
+    public ResponseEntity<Map<String, Object>> downloadImageById(@RequestBody Map<String, Object> request) {
 		Map<String, Object> respond = new HashMap<String, Object>();
 		try{
-			//JsonObject jsonObj = helperManager.stringToJsonHelper(request);
-//			String accessToken = jsonObj.getString("accessToken");
-//			int imageId = jsonObj.getInt("imageId");
-//			Map<String, Object> result = helperManager.decodeJWT(accessToken);
-//			
-//			helperManager.checkSessionTimeOut((String)result.get("expire"));
-//			
-//			int id = userManager.getUserId((String)result.get("username"), accessToken);
-//			
-//			String image = imageManager.retrieveImage(imageId, id);
+			String accessToken = (String)request.get("accessToken");
+			int imageId = (int)request.get("imageId");
+			Map<String, Object> result = helperManager.decodeJWT(accessToken);
 			
-			System.out.println(request.get("haha"));
+			helperManager.checkSessionTimeOut((String)result.get("expire"));
 			
-			String image = imageManager.retrieveImage((int)request.get("imageId"), (int)request.get("userId"));
+			int id = userManager.getUserId((String)result.get("username"), accessToken);
+			
+			Image image = imageManager.retrieveImage(imageId, id);
 			
 			respond.put("error", "");
-			respond.put("image", image);
+			respond.put("id", image.getId());
+			respond.put("image", image.getLocation());
+			respond.put("title", image.getTitle());
 		}catch(NullPointerException e){
 			respond.put("error", "Request parameters incorrest");
 		}catch(IllegalStateException e){

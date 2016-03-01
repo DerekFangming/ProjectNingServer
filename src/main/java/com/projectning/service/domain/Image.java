@@ -9,6 +9,7 @@ public class Image {
 	private int ownerId;
 	private Instant createdAt;
 	private boolean enabled;
+	private String title;
 	
 	public int getId(){
 		return id;
@@ -56,6 +57,14 @@ public class Image {
 	
 	public void setEnabled(boolean enabled){
 		this.enabled = enabled;
+	}
+	
+	public String getTitle(){
+		return title;
+	}
+	
+	public void setTitle(String title){
+		this.title = title;
 	}
 
 }

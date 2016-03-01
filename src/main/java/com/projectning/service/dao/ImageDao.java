@@ -16,7 +16,8 @@ public interface ImageDao extends CommonDao<Image>{
 	    TYPE,
 	    OWNER_ID,
 	    CREATED_AT,
-	    ENABLED;
+	    ENABLED,
+	    TITLE;
 		
 		public boolean isPK = false;
 	    public String name;
@@ -51,6 +52,7 @@ public interface ImageDao extends CommonDao<Image>{
 		    new Pair<Enum<?>, String>(Field.TYPE, "TEXT NOT NULL"),
 		    new Pair<Enum<?>, String>(Field.OWNER_ID, "TEXT"),
 		    new Pair<Enum<?>, String>(Field.CREATED_AT, "TIMESTAMP WITHOUT TIME ZONE NOT NULL"),
-		    new Pair<Enum<?>, String>(Field.ENABLED, "BOOLEAN NOT NULL"));
+		    new Pair<Enum<?>, String>(Field.ENABLED, "BOOLEAN NOT NULL"),
+		    new Pair<Enum<?>, String>(Field.TITLE, "TEXT"));
 
 }
