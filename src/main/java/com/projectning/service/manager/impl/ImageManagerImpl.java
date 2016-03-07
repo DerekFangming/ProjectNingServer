@@ -68,6 +68,7 @@ public class ImageManagerImpl implements ImageManager{
 		List<QueryTerm> values = new ArrayList<QueryTerm>();
 		values.add(ImageDao.Field.ID.getQueryTerm(imageId));
 		values.add(ImageDao.Field.OWNER_ID.getQueryTerm(ownerId));
+		values.add(ImageDao.Field.ENABLED.getQueryTerm(true));
 		Image img = imageDao.findObject(values);
 		
 		File originalFile = new File(img.getLocation());
