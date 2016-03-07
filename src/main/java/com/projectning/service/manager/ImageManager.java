@@ -26,7 +26,7 @@ public interface ImageManager {
 	 * @return Image image object
 	 * @throws NotFoundException if the file is not found
 	 */
-	public Image retrieveImage(int imageId, int ownerId) throws NotFoundException, FileNotFoundException, IOException;
+	public Image retrieveImageById(int imageId, int ownerId) throws NotFoundException, FileNotFoundException, IOException;
 	
 	/**
 	 * Soft delete (disable) a image base on the id

@@ -76,7 +76,7 @@ public class ImageController {
 			
 			int id = userManager.getUserId((String)result.get("username"), accessToken);
 			
-			Image image = imageManager.retrieveImage(imageId, id);
+			Image image = imageManager.retrieveImageById(imageId, id);
 			
 			respond.put("error", "");
 			respond.put("createdAt", image.getCreatedAt().toString());

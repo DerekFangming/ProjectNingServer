@@ -63,7 +63,7 @@ public class ImageManagerImpl implements ImageManager{
 	}
 
 	@Override
-	public Image retrieveImage(int imageId, int ownerId) throws NotFoundException, FileNotFoundException,IOException{
+	public Image retrieveImageById(int imageId, int ownerId) throws NotFoundException, FileNotFoundException,IOException{
 		
 		List<QueryTerm> values = new ArrayList<QueryTerm>();
 		values.add(ImageDao.Field.ID.getQueryTerm(imageId));
