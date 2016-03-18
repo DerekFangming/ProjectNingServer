@@ -2,6 +2,7 @@ package com.projectning.service.manager;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.List;
 
 import com.projectning.service.domain.Image;
 import com.projectning.service.exceptions.NotFoundException;
@@ -35,5 +36,7 @@ public interface ImageManager {
 	 * @throws IllegalStateException if the user doesn't have authority to delete the image
 	 */
 	public void softDeleteImage(int imageId, int ownerId) throws NotFoundException, IllegalStateException;
+	
+	public List<Integer> getImageIdByType(String type, int ownerId) throws NotFoundException;
 	
 }

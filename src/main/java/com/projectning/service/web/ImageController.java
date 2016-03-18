@@ -44,7 +44,7 @@ public class ImageController {
 				
 			}
 			
-			imageManager.saveImage((String)request.get("image"), "portrait", id, title);
+			imageManager.saveImage((String)request.get("image"), (String)request.get("type"), id, title);
 			
 			respond.put("error", "");
 		}catch(NullPointerException e){
@@ -80,7 +80,7 @@ public class ImageController {
 			
 			respond.put("error", "");
 			respond.put("createdAt", image.getCreatedAt().toString());
-			respond.put("image", image.getLocation());
+			respond.put("image", image.getLocation());// crazy hack
 			respond.put("title", image.getTitle());
 		}catch(NullPointerException e){
 			respond.put("error", "Request parameters incorrest");
@@ -124,6 +124,32 @@ public class ImageController {
 		}
 		return new ResponseEntity<Map<String, Object>>(respond, HttpStatus.OK);
 		
+	}
+	
+	@RequestMapping("/get_image_ids_by_type")
+	public ResponseEntity<Map<String, Object>> getImageIds(@RequestBody Map<String, Object> request) {
+		Map<String, Object> respond = new HashMap<String, Object>();
+		try{
+			String accessToken = (String)request.get("accessToken");
+			Map<String, Object> result = helperManager.decodeJWT(accessToken);
+			
+			helperManager.checkSessionTimeOut((String)result.get("expire"));
+			
+			int id = userManager.getUserId((String)result.get("username"), accessToken);
+			
+			respond.put("idList", imageManager.getImageIdByType((String)request.get("type"), id));
+			
+			respond.put("error", "");
+		}catch(NullPointerException e){
+			respond.put("error", "Request parameters incorrest");
+		}catch(IllegalStateException e){
+			respond.put("error", e.getMessage());
+		}catch(NotFoundException e){
+			respond.put("error", "Image not found");
+		}catch(SessionExpiredException e){
+			respond.put("error", "Session timeout");
+		}
+		return new ResponseEntity<Map<String, Object>>(respond, HttpStatus.OK);
 	}
 
 }
