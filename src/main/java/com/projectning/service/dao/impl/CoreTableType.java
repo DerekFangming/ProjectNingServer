@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.projectning.service.dao.DataSourceRegistry;
 import com.projectning.service.dao.DataSourceType;
+import com.projectning.service.dao.FriendDao;
 import com.projectning.service.dao.ImageDao;
 import com.projectning.service.dao.SchemaTable;
 import com.projectning.service.dao.SdkDataSource;
@@ -15,7 +16,8 @@ import com.projectning.util.Pair;
 public enum CoreTableType implements SchemaTable
 {
 	USERS(CoreDataSourceType.CORE, UserDao.FieldTypes),
-	IMAGES(CoreDataSourceType.CORE, ImageDao.FieldTypes)
+	IMAGES(CoreDataSourceType.CORE, ImageDao.FieldTypes),
+	FRIENDS(CoreDataSourceType.CORE, FriendDao.FieldTypes)
 ;
 
 
