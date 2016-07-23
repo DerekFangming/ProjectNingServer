@@ -3,7 +3,6 @@ package com.projectning.service.dao;
 import java.util.Arrays;
 import java.util.List;
 
-import com.projectning.service.dao.UserDao.Field;
 import com.projectning.service.dao.impl.QueryTerm;
 import com.projectning.service.dao.impl.RelationalOpType;
 import com.projectning.service.domain.Friend;

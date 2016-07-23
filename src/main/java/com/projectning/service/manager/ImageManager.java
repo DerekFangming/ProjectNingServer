@@ -37,6 +37,13 @@ public interface ImageManager {
 	 */
 	public void softDeleteImage(int imageId, int ownerId) throws NotFoundException, IllegalStateException;
 	
-	public List<Integer> getImageIdByType(String type, int ownerId) throws NotFoundException;
+	/**
+	 * Get a list of image IDs by image type
+	 * Return an empty list if no image found
+	 * @param type the type of the image
+	 * @param ownerId the owner(user) id
+	 * @return a list of ids that belongs the user and type
+	 */
+	public List<Integer> getImageIdByType(String type, int ownerId);
 	
 }

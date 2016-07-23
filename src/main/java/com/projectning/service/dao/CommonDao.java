@@ -1,6 +1,5 @@
 package com.projectning.service.dao;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import com.projectning.service.dao.impl.NVPair;
@@ -244,10 +243,7 @@ public interface CommonDao<T extends Object>
   int delete(List<QueryTerm> terms);
   int delete(QueryInstance qi);
   
-  default List<Pair<Enum<?>, String>> getFieldDefns()
-  {
-    return this.FieldTypes;
-  }  
+   
 }
   
 

@@ -85,13 +85,21 @@ public class ImageManagerImpl implements ImageManager{
 	}
 
 	@Override
-	public List<Integer> getImageIdByType(String type, int ownerId) throws NotFoundException {
+	public List<Integer> getImageIdByType(String type, int ownerId){
 		List<QueryTerm> values = new ArrayList<QueryTerm>();
 		values.add(ImageDao.Field.TYPE.getQueryTerm(type));
 		values.add(ImageDao.Field.OWNER_ID.getQueryTerm(ownerId));
 		values.add(ImageDao.Field.ENABLED.getQueryTerm(true));
-		List<Image> imgList = imageDao.findAllObjects(values);
+		
+		List<Image> imgList = new ArrayList<Image>();
 		List<Integer> idList = new ArrayList<Integer>();
+		
+		try{
+			imgList = imageDao.findAllObjects(values);
+		}catch(NotFoundException e){
+			return idList;
+		}
+		
 		for(Image i : imgList){
 			idList.add(i.getId());
 		}

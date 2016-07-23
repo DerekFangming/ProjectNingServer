@@ -1,7 +1,6 @@
 package com.projectning.service.dao.impl;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -14,8 +13,6 @@ import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import com.projectning.service.dao.DataSourceType;
 import com.projectning.service.dao.SchemaTable;
 import com.projectning.service.dao.SdkDataSource;
-import com.projectning.util.ToStringHelper;
-import com.projectning.util.Util;
 
 public class SdkDataSourceImpl extends DriverManagerDataSource implements SdkDataSource
 {

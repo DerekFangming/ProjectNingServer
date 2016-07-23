@@ -180,7 +180,6 @@ public enum QueryType
     protected StringBuilder finalizeQueryString(QueryBuilder builder)
     {
       SchemaTable table = builder.getSchemaTable();
-      String tableName = table.getTableName();
 
       StringBuilder querySB = new StringBuilder("SELECT ")
         .append(table.getPrimaryKeyName())
