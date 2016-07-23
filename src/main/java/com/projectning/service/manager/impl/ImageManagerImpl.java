@@ -20,6 +20,7 @@ import com.projectning.service.dao.impl.QueryTerm;
 import com.projectning.service.domain.Image;
 import com.projectning.service.exceptions.NotFoundException;
 import com.projectning.service.manager.ImageManager;
+import com.projectning.util.Util;
 
 @Component
 public class ImageManagerImpl implements ImageManager{
@@ -37,14 +38,14 @@ public class ImageManagerImpl implements ImageManager{
 		image.setTitle(title);
 		
 		int id = (int) imageDao.persist(image);
-		NVPair pair = new NVPair(ImageDao.Field.LOCATION.name, "/Volumes/Data/images/" + Integer.toString(id) + ".bmp");
+		NVPair pair = new NVPair(ImageDao.Field.LOCATION.name, Util.imagePath + Integer.toString(id) + ".bmp");
 		imageDao.update(id, pair);
 		
 		if(base64.contains(","))
 			base64 = base64.split(",")[1];
 		
 		byte[] data = Base64.decodeBase64(base64);
-		try (OutputStream stream = new FileOutputStream("/Volumes/Data/images/" + Integer.toString(id) + ".bmp")) {
+		try (OutputStream stream = new FileOutputStream(Util.imagePath + Integer.toString(id) + ".bmp")) {
 		    stream.write(data);
 		}
 	}

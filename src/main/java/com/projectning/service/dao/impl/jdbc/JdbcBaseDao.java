@@ -35,7 +35,6 @@ import com.projectning.service.dao.impl.RelationalOpType;
 import com.projectning.service.dao.impl.SdkDataSourceImpl;
 import com.projectning.service.domain.EnumType;
 import com.projectning.service.domain.HasBuilder;
-import com.projectning.service.domain.HasExternalReference;
 import com.projectning.service.domain.ObjectOrigin;
 import com.projectning.service.exceptions.AlreadyExistsException;
 import com.projectning.service.exceptions.ExceptionsHelper;
@@ -138,18 +137,6 @@ public abstract class JdbcBaseDao<T extends Object> implements CommonDao<T>
   public long persist(T obj)
   {
     this.requireBuilderUsed(obj);
-    
-    // In the case of those domain objects that contain an xref...
-    if(obj instanceof HasExternalReference)
-    {
-      // If it looks like the object was already persisted...
-      if(((HasExternalReference) obj).isPersisted())
-      {
-        // Abort! ;-)
-        throw new AlreadyExistsException("It looks like this ojbect has aleady been persisted: " 
-        + ((HasExternalReference) obj).getXref());
-      }
-    }
     
     int expectedCount = this.expectedValues;
     

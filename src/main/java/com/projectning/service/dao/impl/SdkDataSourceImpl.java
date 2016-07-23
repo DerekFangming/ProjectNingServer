@@ -114,16 +114,4 @@ public class SdkDataSourceImpl extends DriverManagerDataSource implements SdkDat
     return this.tables;
   }
 
-  @Override
-  public String toString()
-  {
-    StringBuilder sb = new StringBuilder(Util.NL);
-    sb = ToStringHelper.variableToString(sb, ToStringHelper.INDENT_NO, "dbNickname", this.dbNnickname);
-    sb = ToStringHelper.variableToString(sb, ToStringHelper.INDENT_NO, "dataSourceType", this.dst.toString());
-    sb = ToStringHelper.variableToString(sb, ToStringHelper.INDENT_NO, "dbName", this.dbName);
-    sb = ToStringHelper.variableToString(sb, ToStringHelper.INDENT_NO, "serverName", this.serverName);
-    sb = ToStringHelper.variableToString(sb, ToStringHelper.INDENT_NO, "tables", this.tables.toString());
-    
-    return sb.toString();
-  }
 }

@@ -7,7 +7,6 @@ import org.apache.log4j.Logger;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 
 import com.projectning.service.dao.SchemaTable;
-import com.projectning.util.Util;
 
 public class QueryBuilder
 {
@@ -425,15 +424,7 @@ public class QueryBuilder
     return this;
   }
   
-  public QueryBuilder setResultsOrderType(String orderingField, ResultsOrderType ordering)
-  {
-    Util.preventNullOrEmpty("orderingField", orderingField);
-    
-    this.orderingField = orderingField;
-    this.ordering = ordering;
-    
-    return this;
-  }
+
     
   public QueryInstance createQuery()
   {    
