@@ -1,4 +1,4 @@
-package com.projectning.util;
+package com.projectning.service.exceptions;
 
 public class SingletonException extends IllegalStateException
 {
