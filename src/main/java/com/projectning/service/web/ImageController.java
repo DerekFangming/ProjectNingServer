@@ -18,6 +18,7 @@ import com.projectning.service.exceptions.SessionExpiredException;
 import com.projectning.service.manager.HelperManager;
 import com.projectning.service.manager.ImageManager;
 import com.projectning.service.manager.UserManager;
+import com.projectning.util.Util;
 
 @Controller
 public class ImageController {
@@ -44,7 +45,9 @@ public class ImageController {
 				
 			}
 			
-			imageManager.saveImage((String)request.get("image"), (String)request.get("type"), id, title);
+			String verifiedType = Util.verifyType((String)request.get("type"));
+			
+			imageManager.saveImage((String)request.get("image"), verifiedType, id, title);
 			
 			respond.put("error", "");
 		}catch(NullPointerException e){
