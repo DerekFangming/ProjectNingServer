@@ -85,7 +85,7 @@ public class ImageManagerImpl implements ImageManager{
 	}
 
 	@Override
-	public List<Integer> getImageIdByType(String type, int ownerId){
+	public List<Integer> getImageIdListByType(String type, int ownerId){
 		List<QueryTerm> values = new ArrayList<QueryTerm>();
 		values.add(ImageDao.Field.TYPE.getQueryTerm(type));
 		values.add(ImageDao.Field.OWNER_ID.getQueryTerm(ownerId));
@@ -104,6 +104,12 @@ public class ImageManagerImpl implements ImageManager{
 			idList.add(i.getId());
 		}
 		return idList;
+	}
+
+	@Override
+	public Image retrieveAvatar(int userId) throws NotFoundException {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }
