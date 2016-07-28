@@ -140,7 +140,7 @@ public class ImageController {
 			
 			int id = userManager.getUserId((String)result.get("username"), accessToken);
 			
-			respond.put("idList", imageManager.getImageIdByType((String)request.get("type"), id));
+			respond.put("idList", imageManager.getImageIdListByType((String)request.get("type"), id));
 			
 			respond.put("error", "");
 		}catch(NullPointerException e){

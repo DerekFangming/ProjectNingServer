@@ -52,6 +52,6 @@ public interface ImageManager {
 	 * @return Image image object of the Avatar
 	 * @throws NotFoundException
 	 */
-	public Image retrieveAvatar(int userId) throws NotFoundException;
+	public Image retrieveAvatar(int userId) throws NotFoundException, FileNotFoundException, IOException;
 	
 }

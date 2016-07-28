@@ -64,7 +64,7 @@ public class ImageManagerImpl implements ImageManager{
 	}
 
 	@Override
-	public Image retrieveImageById(int imageId, int ownerId) throws NotFoundException, FileNotFoundException,IOException{
+	public Image retrieveImageById(int imageId, int ownerId) throws NotFoundException, FileNotFoundException, IOException{
 		
 		List<QueryTerm> values = new ArrayList<QueryTerm>();
 		values.add(ImageDao.Field.ID.getQueryTerm(imageId));
@@ -107,9 +107,22 @@ public class ImageManagerImpl implements ImageManager{
 	}
 
 	@Override
-	public Image retrieveAvatar(int userId) throws NotFoundException {
-		// TODO Auto-generated method stub
-		return null;
+	public Image retrieveAvatar(int userId) throws NotFoundException, FileNotFoundException, IOException {
+		List<QueryTerm> values = new ArrayList<QueryTerm>();
+		values.add(ImageDao.Field.OWNER_ID.getQueryTerm(userId));
+		values.add(ImageDao.Field.ENABLED.getQueryTerm(true));
+		Image img = imageDao.findObject(values);
+		
+		File originalFile = new File(img.getLocation());
+		String encodedBase64 = null;
+		FileInputStream fileInputStreamReader = new FileInputStream(originalFile);
+        byte[] bytes = new byte[(int)originalFile.length()];
+        fileInputStreamReader.read(bytes);
+        encodedBase64 = new String(Base64.encodeBase64(bytes));
+        fileInputStreamReader.close();
+        
+        img.setLocation(encodedBase64);
+        return img;
 	}
 
 }
