@@ -18,6 +18,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import com.projectning.service.exceptions.NotFoundException;
 import com.projectning.service.manager.HelperManager;
 import com.projectning.service.manager.UserManager;
+import com.projectning.util.ErrorMessage;
+import com.projectning.util.ImageType;
 
 @Controller
 public class AuthController {
@@ -37,7 +39,7 @@ public class AuthController {
 		}catch(IllegalStateException e){
 			respond.put("error", e.getMessage());
 		}catch(NullPointerException e){
-			respond.put("error", "Request parameters incorrect");
+			respond.put("error", ErrorMessage.INCORECT_PARAM.getMsg());
 		}
 	
 		return new ResponseEntity<Map<String, Object>>(respond, HttpStatus.OK);
@@ -67,11 +69,11 @@ public class AuthController {
 			respond.put("emailConfirmed","false");
 			respond.put("error", "");
 		}catch(NullPointerException e){
-			respond.put("error", "Request parameters incorrest");
+			respond.put("error", ErrorMessage.INCORECT_PARAM.getMsg());
 		}catch(IllegalStateException e){
 			respond.put("error", e.getMessage());
 		}catch(NotFoundException e){
-			respond.put("error", "User not found");
+			respond.put("error", ErrorMessage.USER_NOT_FOUND.getMsg());
 		}
 	
 		return new ResponseEntity<Map<String, Object>>(respond, HttpStatus.OK);
@@ -105,7 +107,7 @@ public class AuthController {
 		}catch(NotFoundException e){
 			respond = "User name is not found in database";
 		}
-		
+		// Crazy hack to get the page displayed
 		return new ResponseEntity<String>(helperManager.getEmailConfirmedPage(respond), HttpStatus.OK);
 	}
 	
@@ -117,9 +119,9 @@ public class AuthController {
 			respond.put("salt", userManager.loginForSalt(username));
 			respond.put("error", "");
 		}catch(NullPointerException e){
-			respond.put("error", "Request parameters incorrest");
+			respond.put("error", ErrorMessage.INCORECT_PARAM.getMsg());
 		}catch(NotFoundException e){
-			respond.put("error", "User not found");
+			respond.put("error", ErrorMessage.USER_NOT_FOUND.getMsg());
 		}
 		return new ResponseEntity<Map<String, Object>>(respond, HttpStatus.OK);
 		
@@ -143,9 +145,9 @@ public class AuthController {
 			respond.put("emailConfirmed","false");
 			respond.put("error", "");
 		}catch(NullPointerException e){
-			respond.put("error", "Request parameters incorrest");
+			respond.put("error", ErrorMessage.INCORECT_PARAM.getMsg());
 		}catch(NotFoundException e){
-			respond.put("error", "User not found");
+			respond.put("error", ErrorMessage.USER_NOT_FOUND.getMsg());
 		}
 		return new ResponseEntity<Map<String, Object>>(respond, HttpStatus.OK);
 		
@@ -159,5 +161,12 @@ public class AuthController {
         
         return new ResponseEntity<String>(helperManager.getEmailConfirmedPage("Invalid code"), HttpStatus.OK);
     }
+	
+	@RequestMapping("/test")
+	public ResponseEntity<String> test(HttpServletRequest request) {
+		String a = "haha";
+		
+		return new ResponseEntity<String>(a + a.toUpperCase() + a, HttpStatus.OK);
+	}
 
 }

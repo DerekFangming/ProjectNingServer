@@ -14,7 +14,7 @@ public interface ImageManager {
 	 * @param base64 the encoded image file
 	 * @param type the type of the image for the project. Defaulted to Others if type is not recognized
 	 * @param ownerId the owner of the image
-	 * @param title the title of the image, if applicable. Defaulted to null if type is not recognized
+	 * @param title the title of the image, if applicable. Defaulted to empty String if type is not recognized
 	 * @throws FileNotFoundException if the output file path is not available
 	 * @throws IOException if write image file process error
 	 */

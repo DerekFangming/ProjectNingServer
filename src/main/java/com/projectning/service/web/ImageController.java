@@ -18,6 +18,7 @@ import com.projectning.service.exceptions.SessionExpiredException;
 import com.projectning.service.manager.HelperManager;
 import com.projectning.service.manager.ImageManager;
 import com.projectning.service.manager.UserManager;
+import com.projectning.util.ErrorMessage;
 import com.projectning.util.Util;
 
 @Controller
@@ -45,17 +46,17 @@ public class ImageController {
 				
 			}
 			
-			String verifiedType = Util.verifyType((String)request.get("type"));
+			String verifiedType = Util.verifyImageType((String)request.get("type"));
 			
 			imageManager.saveImage((String)request.get("image"), verifiedType, id, title);
 			
 			respond.put("error", "");
 		}catch(NullPointerException e){
-			respond.put("error", "Request parameters incorrest");
+			respond.put("error", ErrorMessage.INCORECT_PARAM.getMsg());
 		}catch(IllegalStateException e){
 			respond.put("error", e.getMessage());
 		}catch(NotFoundException e){
-			respond.put("error", "User not found");
+			respond.put("error", ErrorMessage.USER_NOT_FOUND.getMsg());
 		}catch (FileNotFoundException e) {
 			respond.put("error", "Internal error, image path not found");
 		}catch (IOException e) {
@@ -86,7 +87,7 @@ public class ImageController {
 			respond.put("image", image.getLocation());// crazy hack
 			respond.put("title", image.getTitle());
 		}catch(NullPointerException e){
-			respond.put("error", "Request parameters incorrest");
+			respond.put("error", ErrorMessage.INCORECT_PARAM.getMsg());
 		}catch(IllegalStateException e){
 			respond.put("error", e.getMessage());
 		}catch(NotFoundException e){
@@ -117,7 +118,7 @@ public class ImageController {
 			
 			respond.put("error", "");
 		}catch(NullPointerException e){
-			respond.put("error", "Request parameters incorrest");
+			respond.put("error", ErrorMessage.INCORECT_PARAM.getMsg());
 		}catch(IllegalStateException e){
 			respond.put("error", e.getMessage());
 		}catch(NotFoundException e){
@@ -144,7 +145,7 @@ public class ImageController {
 			
 			respond.put("error", "");
 		}catch(NullPointerException e){
-			respond.put("error", "Request parameters incorrest");
+			respond.put("error", ErrorMessage.INCORECT_PARAM.getMsg());
 		}catch(IllegalStateException e){
 			respond.put("error", e.getMessage());
 		}catch(NotFoundException e){
@@ -152,6 +153,12 @@ public class ImageController {
 		}catch(SessionExpiredException e){
 			respond.put("error", "Session timeout");
 		}
+		return new ResponseEntity<Map<String, Object>>(respond, HttpStatus.OK);
+	}
+	
+	@RequestMapping("/")
+	public ResponseEntity<Map<String, Object>> getAvatar(@RequestBody Map<String, Object> request) {
+		Map<String, Object> respond = new HashMap<String, Object>();
 		return new ResponseEntity<Map<String, Object>>(respond, HttpStatus.OK);
 	}
 

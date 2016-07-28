@@ -4,12 +4,12 @@ public class Util {
 	public final static String imagePath = "/Volumes/Data/images/";
 	
 
-	public static String verifyType(String type) {
+	public static String verifyImageType(String type) {
 		if (type == null)
 			return ImageType.OTHERS.getName();
 		
 		for (ImageType it : ImageType.values()) {
-	        if (it.getName().equals(type)) {
+	        if (it.getName().toUpperCase().equals(type.toUpperCase())) {
 	            return type;
 	        }
 	    }

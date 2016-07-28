@@ -30,8 +30,8 @@ public class ImageManagerImpl implements ImageManager{
 	@Override
 	public void saveImage(String base64, String type, int ownerId, String title) throws FileNotFoundException, IOException {
 		Image image = new Image();
-		image.setLocation("temp");
-		image.setType(Util.verifyType(type));
+		image.setLocation("");
+		image.setType(Util.verifyImageType(type));
 		image.setCreatedAt(Instant.now());
 		image.setOwnerId(ownerId);
 		image.setEnabled(true);
