@@ -43,7 +43,7 @@ public class ImageController {
 			try{
 				title = (String)request.get("title");
 			}catch(NullPointerException e){
-				
+				//
 			}
 			
 			String verifiedType = Util.verifyImageType((String)request.get("type"));
@@ -91,7 +91,7 @@ public class ImageController {
 		}catch(IllegalStateException e){
 			respond.put("error", e.getMessage());
 		}catch(NotFoundException e){
-			respond.put("error", "Image not found");
+			respond.put("error", ErrorMessage.IMAGE_NOT_FOUND.getMsg());
 		}catch (FileNotFoundException e) {
 			respond.put("error", "Internal error, image path not found");
 		}catch (IOException e) {
@@ -122,7 +122,7 @@ public class ImageController {
 		}catch(IllegalStateException e){
 			respond.put("error", e.getMessage());
 		}catch(NotFoundException e){
-			respond.put("error", "Image not found");
+			respond.put("error", ErrorMessage.INCORECT_PARAM.getMsg());
 		}catch(SessionExpiredException e){
 			respond.put("error", "Session timeout");
 		}
@@ -149,7 +149,7 @@ public class ImageController {
 		}catch(IllegalStateException e){
 			respond.put("error", e.getMessage());
 		}catch(NotFoundException e){
-			respond.put("error", "Image not found");
+			respond.put("error", ErrorMessage.INCORECT_PARAM.getMsg());
 		}catch(SessionExpiredException e){
 			respond.put("error", "Session timeout");
 		}
