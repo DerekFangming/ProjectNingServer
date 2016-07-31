@@ -1,7 +1,5 @@
 package com.projectning.service.exceptions;
 
-import com.projectning.service.dao.impl.CoreTableType;
-
 public class ExceptionsHelper
 {
   /**

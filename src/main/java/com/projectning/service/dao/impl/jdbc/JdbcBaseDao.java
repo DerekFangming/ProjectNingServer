@@ -36,7 +36,6 @@ import com.projectning.service.dao.impl.SdkDataSourceImpl;
 import com.projectning.service.domain.EnumType;
 import com.projectning.service.domain.HasBuilder;
 import com.projectning.service.domain.ObjectOrigin;
-import com.projectning.service.exceptions.AlreadyExistsException;
 import com.projectning.service.exceptions.ExceptionsHelper;
 import com.projectning.service.exceptions.NotFoundException;
 import com.projectning.service.exceptions.NotUsingObjectBuilderException;
@@ -165,11 +164,6 @@ public abstract class JdbcBaseDao<T extends Object> implements CommonDao<T>
 
     QueryBuilder qb = QueryType.getQueryBuilder(this.myTable, QueryType.INSERT);
 
-    // TODO: READ BEFORE DELETING
-//    // TODO: Get rid of this step by changing getParamsMap(obj) to return a List<NVPair>
-//    List<NVPair> values = paramsMapToNameValueList(params);
-    
-//    qb.setParamsSource(values);
     qb.addNameValuePairs(values.getList());
     
     QueryInstance qi = qb.createQuery();
@@ -189,21 +183,7 @@ catch(Throwable t)
     return dbid;
   }
   
-  private List<NVPair> paramsMapToNameValueList(MapSqlParameterSource map)
-  {
-    List<NVPair> terms = new ArrayList<NVPair>();
-    
-    for(String key : map.getValues().keySet())
-    {
-      terms.add(new NVPair(key, map.getValue(key)));
-    }
-    
-    return terms;
-  }
-  // TODO: FIX ME FIX ME FIX ME FIX ME FIX ME FIX ME FIX ME FIX ME FIX ME FIX ME FIX ME FIX ME
-  // TODO: FIX ME FIX ME FIX ME FIX ME FIX ME FIX ME FIX ME FIX ME FIX ME FIX ME FIX ME FIX ME
-  // TODO: FIX ME FIX ME FIX ME FIX ME FIX ME FIX ME FIX ME FIX ME FIX ME FIX ME FIX ME FIX ME
-  // TODO: FIX ME FIX ME FIX ME FIX ME FIX ME FIX ME FIX ME FIX ME FIX ME FIX ME FIX ME FIX ME
+  
   @Override
   public void update(long dbId, T obj) throws NotFoundException
   {

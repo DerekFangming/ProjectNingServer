@@ -20,6 +20,7 @@ import com.projectning.service.dao.impl.QueryTerm;
 import com.projectning.service.domain.Image;
 import com.projectning.service.exceptions.NotFoundException;
 import com.projectning.service.manager.ImageManager;
+import com.projectning.util.ErrorMessage;
 import com.projectning.util.Util;
 
 @Component
@@ -57,7 +58,7 @@ public class ImageManagerImpl implements ImageManager{
 		Image image = imageDao.findObject(value);
 		
 		if(image.getOwnerId() != ownerId)
-			throw new IllegalStateException("You cannot delete an image that is not yours.");
+			throw new IllegalStateException(ErrorMessage.UNAUTHORIZED_DELETE.getMsg());
 		
 		NVPair pair = new NVPair(ImageDao.Field.ENABLED.name, false);
 		imageDao.update(image.getId(), pair);

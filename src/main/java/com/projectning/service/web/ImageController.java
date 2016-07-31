@@ -52,17 +52,17 @@ public class ImageController {
 			
 			respond.put("error", "");
 		}catch(NullPointerException e){
-			respond.put("error", ErrorMessage.INCORECT_PARAM.getMsg());
+			respond.put("error", ErrorMessage.INCORRECT_PARAM.getMsg());
 		}catch(IllegalStateException e){
 			respond.put("error", e.getMessage());
 		}catch(NotFoundException e){
 			respond.put("error", ErrorMessage.USER_NOT_FOUND.getMsg());
 		}catch (FileNotFoundException e) {
-			respond.put("error", "Internal error, image path not found");
+			respond.put("error", ErrorMessage.INCORRECT_INTER_IMG_PATH.getMsg());
 		}catch (IOException e) {
-			respond.put("error", "Internal error, cannot write image file");
+			respond.put("error", ErrorMessage.INCORRECT_INTER_IMG_IO.getMsg());
 		}catch(SessionExpiredException e){
-			respond.put("error", "Session timeout");
+			respond.put("error", ErrorMessage.SESSION_EXPIRED.getMsg());
 		}
 		return new ResponseEntity<Map<String, Object>>(respond, HttpStatus.OK);
 		
@@ -87,15 +87,15 @@ public class ImageController {
 			respond.put("image", image.getLocation());// crazy hack
 			respond.put("title", image.getTitle());
 		}catch(NullPointerException e){
-			respond.put("error", ErrorMessage.INCORECT_PARAM.getMsg());
+			respond.put("error", ErrorMessage.INCORRECT_PARAM.getMsg());
 		}catch(IllegalStateException e){
 			respond.put("error", e.getMessage());
 		}catch(NotFoundException e){
 			respond.put("error", ErrorMessage.IMAGE_NOT_FOUND.getMsg());
 		}catch (FileNotFoundException e) {
-			respond.put("error", "Internal error, image path not found");
+			respond.put("error", ErrorMessage.INCORRECT_INTER_IMG_PATH.getMsg());
 		}catch (IOException e) {
-			respond.put("error", "Internal error, cannot write image file");
+			respond.put("error", ErrorMessage.INCORRECT_INTER_IMG_IO.getMsg());
 		}catch(SessionExpiredException e){
 			respond.put("error", "Session timeout");
 		}
@@ -118,13 +118,13 @@ public class ImageController {
 			
 			respond.put("error", "");
 		}catch(NullPointerException e){
-			respond.put("error", ErrorMessage.INCORECT_PARAM.getMsg());
+			respond.put("error", ErrorMessage.INCORRECT_PARAM.getMsg());
 		}catch(IllegalStateException e){
 			respond.put("error", e.getMessage());
 		}catch(NotFoundException e){
-			respond.put("error", ErrorMessage.INCORECT_PARAM.getMsg());
+			respond.put("error", ErrorMessage.IMAGE_NOT_FOUND.getMsg());
 		}catch(SessionExpiredException e){
-			respond.put("error", "Session timeout");
+			respond.put("error", ErrorMessage.SESSION_EXPIRED.getMsg());
 		}
 		return new ResponseEntity<Map<String, Object>>(respond, HttpStatus.OK);
 		
@@ -145,13 +145,13 @@ public class ImageController {
 			
 			respond.put("error", "");
 		}catch(NullPointerException e){
-			respond.put("error", ErrorMessage.INCORECT_PARAM.getMsg());
+			respond.put("error", ErrorMessage.INCORRECT_PARAM.getMsg());
 		}catch(IllegalStateException e){
 			respond.put("error", e.getMessage());
 		}catch(NotFoundException e){
-			respond.put("error", ErrorMessage.INCORECT_PARAM.getMsg());
+			respond.put("error", ErrorMessage.IMAGE_NOT_FOUND.getMsg());
 		}catch(SessionExpiredException e){
-			respond.put("error", "Session timeout");
+			respond.put("error", ErrorMessage.SESSION_EXPIRED.getMsg());
 		}
 		return new ResponseEntity<Map<String, Object>>(respond, HttpStatus.OK);
 	}

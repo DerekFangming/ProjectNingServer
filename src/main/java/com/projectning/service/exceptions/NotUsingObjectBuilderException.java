@@ -1,5 +1,6 @@
 package com.projectning.service.exceptions;
 
+@SuppressWarnings("serial")
 public class NotUsingObjectBuilderException extends RuntimeException
 {
 

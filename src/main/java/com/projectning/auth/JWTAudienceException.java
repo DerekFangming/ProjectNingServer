@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import java.util.ArrayList;
 import java.util.List;
 
+@SuppressWarnings("serial")
 public class JWTAudienceException extends JWTVerifyException {
     private JsonNode audienceNode;
 

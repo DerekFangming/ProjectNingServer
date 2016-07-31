@@ -78,7 +78,8 @@ public class JWTVerifier {
      * @throws JWTVerifyException    when expiration, issuer or audience are invalid
      * @throws IllegalStateException when token's structure is invalid
      */
-    public Map<String, Object> verify(String token)
+    @SuppressWarnings("unchecked")
+	public Map<String, Object> verify(String token)
             throws NoSuchAlgorithmException, InvalidKeyException, IllegalStateException,
             IOException, SignatureException, JWTVerifyException {
         if (token == null || "".equals(token)) {

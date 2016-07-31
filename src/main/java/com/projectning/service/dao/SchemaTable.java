@@ -161,7 +161,8 @@ public interface SchemaTable
   {
     String colName;
   
-    Class clazz = enumElt.getClass();
+    @SuppressWarnings("rawtypes")
+	Class clazz = enumElt.getClass();
   
     try
     {
@@ -186,7 +187,8 @@ public interface SchemaTable
   {
     boolean isPK = false;
   
-    Class clazz = enumElt.getClass();
+    @SuppressWarnings("rawtypes")
+	Class clazz = enumElt.getClass();
   
     try
     {

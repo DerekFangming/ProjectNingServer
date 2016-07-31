@@ -1,5 +1,6 @@
 package com.projectning.auth;
 
+@SuppressWarnings("serial")
 public class JWTExpiredException extends JWTVerifyException {
     private long expiration;
 

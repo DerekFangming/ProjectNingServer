@@ -1,5 +1,6 @@
 package com.projectning.auth;
 
+@SuppressWarnings("serial")
 public class JWTIssuerException extends JWTVerifyException {
     private final String issuer;
 

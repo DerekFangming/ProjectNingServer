@@ -19,7 +19,6 @@ import com.projectning.service.exceptions.NotFoundException;
 import com.projectning.service.manager.HelperManager;
 import com.projectning.service.manager.UserManager;
 import com.projectning.util.ErrorMessage;
-import com.projectning.util.ImageType;
 
 @Controller
 public class AuthController {
@@ -39,7 +38,7 @@ public class AuthController {
 		}catch(IllegalStateException e){
 			respond.put("error", e.getMessage());
 		}catch(NullPointerException e){
-			respond.put("error", ErrorMessage.INCORECT_PARAM.getMsg());
+			respond.put("error", ErrorMessage.INCORRECT_PARAM.getMsg());
 		}
 	
 		return new ResponseEntity<Map<String, Object>>(respond, HttpStatus.OK);
@@ -69,7 +68,7 @@ public class AuthController {
 			respond.put("emailConfirmed","false");
 			respond.put("error", "");
 		}catch(NullPointerException e){
-			respond.put("error", ErrorMessage.INCORECT_PARAM.getMsg());
+			respond.put("error", ErrorMessage.INCORRECT_PARAM.getMsg());
 		}catch(IllegalStateException e){
 			respond.put("error", e.getMessage());
 		}catch(NotFoundException e){
@@ -105,7 +104,7 @@ public class AuthController {
 		}catch(DateTimeParseException e){
 			respond = "Expiration date format incorrect";
 		}catch(NotFoundException e){
-			respond = "User name is not found in database";
+			respond = ErrorMessage.USER_NOT_FOUND.getMsg();
 		}
 		// Crazy hack to get the page displayed
 		return new ResponseEntity<String>(helperManager.getEmailConfirmedPage(respond), HttpStatus.OK);
@@ -119,7 +118,7 @@ public class AuthController {
 			respond.put("salt", userManager.loginForSalt(username));
 			respond.put("error", "");
 		}catch(NullPointerException e){
-			respond.put("error", ErrorMessage.INCORECT_PARAM.getMsg());
+			respond.put("error", ErrorMessage.INCORRECT_PARAM.getMsg());
 		}catch(NotFoundException e){
 			respond.put("error", ErrorMessage.USER_NOT_FOUND.getMsg());
 		}
@@ -145,7 +144,7 @@ public class AuthController {
 			respond.put("emailConfirmed","false");
 			respond.put("error", "");
 		}catch(NullPointerException e){
-			respond.put("error", ErrorMessage.INCORECT_PARAM.getMsg());
+			respond.put("error", ErrorMessage.INCORRECT_PARAM.getMsg());
 		}catch(NotFoundException e){
 			respond.put("error", ErrorMessage.USER_NOT_FOUND.getMsg());
 		}
