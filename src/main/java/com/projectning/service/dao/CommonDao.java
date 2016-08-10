@@ -63,7 +63,7 @@ public interface CommonDao<T extends Object>
    * match <i>exactly</i> the number of columns in the table, less the 
    * primary key field (if applicable).
    */
-  long persist(T obj) throws IllegalArgumentException;  
+  int persist(T obj) throws IllegalArgumentException;  
   
   /**
    * Updates a row in the current table
@@ -135,8 +135,8 @@ public interface CommonDao<T extends Object>
    * 
    * @throws NotFoundException If no such row exists
    */
-  long findId(QueryTerm term) throws NotFoundException;
-  long findId(List<QueryTerm> terms) throws NotFoundException;
+  int findId(QueryTerm term) throws NotFoundException;
+  int findId(List<QueryTerm> terms) throws NotFoundException;
   
   /**
    * Returns the list of row IDs matching all of the specified fields with exact values.
@@ -230,9 +230,9 @@ public interface CommonDao<T extends Object>
    * 
    * @return The number of rows matching the <tt>values</tt>.  
    */
-  long getCount(QueryTerm term);
-  long getCount(List<QueryTerm> terms);
-  long getCount(QueryInstance qi);
+  int getCount(QueryTerm term);
+  int getCount(List<QueryTerm> terms);
+  int getCount(QueryInstance qi);
   
   void requireBuilderUsed(T obj);
 

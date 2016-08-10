@@ -133,7 +133,7 @@ public abstract class JdbcBaseDao<T extends Object> implements CommonDao<T>
   protected abstract RowMapper<T> getRowMapper( );
 
   @Override
-  public long persist(T obj)
+  public int persist(T obj)
   {
     this.requireBuilderUsed(obj);
     
@@ -177,7 +177,7 @@ catch(Throwable t)
 {
   System.out.println(t.toString());
 }
-    long dbid = generatedKeyHolder.getKey().longValue();
+    int dbid = generatedKeyHolder.getKey().intValue();
       
     // Return the row's new ID
     return dbid;
@@ -295,15 +295,15 @@ catch(Throwable t)
   }
 
   @Override
-  public long findId(QueryTerm term) throws NotFoundException
+  public int findId(QueryTerm term) throws NotFoundException
   {
     return this.findId(convertToList(term));
   }
   
   @Override
-  public long findId(List<QueryTerm> terms) throws NotFoundException
+  public int findId(List<QueryTerm> terms) throws NotFoundException
   {
-    long dbId = -1;
+    int dbId = -1;
     
     QueryBuilder qb = QueryType.getQueryBuilder(this.myTable, QueryType.FIND_ID);
     
@@ -319,7 +319,7 @@ catch(Throwable t)
       
       if(rows.first())
       {
-        dbId = rows.getLong(myPkName);
+        dbId = rows.getInt(myPkName);
       }
       else
       {
@@ -509,7 +509,7 @@ catch(Throwable t)
   {
     boolean result = false;
     
-    long count = this.getCount(terms);
+    int count = this.getCount(terms);
     
     if(count != 0)
     {
@@ -520,14 +520,14 @@ catch(Throwable t)
   }
     
   @Override
-  public long getCount(QueryTerm term)
+  public int getCount(QueryTerm term)
   {
     return this.getCount(JdbcBaseDao.convertToList(term));
   }
   
   
   @Override
-  public long getCount(List<QueryTerm> terms)
+  public int getCount(List<QueryTerm> terms)
   {
     QueryBuilder qb = QueryType.getQueryBuilder(this.myTable, 
       QueryType.COUNT_ALL);
@@ -538,15 +538,15 @@ catch(Throwable t)
 
     Long count = this.namedTemplate.queryForObject(qi.getQueryStr(), qi.getParams(), Long.class);
     
-    return ((count == null) ? 0 : count.longValue());    
+    return ((count == null) ? 0 : count.intValue());    
   }
   
   @Override
-  public long getCount(QueryInstance qi)
+  public int getCount(QueryInstance qi)
   {
     Long count = this.namedTemplate.queryForObject(qi.getQueryStr(), qi.getParams(), Long.class);
     
-    return ((count == null) ? 0 : count.longValue());
+    return ((count == null) ? 0 : count.intValue());
   }
   
   @Override

@@ -38,7 +38,7 @@ public class ImageManagerImpl implements ImageManager{
 		image.setEnabled(true);
 		image.setTitle(title);
 		
-		int id = (int) imageDao.persist(image);
+		int id = imageDao.persist(image);
 		NVPair pair = new NVPair(ImageDao.Field.LOCATION.name, Util.imagePath + Integer.toString(id) + ".bmp");
 		imageDao.update(id, pair);
 		
