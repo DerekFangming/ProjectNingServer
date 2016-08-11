@@ -77,7 +77,7 @@ public class UserManagerImpl implements UserManager{
 	public boolean checkUsername(String username) {
 		List<QueryTerm> values = new ArrayList<QueryTerm>();
 		values.add(UserDao.Field.USERNAME.getQueryTerm(username));
-		return userDao.getCount(values) > 0;
+		return userDao.exists(values);
 		
 	}
 
