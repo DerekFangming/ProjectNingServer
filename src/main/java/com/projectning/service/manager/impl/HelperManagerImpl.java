@@ -127,7 +127,7 @@ public class HelperManagerImpl implements HelperManager{
 	@Override
 	public void checkSessionTimeOut(String time) throws SessionExpiredException {
 		Instant exp = Instant.parse(time);
-		if(exp.compareTo(Instant.now()) > 0)
+		if(exp.compareTo(Instant.now()) < 0)
 			throw new SessionExpiredException();
 		
 	}
