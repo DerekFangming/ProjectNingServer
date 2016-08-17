@@ -63,63 +63,63 @@ public class UserManagerImpl implements UserManager{
 		if(password.length() != 32)
 			throw new IllegalStateException("Password internal error");
 		
-		List<QueryTerm> values = new ArrayList<QueryTerm>();
-		values.add(UserDao.Field.USERNAME.getQueryTerm(username));
-		values.add(UserDao.Field.PASSWORD.getQueryTerm("password"));
-		User user = userDao.findObject(values);
+		List<QueryTerm> terms = new ArrayList<QueryTerm>();
+		terms.add(UserDao.Field.USERNAME.getQueryTerm(username));
+		terms.add(UserDao.Field.PASSWORD.getQueryTerm("password"));
+		User user = userDao.findObject(terms);
 		
-		NVPair pair = new NVPair(UserDao.Field.PASSWORD.name, password);
+		NVPair newValue = new NVPair(UserDao.Field.PASSWORD.name, password);
 		
-		userDao.update(user.getId(), pair);
+		userDao.update(user.getId(), newValue);
 	}
 
 	@Override
 	public boolean checkUsername(String username) {
-		List<QueryTerm> values = new ArrayList<QueryTerm>();
-		values.add(UserDao.Field.USERNAME.getQueryTerm(username));
-		return userDao.exists(values);
+		List<QueryTerm> terms = new ArrayList<QueryTerm>();
+		terms.add(UserDao.Field.USERNAME.getQueryTerm(username));
+		return userDao.exists(terms);
 		
 	}
 
 	@Override
 	public void updateVeriCode(String username, String code) throws NotFoundException{
-		List<QueryTerm> values = new ArrayList<QueryTerm>();
-		values.add(UserDao.Field.USERNAME.getQueryTerm(username));
-		User user = userDao.findObject(values);
+		List<QueryTerm> terms = new ArrayList<QueryTerm>();
+		terms.add(UserDao.Field.USERNAME.getQueryTerm(username));
+		User user = userDao.findObject(terms);
 		
-		NVPair pair = new NVPair(UserDao.Field.VERI_TOKEN.name, code);
+		NVPair newValue = new NVPair(UserDao.Field.VERI_TOKEN.name, code);
 		
-		userDao.update(user.getId(), pair);
+		userDao.update(user.getId(), newValue);
 	}
 
 	@Override
 	public void checkVeriCode(String username, String code) throws NotFoundException {
-		List<QueryTerm> values = new ArrayList<QueryTerm>();
-		values.add(UserDao.Field.USERNAME.getQueryTerm(username));
-		values.add(UserDao.Field.VERI_TOKEN.getQueryTerm(code));
-		userDao.findObject(values);
+		List<QueryTerm> terms = new ArrayList<QueryTerm>();
+		terms.add(UserDao.Field.USERNAME.getQueryTerm(username));
+		terms.add(UserDao.Field.VERI_TOKEN.getQueryTerm(code));
+		userDao.findObject(terms);
 		
 	}
 
 	@Override
 	public void confirmEmail(String username) throws NotFoundException {
-		List<QueryTerm> values = new ArrayList<QueryTerm>();
-		values.add(UserDao.Field.USERNAME.getQueryTerm(username));
-		User user = userDao.findObject(values);
+		List<QueryTerm> terms = new ArrayList<QueryTerm>();
+		terms.add(UserDao.Field.USERNAME.getQueryTerm(username));
+		User user = userDao.findObject(terms);
 		
-		List<NVPair> pairs = new ArrayList<NVPair>();
-		pairs.add(new NVPair("veri_token", ""));
-		pairs.add(new NVPair("email_confirmed", true));
+		List<NVPair> newValue = new ArrayList<NVPair>();
+		newValue.add(new NVPair("veri_token", ""));
+		newValue.add(new NVPair("email_confirmed", true));
 		
-		userDao.update(user.getId(), pairs);
+		userDao.update(user.getId(), newValue);
 		
 	}
 
 	@Override
 	public void updateAccessToken(String username, String token) throws NotFoundException {
-		List<QueryTerm> values = new ArrayList<QueryTerm>();
-		values.add(UserDao.Field.USERNAME.getQueryTerm(username));
-		User user = userDao.findObject(values);
+		List<QueryTerm> terms = new ArrayList<QueryTerm>();
+		terms.add(UserDao.Field.USERNAME.getQueryTerm(username));
+		User user = userDao.findObject(terms);
 		
 		NVPair pair = new NVPair(UserDao.Field.AUTH_TOKEN.name, token);
 		
@@ -129,17 +129,17 @@ public class UserManagerImpl implements UserManager{
 
 	@Override
 	public String loginForSalt(String username) throws NotFoundException {
-		List<QueryTerm> values = new ArrayList<QueryTerm>();
-		values.add(UserDao.Field.USERNAME.getQueryTerm(username));
-		return userDao.findObject(values).getSalt();
+		List<QueryTerm> terms = new ArrayList<QueryTerm>();
+		terms.add(UserDao.Field.USERNAME.getQueryTerm(username));
+		return userDao.findObject(terms).getSalt();
 	}
 
 	@Override
 	public void login(String username, String password, String accessToken) throws NotFoundException {
-		List<QueryTerm> values = new ArrayList<QueryTerm>();
-		values.add(UserDao.Field.USERNAME.getQueryTerm(username));
-		values.add(UserDao.Field.PASSWORD.getQueryTerm(password));
-		User user = userDao.findObject(values);
+		List<QueryTerm> terms = new ArrayList<QueryTerm>();
+		terms.add(UserDao.Field.USERNAME.getQueryTerm(username));
+		terms.add(UserDao.Field.PASSWORD.getQueryTerm(password));
+		User user = userDao.findObject(terms);
 		
 		NVPair pair = new NVPair(UserDao.Field.AUTH_TOKEN.name, accessToken);
 		
@@ -149,10 +149,18 @@ public class UserManagerImpl implements UserManager{
 
 	@Override
 	public int getUserId(String username, String accessToken) throws NotFoundException {
-		List<QueryTerm> values = new ArrayList<QueryTerm>();
-		values.add(UserDao.Field.USERNAME.getQueryTerm(username));
-		values.add(UserDao.Field.AUTH_TOKEN.getQueryTerm(accessToken));
-		return userDao.findObject(values).getId();
+		List<QueryTerm> terms = new ArrayList<QueryTerm>();
+		terms.add(UserDao.Field.USERNAME.getQueryTerm(username));
+		terms.add(UserDao.Field.AUTH_TOKEN.getQueryTerm(accessToken));
+		return userDao.findObject(terms).getId();
+	}
+
+	@Override
+	public void checkUserIdExistance(int id) throws NotFoundException {
+		List<QueryTerm> terms = new ArrayList<QueryTerm>();
+		terms.add(UserDao.Field.ID.getQueryTerm(id));
+		userDao.findObject(terms);
+		
 	}
 	
 

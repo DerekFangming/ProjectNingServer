@@ -1,7 +1,5 @@
 package com.projectning.service.web;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -18,7 +16,6 @@ import com.projectning.service.manager.HelperManager;
 import com.projectning.service.manager.RelationshipManager;
 import com.projectning.service.manager.UserManager;
 import com.projectning.util.ErrorMessage;
-import com.projectning.util.Util;
 
 @Controller
 public class RelationshipController {
@@ -27,8 +24,8 @@ public class RelationshipController {
 	@Autowired private HelperManager helperManager;
 	@Autowired private UserManager userManager;
 	
-	@RequestMapping("/friend_request")
-    public ResponseEntity<Map<String, Object>> friendRequest(@RequestBody Map<String, Object> request) {
+	@RequestMapping("/send_friend_request")
+    public ResponseEntity<Map<String, Object>> sendFriendRequest(@RequestBody Map<String, Object> request) {
 		Map<String, Object> respond = new HashMap<String, Object>();
 		try{
 			String accessToken = (String) request.get("accessToken");
@@ -38,7 +35,9 @@ public class RelationshipController {
 			
 			int id = userManager.getUserId((String)result.get("username"), accessToken);
 			
-			relationshipManager.friendRequest(id, (int)request.get("receiverId"));
+			userManager.checkUserIdExistance((int)request.get("receiverId"));
+			
+			relationshipManager.sendFriendRequest(id, (int)request.get("receiverId"));
 			
 			respond.put("error", "");
 		}catch(NullPointerException e){

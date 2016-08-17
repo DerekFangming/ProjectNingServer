@@ -87,4 +87,11 @@ public interface UserManager {
 	 * @throws NotFoundException if the user is not found
 	 */
 	public int getUserId(String username, String accessToken) throws NotFoundException;
+	
+	/**
+	 * Check if the given user id exists in the user table or not
+	 * @param id the user id
+	 * @throws NotFoundException if the user doesn't exist
+	 */
+	public void checkUserIdExistance(int id) throws NotFoundException;
 }

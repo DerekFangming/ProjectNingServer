@@ -21,7 +21,8 @@ public class RelationshipManagerImpl implements RelationshipManager{
 	@Autowired private RelationshipDao relationshipDao;
 
 	@Override
-	public void friendRequest(int senderId, int receiverId) throws NotFoundException {
+	public void sendFriendRequest(int senderId, int receiverId) throws IllegalStateException {
+		
 		try{
 			List<QueryTerm> terms = new ArrayList<QueryTerm>();
 			terms.add(RelationshipDao.Field.RECEIVER_ID.getQueryTerm(senderId));
@@ -58,6 +59,43 @@ public class RelationshipManagerImpl implements RelationshipManager{
 			
 		}
 		
+	}
+	
+	@Override
+	public void acceptFriendRequest(int senderId, int receiverId) throws IllegalStateException, NotFoundException {
+		List<QueryTerm> terms = new ArrayList<QueryTerm>();
+		terms.add(RelationshipDao.Field.RECEIVER_ID.getQueryTerm(receiverId));
+		terms.add(RelationshipDao.Field.SENDER_ID.getQueryTerm(senderId));
+		Relationship relationship = relationshipDao.findObject(terms);
+		if(relationship.getAccepted()){
+			throw new IllegalStateException(ErrorMessage.ALREADY_FRIEND.getMsg());
+		}else{
+			NVPair newValue = new NVPair(RelationshipDao.Field.ACCEPTED.name, true);
+			relationshipDao.update(relationship.getId(), newValue);
+		}
+	}
+	
+	@Override
+	public void removeFriend(int senderId, int receiverId) throws IllegalStateException, NotFoundException {
+		/*try{
+			List<QueryTerm> terms = new ArrayList<QueryTerm>();
+			terms.add(RelationshipDao.Field.RECEIVER_ID.getQueryTerm(senderId));
+			terms.add(RelationshipDao.Field.SENDER_ID.getQueryTerm(receiverId));
+			Relationship relationship = relationshipDao.findObject(terms);
+			
+			if(relationship.getAccepted()){
+				throw new IllegalStateException(ErrorMessage.ALREADY_FRIEND.getMsg());
+			}
+			
+			NVPair newValue = new NVPair(RelationshipDao.Field.ACCEPTED.name, true);
+			relationshipDao.update(relationship.getId(), newValue);
+		}catch (NotFoundException e){
+			
+		}*/
+		List<QueryTerm> terms = new ArrayList<QueryTerm>();
+		terms.add(RelationshipDao.Field.RECEIVER_ID.getQueryTerm(senderId));
+		terms.add(RelationshipDao.Field.SENDER_ID.getQueryTerm(receiverId));
+		relationshipDao.delete(terms);
 	}
 
 }
