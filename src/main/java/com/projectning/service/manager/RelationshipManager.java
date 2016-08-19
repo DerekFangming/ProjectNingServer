@@ -28,9 +28,8 @@ public interface RelationshipManager {
 	 * Both user ids must be pre-checked
 	 * @param senderId the id of the requester
 	 * @param receiverId the id of the receiver
-	 * @throws IllegalStateException if there are any relationship status error
 	 * @throws NotFoundException if the friend request does not exist
 	 */
-	public void removeFriend (int senderId, int receiverId) throws IllegalStateException, NotFoundException;
+	public void removeFriend (int senderId, int receiverId) throws NotFoundException;
 	
 }
