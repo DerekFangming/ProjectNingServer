@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.projectning.service.exceptions.NotFoundException;
 import com.projectning.service.manager.HelperManager;
+import com.projectning.service.manager.RelationshipManager;
 import com.projectning.service.manager.UserManager;
 import com.projectning.util.ErrorMessage;
 
@@ -161,11 +162,15 @@ public class AuthController {
         return new ResponseEntity<String>(helperManager.getEmailConfirmedPage("Invalid code"), HttpStatus.OK);
     }
 	
+	@Autowired RelationshipManager relationshipManager;
+	
 	@RequestMapping("/test")
-	public ResponseEntity<String> test(HttpServletRequest request) {
-		String a = "haha";
-		
-		return new ResponseEntity<String>(a + a.toUpperCase() + a, HttpStatus.OK);
+	public ResponseEntity<String> test(@RequestBody Map<String, Object> request) {
+		int a = (int)request.get("a");
+		int b = (int)request.get("b");
+		relationshipManager.removeFriend(a, b);
+		System.out.println("received");
+		return new ResponseEntity<String>("" + a, HttpStatus.OK);
 	}
 
 }
