@@ -156,9 +156,33 @@ public class ImageController {
 		return new ResponseEntity<Map<String, Object>>(respond, HttpStatus.OK);
 	}
 	
-	@RequestMapping("/")
+	@RequestMapping("/get_new_avatar")
 	public ResponseEntity<Map<String, Object>> getAvatar(@RequestBody Map<String, Object> request) {
 		Map<String, Object> respond = new HashMap<String, Object>();
+		try{
+			String accessToken = (String)request.get("accessToken");
+			Map<String, Object> result = helperManager.decodeJWT(accessToken);
+			
+			helperManager.checkSessionTimeOut((String)result.get("expire"));
+			
+			int userId = userManager.getUserId((String)result.get("username"), accessToken);
+			
+			//Image image = imageManager.retrieveImageById(imageId, id);
+			
+			respond.put("error", "");
+			//respond.put("createdAt", image.getCreatedAt().toString());
+			//respond.put("image", image.getLocation());// crazy hack
+			
+			respond.put("error", "");
+		}catch(NullPointerException e){
+			respond.put("error", ErrorMessage.INCORRECT_PARAM.getMsg());
+		}catch(IllegalStateException e){
+			respond.put("error", e.getMessage());
+		}catch(NotFoundException e){
+			respond.put("error", ErrorMessage.IMAGE_NOT_FOUND.getMsg());
+		}catch(SessionExpiredException e){
+			respond.put("error", ErrorMessage.SESSION_EXPIRED.getMsg());
+		}
 		return new ResponseEntity<Map<String, Object>>(respond, HttpStatus.OK);
 	}
 

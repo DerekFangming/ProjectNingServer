@@ -3,7 +3,9 @@ package com.projectning.service.web;
 import java.time.Duration;
 import java.time.Instant;
 import java.time.format.DateTimeParseException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -15,6 +17,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.projectning.service.dao.ImageDao;
+import com.projectning.service.dao.UserDao;
+import com.projectning.service.dao.impl.QueryTerm;
+import com.projectning.service.dao.impl.RelationalOpType;
+import com.projectning.service.domain.Image;
+import com.projectning.service.domain.User;
 import com.projectning.service.exceptions.NotFoundException;
 import com.projectning.service.manager.HelperManager;
 import com.projectning.service.manager.RelationshipManager;
@@ -26,6 +34,8 @@ public class AuthController {
 	
 	@Autowired private HelperManager helperManager;
 	@Autowired private UserManager userManager;
+	
+	@Autowired UserDao u;
 	
 	@RequestMapping("/register_for_salt")
     public ResponseEntity<Map<String, Object>> registerForSalt(@RequestBody Map<String, Object> request) {
@@ -166,11 +176,21 @@ public class AuthController {
 	
 	@RequestMapping("/test")
 	public ResponseEntity<String> test(@RequestBody Map<String, Object> request) {
-		int a = (int)request.get("a");
+		/*int a = (int)request.get("a");
 		int b = (int)request.get("b");
 		relationshipManager.removeFriend(a, b);
-		System.out.println("received");
-		return new ResponseEntity<String>("" + a, HttpStatus.OK);
+		System.out.println("received");*/
+		
+		List<Integer> l = new ArrayList<Integer>();
+		l.add(2);
+		
+		
+		
+		List<QueryTerm> values = new ArrayList<QueryTerm>();
+		values.add(ImageDao.Field.ID.getQueryTerm(RelationalOpType.IN, l));
+		List<User> temp = u.findAllObjects(values);
+		
+		return new ResponseEntity<String>(temp.toString(), HttpStatus.OK);
 	}
 
 }
