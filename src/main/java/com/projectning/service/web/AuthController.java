@@ -18,8 +18,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.projectning.service.dao.ImageDao;
+import com.projectning.service.dao.RelationshipDao;
 import com.projectning.service.dao.UserDao;
+import com.projectning.service.dao.impl.CoreTableType;
+import com.projectning.service.dao.impl.InnerQueryTerm;
+import com.projectning.service.dao.impl.QueryBuilder;
 import com.projectning.service.dao.impl.QueryTerm;
+import com.projectning.service.dao.impl.QueryType;
 import com.projectning.service.dao.impl.RelationalOpType;
 import com.projectning.service.domain.Image;
 import com.projectning.service.domain.User;
@@ -181,16 +186,30 @@ public class AuthController {
 		relationshipManager.removeFriend(a, b);
 		System.out.println("received");*/
 		
-		List<Integer> l = new ArrayList<Integer>();
-		l.add(2);
+		QueryBuilder qb = QueryType.getQueryBuilder(CoreTableType.USERS, QueryType.FIND);
+	    
+	    QueryBuilder inner = qb.getInnerQueryBuilder(CoreTableType.RELATIONSHIPS, QueryType.FIND);
+	    //inner.addFirstQueryExpression(new QueryTerm(Imag.Field.ID.name, ca.getProblemSetId()));
+	    inner.setReturnField(RelationshipDao.Field.ID.name);
+	    
+	    qb.addFirstQueryExpression(new InnerQueryTerm(UserDao.Field.ID.name, inner));
+	    
+	    List<User> temp = u.findAllObjects(qb.createQuery());
 		
+	    String a = "";
+	    
+	    for(User t : temp){
+	    	a += Integer.toString(t.getId());
+	    	a += " ";
+	    }
+	    
+//		
+//		
+//		List<QueryTerm> values = new ArrayList<QueryTerm>();
+//		values.add(ImageDao.Field.ID.getQueryTerm(RelationalOpType.IN, l));
+//		List<User> temp = u.findAllObjects(values);
 		
-		
-		List<QueryTerm> values = new ArrayList<QueryTerm>();
-		values.add(ImageDao.Field.ID.getQueryTerm(RelationalOpType.IN, l));
-		List<User> temp = u.findAllObjects(values);
-		
-		return new ResponseEntity<String>(temp.toString(), HttpStatus.OK);
+		return new ResponseEntity<String>(a, HttpStatus.OK);
 	}
 
 }
