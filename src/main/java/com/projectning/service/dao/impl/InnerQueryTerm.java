@@ -2,9 +2,9 @@ package com.projectning.service.dao.impl;
 
 public class InnerQueryTerm extends QueryTerm
 {
-  public InnerQueryTerm(String field, QueryBuilder qb)
+  public InnerQueryTerm(String field, RelationalOpType op, QueryBuilder qb)
   {
-    super(field, RelationalOpType.IN, qb);
+    super(field, op, qb);
   }
 
   @Override

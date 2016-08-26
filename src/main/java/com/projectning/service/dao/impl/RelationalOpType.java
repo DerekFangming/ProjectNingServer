@@ -79,7 +79,27 @@ public enum RelationalOpType
         .append(qi.getQueryStr())
         .append(")");        
     }
-  };
+  }, 
+  NIN("NOT IN"){
+
+	    @Override
+	    public StringBuilder makeSymbolicTerm(QueryTerm term)
+	    {
+	      InnerQueryTerm iqt = (InnerQueryTerm) term;
+	      
+	      // Get the inner QB
+	      QueryBuilder iqb = iqt.getValue();
+	      
+	      // Get the inner query itself
+	      QueryInstance qi = iqb.createQuery();
+
+	      return new StringBuilder()
+	        .append(term.getField())
+	        .append(" NOT IN (")
+	        .append(qi.getQueryStr())
+	        .append(")");        
+	    }
+	  };
 
   public String asString;
 

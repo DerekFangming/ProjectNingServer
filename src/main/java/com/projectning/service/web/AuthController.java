@@ -192,7 +192,7 @@ public class AuthController {
 	    //inner.addFirstQueryExpression(new QueryTerm(Imag.Field.ID.name, ca.getProblemSetId()));
 	    inner.setReturnField(RelationshipDao.Field.ID.name);
 	    
-	    qb.addFirstQueryExpression(new InnerQueryTerm(UserDao.Field.ID.name, inner));
+	    qb.addFirstQueryExpression(new InnerQueryTerm(UserDao.Field.ID.name, RelationalOpType.NIN, inner));
 	    
 	    List<User> temp = u.findAllObjects(qb.createQuery());
 		
