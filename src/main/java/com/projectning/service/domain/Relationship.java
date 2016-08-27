@@ -7,7 +7,8 @@ public class Relationship {
 	private int id;
 	private int senderId;
 	private int receiverId;
-	private boolean accepted;
+	private boolean confirmed;
+	private String type;
 	private Instant createdAt;
 	
 	public int getId(){
@@ -34,12 +35,20 @@ public class Relationship {
 		this.receiverId = receiverId;
 	}
 	
-	public boolean getAccepted(){
-		return accepted;
+	public boolean getConfirmed(){
+		return confirmed;
 	}
 	
-	public void setAccepted(boolean accepted){
-		this.accepted = accepted;
+	public void setConfirmed(boolean confirmed){
+		this.confirmed = confirmed;
+	}
+	
+	public String getType(){
+		return type;
+	}
+	
+	public void setType(String type){
+		this.type = type;
 	}
 	
 	public Instant getCreatedAt(){

@@ -13,7 +13,8 @@ public interface RelationshipDao extends CommonDao<Relationship>{
 		ID(true),
 	    SENDER_ID,
 	    RECEIVER_ID,
-	    ACCEPTED,
+	    CONFIRMED,
+		TYPE,
 	    CREATED_AT,;
 		
 		public boolean isPK = false;
@@ -47,7 +48,8 @@ public interface RelationshipDao extends CommonDao<Relationship>{
 		    new Pair<Enum<?>, String>(Field.ID, "SERIAL NOT NULL"),
 		    new Pair<Enum<?>, String>(Field.SENDER_ID, "INTEGER NOT NULL"),
 		    new Pair<Enum<?>, String>(Field.RECEIVER_ID, "INTEGER NOT NULL"),
-		    new Pair<Enum<?>, String>(Field.ACCEPTED, "BOOLEAN NOT NULL"),
+		    new Pair<Enum<?>, String>(Field.CONFIRMED, "BOOLEAN NOT NULL"),
+			new Pair<Enum<?>, String>(Field.TYPE, "TEXT"),
 		    new Pair<Enum<?>, String>(Field.CREATED_AT, "TIMESTAMP WITHOUT TIME ZONE NOT NULL"));
 
 }

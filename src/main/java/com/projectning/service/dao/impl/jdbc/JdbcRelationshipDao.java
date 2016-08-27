@@ -27,7 +27,8 @@ public class JdbcRelationshipDao extends JdbcBaseDao<Relationship> implements Re
 	    
 	    params.addValue(RelationshipDao.Field.SENDER_ID.name, obj.getSenderId());
 	    params.addValue(RelationshipDao.Field.RECEIVER_ID.name, obj.getReceiverId());
-		params.addValue(RelationshipDao.Field.ACCEPTED.name, obj.getAccepted());
+	    params.addValue(RelationshipDao.Field.CONFIRMED.name, obj.getConfirmed());
+		params.addValue(RelationshipDao.Field.TYPE.name, obj.getType());
 	    params.addValue(RelationshipDao.Field.CREATED_AT.name, Date.from(obj.getCreatedAt()));
 	        
 	    return params;
@@ -45,6 +46,8 @@ public class JdbcRelationshipDao extends JdbcBaseDao<Relationship> implements Re
 	    	  obj.setId(rs.getInt(RelationshipDao.Field.ID.name));
 	    	  obj.setSenderId(rs.getInt(RelationshipDao.Field.SENDER_ID.name));
 	    	  obj.setReceiverId(rs.getInt(RelationshipDao.Field.RECEIVER_ID.name));
+	    	  obj.setConfirmed(rs.getBoolean(RelationshipDao.Field.CONFIRMED.name));
+			  obj.setType(rs.getString(RelationshipDao.Field.TYPE.name));
 	    	  obj.setCreatedAt(rs.getTimestamp(RelationshipDao.Field.CREATED_AT.name).toInstant());
 	        
 	        return obj;

@@ -24,6 +24,7 @@ CREATE TABLE relationships (
     id serial primary key,
     sender_id integer NOT NULL,
     receiver_id integer NOT NULL,
-    accepted boolean NOT NULL DEFAULT false,
+    confirmed boolean NOT NULL DEFAULT false,
+    type varchar(10),
     created_at timestamp without time zone NOT NULL
 );

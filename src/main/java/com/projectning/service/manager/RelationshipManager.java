@@ -21,7 +21,8 @@ public interface RelationshipManager {
 	 * @throws IllegalStateException if there are any relationship status error
 	 * @throws NotFoundException if the friend request does not exist
 	 */
-	public void acceptFriendRequest(int senderId, int receiverId) throws IllegalStateException, NotFoundException;
+	@Deprecated
+	public void acceptFriendRequest(int senderId, int receiverId) throws IllegalStateException;
 	
 	/**
 	 * Remove an accepted friend request

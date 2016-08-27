@@ -14,6 +14,7 @@ import com.projectning.service.domain.Relationship;
 import com.projectning.service.exceptions.NotFoundException;
 import com.projectning.service.manager.RelationshipManager;
 import com.projectning.util.ErrorMessage;
+import com.projectning.util.RelationshipType;
 
 @Component
 public class RelationshipManagerImpl implements RelationshipManager{
@@ -23,74 +24,64 @@ public class RelationshipManagerImpl implements RelationshipManager{
 	@Override
 	public void sendFriendRequest(int senderId, int receiverId) throws IllegalStateException {
 		
-		try{
-			List<QueryTerm> terms = new ArrayList<QueryTerm>();
-			terms.add(RelationshipDao.Field.RECEIVER_ID.getQueryTerm(senderId));
-			terms.add(RelationshipDao.Field.SENDER_ID.getQueryTerm(receiverId));
-			Relationship relationship = relationshipDao.findObject(terms);
-			
-			if(relationship.getAccepted()){
+		List<QueryTerm> terms = new ArrayList<QueryTerm>();
+		terms.add(RelationshipDao.Field.RECEIVER_ID.getQueryTerm(senderId));
+		terms.add(RelationshipDao.Field.SENDER_ID.getQueryTerm(receiverId));
+		terms.add(RelationshipDao.Field.TYPE.getQueryTerm(RelationshipType.FRIEND.getName()));
+		
+		if(relationshipDao.exists(terms)){
+			List<QueryTerm> checkBackTerms = new ArrayList<QueryTerm>();
+			checkBackTerms.add(RelationshipDao.Field.RECEIVER_ID.getQueryTerm(receiverId));
+			checkBackTerms.add(RelationshipDao.Field.SENDER_ID.getQueryTerm(senderId));
+			checkBackTerms.add(RelationshipDao.Field.TYPE.getQueryTerm(RelationshipType.FRIEND.getName()));
+			if(relationshipDao.exists(checkBackTerms)){
 				throw new IllegalStateException(ErrorMessage.ALREADY_FRIEND.getMsg());
 			}
-			
-			NVPair newValue = new NVPair(RelationshipDao.Field.ACCEPTED.name, true);
-			relationshipDao.update(relationship.getId(), newValue);
-		}catch (NotFoundException e){
-			try{
-				List<QueryTerm> terms = new ArrayList<QueryTerm>();
-				terms.add(RelationshipDao.Field.RECEIVER_ID.getQueryTerm(receiverId));
-				terms.add(RelationshipDao.Field.SENDER_ID.getQueryTerm(senderId));
-				Relationship relationship = relationshipDao.findObject(terms);
-			
-				if(relationship.getAccepted()){
-					throw new IllegalStateException(ErrorMessage.ALREADY_FRIEND.getMsg());
-				}else{
-					throw new IllegalStateException(ErrorMessage.ALREADY_REQUESTED.getMsg());
-				}
-			}catch (NotFoundException ex){
-				Relationship relationship = new Relationship();
-				relationship.setSenderId(senderId);
-				relationship.setReceiverId(receiverId);
-				relationship.setAccepted(false);
-				relationship.setCreatedAt(Instant.now());
-				
-				relationshipDao.persist(relationship);
-			}
-			
 		}
+		
+		Relationship relationship = new Relationship();
+		relationship.setSenderId(senderId);
+		relationship.setReceiverId(receiverId);
+		relationship.setType(RelationshipType.FRIEND.getName());
+		relationship.setCreatedAt(Instant.now());
+		
+		relationshipDao.persist(relationship);
 		
 	}
 	
+	@Deprecated
 	@Override
-	public void acceptFriendRequest(int senderId, int receiverId) throws NotFoundException {
-		List<QueryTerm> terms = new ArrayList<QueryTerm>();
-		terms.add(RelationshipDao.Field.RECEIVER_ID.getQueryTerm(receiverId));
-		terms.add(RelationshipDao.Field.SENDER_ID.getQueryTerm(senderId));
-		Relationship relationship = relationshipDao.findObject(terms);
-		if(relationship.getAccepted()){
-			throw new IllegalStateException(ErrorMessage.ALREADY_FRIEND.getMsg());
-		}else{
-			NVPair newValue = new NVPair(RelationshipDao.Field.ACCEPTED.name, true);
-			relationshipDao.update(relationship.getId(), newValue);
-		}
+	public void acceptFriendRequest(int senderId, int receiverId) throws IllegalStateException {
+		sendFriendRequest(receiverId, senderId);
 	}
 	
 	@Override
 	public void removeFriend(int senderId, int receiverId) throws NotFoundException {
+		boolean exceptionFlag = false;
 		try{
 			List<QueryTerm> terms = new ArrayList<QueryTerm>();
 			terms.add(RelationshipDao.Field.RECEIVER_ID.getQueryTerm(senderId));
 			terms.add(RelationshipDao.Field.SENDER_ID.getQueryTerm(receiverId));
+			terms.add(RelationshipDao.Field.TYPE.getQueryTerm(RelationshipType.FRIEND.getName()));
 			Relationship relationship = relationshipDao.findObject(terms);
 			
 			relationshipDao.deleteById(relationship.getId());
 		}catch (NotFoundException e){
+			exceptionFlag = true;
+		}
+		
+		try{
 			List<QueryTerm> terms = new ArrayList<QueryTerm>();
 			terms.add(RelationshipDao.Field.RECEIVER_ID.getQueryTerm(receiverId));
 			terms.add(RelationshipDao.Field.SENDER_ID.getQueryTerm(senderId));
+			terms.add(RelationshipDao.Field.TYPE.getQueryTerm(RelationshipType.FRIEND.getName()));
 			Relationship relationship = relationshipDao.findObject(terms);
 			
 			relationshipDao.deleteById(relationship.getId());
+		}catch (NotFoundException e){
+			if(exceptionFlag){
+				throw e;
+			}
 		}
 	}
 
