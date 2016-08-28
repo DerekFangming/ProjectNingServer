@@ -23,6 +23,7 @@ public class RelationshipManagerImpl implements RelationshipManager{
 
 	@Override
 	public void sendFriendRequest(int senderId, int receiverId) throws IllegalStateException {
+		Relationship relationship = new Relationship();
 		
 		List<QueryTerm> terms = new ArrayList<QueryTerm>();
 		terms.add(RelationshipDao.Field.RECEIVER_ID.getQueryTerm(senderId));
@@ -30,16 +31,24 @@ public class RelationshipManagerImpl implements RelationshipManager{
 		terms.add(RelationshipDao.Field.TYPE.getQueryTerm(RelationshipType.FRIEND.getName()));
 		
 		if(relationshipDao.exists(terms)){
+			relationship.setConfirmed(true);
+			
 			List<QueryTerm> checkBackTerms = new ArrayList<QueryTerm>();
 			checkBackTerms.add(RelationshipDao.Field.RECEIVER_ID.getQueryTerm(receiverId));
 			checkBackTerms.add(RelationshipDao.Field.SENDER_ID.getQueryTerm(senderId));
 			checkBackTerms.add(RelationshipDao.Field.TYPE.getQueryTerm(RelationshipType.FRIEND.getName()));
 			if(relationshipDao.exists(checkBackTerms)){
 				throw new IllegalStateException(ErrorMessage.ALREADY_FRIEND.getMsg());
+			}else{
+				Relationship rel = relationshipDao.findObject(terms);
+				NVPair newValue = new NVPair(RelationshipDao.Field.CONFIRMED.name, true);
+				relationshipDao.update(rel.getId(), newValue);
+
 			}
+		}else{
+			relationship.setConfirmed(false);
 		}
 		
-		Relationship relationship = new Relationship();
 		relationship.setSenderId(senderId);
 		relationship.setReceiverId(receiverId);
 		relationship.setType(RelationshipType.FRIEND.getName());
@@ -83,6 +92,30 @@ public class RelationshipManagerImpl implements RelationshipManager{
 				throw e;
 			}
 		}
+	}
+
+	@Override
+	public void denyUser(int senderId, int receiverId) throws IllegalStateException{
+		List<QueryTerm> terms = new ArrayList<QueryTerm>();
+		terms.add(RelationshipDao.Field.RECEIVER_ID.getQueryTerm(receiverId));
+		terms.add(RelationshipDao.Field.SENDER_ID.getQueryTerm(senderId));
+		terms.add(RelationshipDao.Field.TYPE.getQueryTerm(RelationshipType.DENIED.getName()));
+		if(relationshipDao.exists(terms)){
+			throw new IllegalStateException(ErrorMessage.ALREADY_DENIED.getMsg());
+		}
+		
+		Relationship relationship = new Relationship();
+		relationship.setSenderId(senderId);
+		relationship.setReceiverId(receiverId);
+		relationship.setConfirmed(true);
+		relationship.setType(RelationshipType.DENIED.getName());
+		relationship.setCreatedAt(Instant.now());
+	}
+
+	@Override
+	public void findNextUser(int userId) throws NotFoundException {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

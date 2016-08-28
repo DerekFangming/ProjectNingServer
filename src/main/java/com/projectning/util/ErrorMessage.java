@@ -15,7 +15,8 @@ public enum ErrorMessage {
 	UNAUTHORIZED_DELETE("Cannot delete an image that is not yours"),
 	//Relationship related
 	ALREADY_REQUESTED("You have already sent a request to him/her"),
-	ALREADY_FRIEND("You are already friend of him/her");
+	ALREADY_FRIEND("You are already friend of him/her"),
+	ALREADY_DENIED("You have already denied him/her");
 	
 	private final String msg;
 	

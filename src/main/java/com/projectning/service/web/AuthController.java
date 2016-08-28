@@ -181,27 +181,19 @@ public class AuthController {
 	
 	@RequestMapping("/test")
 	public ResponseEntity<String> test(@RequestBody Map<String, Object> request) {
-		/*int a = (int)request.get("a");
-		int b = (int)request.get("b");
-		relationshipManager.removeFriend(a, b);
-		System.out.println("received");*/
+
+		relationshipManager.sendFriendRequest(1, 2);
 		
-		QueryBuilder qb = QueryType.getQueryBuilder(CoreTableType.USERS, QueryType.FIND);
-	    
-	    QueryBuilder inner = qb.getInnerQueryBuilder(CoreTableType.RELATIONSHIPS, QueryType.FIND);
-	    //inner.addFirstQueryExpression(new QueryTerm(Imag.Field.ID.name, ca.getProblemSetId()));
-	    inner.setReturnField(RelationshipDao.Field.ID.name);
-	    
-	    qb.addFirstQueryExpression(new InnerQueryTerm(UserDao.Field.ID.name, RelationalOpType.NIN, inner));
-	    
-	    List<User> temp = u.findAllObjects(qb.createQuery());
+		//relationshipManager.removeFriend(2, 3);
 		
-	    String a = "";
-	    
-	    for(User t : temp){
-	    	a += Integer.toString(t.getId());
-	    	a += " ";
-	    }
+		
+//		
+//	    String a = "";
+//	    
+//	    for(User t : temp){
+//	    	a += Integer.toString(t.getId());
+//	    	a += " ";
+//	    }
 	    
 //		
 //		
@@ -209,7 +201,7 @@ public class AuthController {
 //		values.add(ImageDao.Field.ID.getQueryTerm(RelationalOpType.IN, l));
 //		List<User> temp = u.findAllObjects(values);
 		
-		return new ResponseEntity<String>(a, HttpStatus.OK);
+		return new ResponseEntity<String>("", HttpStatus.OK);
 	}
 
 }
