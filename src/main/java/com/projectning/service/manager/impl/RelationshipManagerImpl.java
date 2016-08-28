@@ -8,9 +8,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.projectning.service.dao.RelationshipDao;
+import com.projectning.service.dao.UserDao;
+import com.projectning.service.dao.impl.CoreTableType;
+import com.projectning.service.dao.impl.InnerQueryTerm;
 import com.projectning.service.dao.impl.NVPair;
+import com.projectning.service.dao.impl.QueryBuilder;
 import com.projectning.service.dao.impl.QueryTerm;
+import com.projectning.service.dao.impl.QueryType;
+import com.projectning.service.dao.impl.RelationalOpType;
 import com.projectning.service.domain.Relationship;
+import com.projectning.service.domain.User;
 import com.projectning.service.exceptions.NotFoundException;
 import com.projectning.service.manager.RelationshipManager;
 import com.projectning.util.ErrorMessage;
@@ -20,6 +27,7 @@ import com.projectning.util.RelationshipType;
 public class RelationshipManagerImpl implements RelationshipManager{
 
 	@Autowired private RelationshipDao relationshipDao;
+	@Autowired private UserDao userDao;
 
 	@Override
 	public void sendFriendRequest(int senderId, int receiverId) throws IllegalStateException {
@@ -114,7 +122,16 @@ public class RelationshipManagerImpl implements RelationshipManager{
 
 	@Override
 	public void findNextUser(int userId) throws NotFoundException {
-		// TODO Auto-generated method stub
+		//TODO : Logic fix due to newly designed 
+		QueryBuilder qb = QueryType.getQueryBuilder(CoreTableType.USERS, QueryType.FIND);
+	    
+	    QueryBuilder inner = qb.getInnerQueryBuilder(CoreTableType.RELATIONSHIPS, QueryType.FIND);
+	    //inner.addFirstQueryExpression(new QueryTerm(Imag.Field.ID.name, ca.getProblemSetId()));
+	    inner.setReturnField(RelationshipDao.Field.ID.name);
+	    
+	    qb.addFirstQueryExpression(new InnerQueryTerm(UserDao.Field.ID.name, RelationalOpType.NIN, inner));
+	    
+	    List<User> temp = userDao.findAllObjects(qb.createQuery());
 		
 	}
 
