@@ -182,7 +182,7 @@ public class AuthController {
 	@RequestMapping("/test")
 	public ResponseEntity<String> test(@RequestBody Map<String, Object> request) {
 
-		relationshipManager.sendFriendRequest(1, 2);
+		relationshipManager.findNextUser(2);
 		
 		//relationshipManager.removeFriend(2, 3);
 		

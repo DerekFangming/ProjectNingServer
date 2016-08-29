@@ -11,6 +11,7 @@ import com.projectning.service.dao.RelationshipDao;
 import com.projectning.service.dao.UserDao;
 import com.projectning.service.dao.impl.CoreTableType;
 import com.projectning.service.dao.impl.InnerQueryTerm;
+import com.projectning.service.dao.impl.LogicalOpType;
 import com.projectning.service.dao.impl.NVPair;
 import com.projectning.service.dao.impl.QueryBuilder;
 import com.projectning.service.dao.impl.QueryTerm;
@@ -122,16 +123,21 @@ public class RelationshipManagerImpl implements RelationshipManager{
 
 	@Override
 	public void findNextUser(int userId) throws NotFoundException {
-		//TODO : Logic fix due to newly designed 
 		QueryBuilder qb = QueryType.getQueryBuilder(CoreTableType.USERS, QueryType.FIND);
 	    
 	    QueryBuilder inner = qb.getInnerQueryBuilder(CoreTableType.RELATIONSHIPS, QueryType.FIND);
-	    //inner.addFirstQueryExpression(new QueryTerm(Imag.Field.ID.name, ca.getProblemSetId()));
-	    inner.setReturnField(RelationshipDao.Field.ID.name);
+	    inner.addFirstQueryExpression(new QueryTerm(RelationshipDao.Field.SENDER_ID.name, userId));
+	    
+	    inner.setReturnField(RelationshipDao.Field.RECEIVER_ID.name);
 	    
 	    qb.addFirstQueryExpression(new InnerQueryTerm(UserDao.Field.ID.name, RelationalOpType.NIN, inner));
+	    qb.addNextQueryExpression(LogicalOpType.AND ,new QueryTerm(UserDao.Field.ID.name, RelationalOpType.NEQ, userId));
 	    
 	    List<User> temp = userDao.findAllObjects(qb.createQuery());
+	    
+	    for(User u : temp){
+	    	System.out.println(u.getId());
+	    }
 		
 	}
 
