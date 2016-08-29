@@ -3,9 +3,7 @@ package com.projectning.service.web;
 import java.time.Duration;
 import java.time.Instant;
 import java.time.format.DateTimeParseException;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -17,17 +15,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.projectning.service.dao.ImageDao;
-import com.projectning.service.dao.RelationshipDao;
 import com.projectning.service.dao.UserDao;
-import com.projectning.service.dao.impl.CoreTableType;
-import com.projectning.service.dao.impl.InnerQueryTerm;
-import com.projectning.service.dao.impl.QueryBuilder;
-import com.projectning.service.dao.impl.QueryTerm;
-import com.projectning.service.dao.impl.QueryType;
-import com.projectning.service.dao.impl.RelationalOpType;
-import com.projectning.service.domain.Image;
-import com.projectning.service.domain.User;
 import com.projectning.service.exceptions.NotFoundException;
 import com.projectning.service.manager.HelperManager;
 import com.projectning.service.manager.RelationshipManager;
@@ -182,7 +170,7 @@ public class AuthController {
 	@RequestMapping("/test")
 	public ResponseEntity<String> test(@RequestBody Map<String, Object> request) {
 
-		relationshipManager.findNextUser(2);
+		System.out.println(relationshipManager.findNextUser(2));
 		
 		//relationshipManager.removeFriend(2, 3);
 		
