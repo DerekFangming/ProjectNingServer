@@ -13,7 +13,7 @@ CREATE TABLE users (
 CREATE TABLE images (
     id serial primary key,
     location varchar(50) NOT NULL,
-    type varchar(20),
+    type varchar(10),
     owner_id integer NOT NULL,
     created_at timestamp without time zone NOT NULL,
 	enabled boolean NOT NULL DEFAULT true,

@@ -17,6 +17,7 @@ import com.projectning.service.exceptions.NotFoundException;
 import com.projectning.service.exceptions.SessionExpiredException;
 import com.projectning.service.manager.HelperManager;
 import com.projectning.service.manager.ImageManager;
+import com.projectning.service.manager.RelationshipManager;
 import com.projectning.service.manager.UserManager;
 import com.projectning.util.ErrorMessage;
 import com.projectning.util.Util;
@@ -27,6 +28,7 @@ public class ImageController {
 	@Autowired private ImageManager imageManager;
 	@Autowired private HelperManager helperManager;
 	@Autowired private UserManager userManager;
+	@Autowired private RelationshipManager relationshipManager;
 	
 	@RequestMapping("/upload_image")
     public ResponseEntity<Map<String, Object>> uploadImage(@RequestBody Map<String, Object> request) {
@@ -156,7 +158,7 @@ public class ImageController {
 		return new ResponseEntity<Map<String, Object>>(respond, HttpStatus.OK);
 	}
 	
-	@RequestMapping("/get_new_avatar")
+	@RequestMapping("/get_next_avatar")
 	public ResponseEntity<Map<String, Object>> getAvatar(@RequestBody Map<String, Object> request) {
 		Map<String, Object> respond = new HashMap<String, Object>();
 		try{
@@ -165,7 +167,21 @@ public class ImageController {
 			
 			helperManager.checkSessionTimeOut((String)result.get("expire"));
 			
-			int userId = userManager.getUserId((String)result.get("username"), accessToken);
+			int senderId = userManager.getUserId((String)result.get("username"), accessToken);
+			
+			try{
+				int receiverId = (int)request.get("receiverId");
+				String action = (String)request.get("action");
+				if(action.equals("deny")){
+					relationshipManager.denyUser(senderId, receiverId);
+				}else if(action.equals("friend")){
+					relationshipManager.sendFriendRequest(senderId, receiverId);
+				}
+			}catch(NullPointerException npe){
+				
+			}
+			
+			
 			
 			//Image image = imageManager.retrieveImageById(imageId, id);
 			

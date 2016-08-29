@@ -45,8 +45,9 @@ public interface RelationshipManager {
 	/**
 	 * Find the next user that is not friend nor denied user
 	 * @param userId the user
+	 * @return the db id of the next user
 	 * @throws NotFoundException if there is no user left in the available list
 	 */
-	public void findNextUser(int userId) throws NotFoundException;
+	public int findNextUser(int userId) throws NotFoundException;
 	
 }

@@ -122,23 +122,18 @@ public class RelationshipManagerImpl implements RelationshipManager{
 	}
 
 	@Override
-	public void findNextUser(int userId) throws NotFoundException {
+	public int findNextUser(int userId) throws NotFoundException {
 		QueryBuilder qb = QueryType.getQueryBuilder(CoreTableType.USERS, QueryType.FIND);
 	    
 	    QueryBuilder inner = qb.getInnerQueryBuilder(CoreTableType.RELATIONSHIPS, QueryType.FIND);
 	    inner.addFirstQueryExpression(new QueryTerm(RelationshipDao.Field.SENDER_ID.name, userId));
-	    
 	    inner.setReturnField(RelationshipDao.Field.RECEIVER_ID.name);
 	    
 	    qb.addFirstQueryExpression(new InnerQueryTerm(UserDao.Field.ID.name, RelationalOpType.NIN, inner));
 	    qb.addNextQueryExpression(LogicalOpType.AND ,new QueryTerm(UserDao.Field.ID.name, RelationalOpType.NEQ, userId));
+	    qb.setLimit(1);
 	    
-	    List<User> temp = userDao.findAllObjects(qb.createQuery());
-	    
-	    for(User u : temp){
-	    	System.out.println(u.getId());
-	    }
-		
+	    return userDao.findAllObjects(qb.createQuery()).get(0).getId();
 	}
 
 }
