@@ -81,7 +81,7 @@ public class ImageManagerImpl implements ImageManager{
         encodedBase64 = new String(Base64.encodeBase64(bytes));
         fileInputStreamReader.close();
         
-        img.setLocation(encodedBase64);
+        img.setImageData(encodedBase64);
         return img;
 	}
 
@@ -122,7 +122,7 @@ public class ImageManagerImpl implements ImageManager{
         encodedBase64 = new String(Base64.encodeBase64(bytes));
         fileInputStreamReader.close();
         
-        img.setLocation(encodedBase64);
+        img.setImageData(encodedBase64);
         return img;
 	}
 

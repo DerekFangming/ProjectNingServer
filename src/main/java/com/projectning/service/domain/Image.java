@@ -10,6 +10,7 @@ public class Image {
 	private Instant createdAt;
 	private boolean enabled;
 	private String title;
+	private String imageData;
 	
 	public int getId(){
 		return id;
@@ -65,6 +66,14 @@ public class Image {
 	
 	public void setTitle(String title){
 		this.title = title;
+	}
+	
+	public String getImageData(){
+		return imageData;
+	}
+	
+	public void setImageData(String imageData){
+		this.imageData = imageData;
 	}
 
 }
