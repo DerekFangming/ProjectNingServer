@@ -86,7 +86,7 @@ public class ImageController {
 			
 			respond.put("error", "");
 			respond.put("createdAt", image.getCreatedAt().toString());
-			respond.put("image", image.getLocation());// crazy hack
+			respond.put("image", image.getImageData());
 			respond.put("title", image.getTitle());
 		}catch(NullPointerException e){
 			respond.put("error", ErrorMessage.INCORRECT_PARAM.getMsg());
@@ -170,24 +170,27 @@ public class ImageController {
 			int senderId = userManager.getUserId((String)result.get("username"), accessToken);
 			
 			try{
-				int receiverId = (int)request.get("receiverId");
+				int receiverId = (int)request.get("userId");
 				String action = (String)request.get("action");
+				
+				userManager.checkUserIdExistance(receiverId);
+				
 				if(action.equals("deny")){
 					relationshipManager.denyUser(senderId, receiverId);
 				}else if(action.equals("friend")){
 					relationshipManager.sendFriendRequest(senderId, receiverId);
 				}
 			}catch(NullPointerException npe){
-				
+				//
 			}
 			
+			int nextUserId = relationshipManager.findNextUser(senderId);
 			
-			
-			//Image image = imageManager.retrieveImageById(imageId, id);
+			Image avatar = imageManager.retrieveAvatar(nextUserId);
 			
 			respond.put("error", "");
-			//respond.put("createdAt", image.getCreatedAt().toString());
-			//respond.put("image", image.getLocation());// crazy hack
+			respond.put("userId", nextUserId);
+			respond.put("image", avatar.getImageData());
 			
 			respond.put("error", "");
 		}catch(NullPointerException e){
@@ -195,9 +198,13 @@ public class ImageController {
 		}catch(IllegalStateException e){
 			respond.put("error", e.getMessage());
 		}catch(NotFoundException e){
-			respond.put("error", ErrorMessage.IMAGE_NOT_FOUND.getMsg());
+			respond.put("error", ErrorMessage.RESOURCE_NOT_FOUND.getMsg());
 		}catch(SessionExpiredException e){
 			respond.put("error", ErrorMessage.SESSION_EXPIRED.getMsg());
+		}catch (FileNotFoundException e) {
+			respond.put("error", ErrorMessage.INCORRECT_INTER_IMG_PATH.getMsg());
+		}catch (IOException e) {
+			respond.put("error", ErrorMessage.INCORRECT_INTER_IMG_IO.getMsg());
 		}
 		return new ResponseEntity<Map<String, Object>>(respond, HttpStatus.OK);
 	}

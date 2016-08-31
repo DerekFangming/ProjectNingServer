@@ -18,7 +18,6 @@ import com.projectning.service.dao.impl.QueryTerm;
 import com.projectning.service.dao.impl.QueryType;
 import com.projectning.service.dao.impl.RelationalOpType;
 import com.projectning.service.domain.Relationship;
-import com.projectning.service.domain.User;
 import com.projectning.service.exceptions.NotFoundException;
 import com.projectning.service.manager.RelationshipManager;
 import com.projectning.util.ErrorMessage;

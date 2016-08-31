@@ -5,6 +5,8 @@ public enum ErrorMessage {
 	INCORRECT_DATE_FORMAT(""),
 	//HTTP related
 	INCORRECT_PARAM("Request parameters incorrect"),
+	//General
+	RESOURCE_NOT_FOUND("The resources do not exist"),
 	//User related
 	USER_NOT_FOUND("User does not exist"),
 	SESSION_EXPIRED("Session expired, please login again"),
