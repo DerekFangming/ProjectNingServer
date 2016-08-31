@@ -21,6 +21,7 @@ import com.projectning.service.domain.Image;
 import com.projectning.service.exceptions.NotFoundException;
 import com.projectning.service.manager.ImageManager;
 import com.projectning.util.ErrorMessage;
+import com.projectning.util.ImageType;
 import com.projectning.util.Util;
 
 @Component
@@ -112,6 +113,7 @@ public class ImageManagerImpl implements ImageManager{
 		List<QueryTerm> values = new ArrayList<QueryTerm>();
 		values.add(ImageDao.Field.OWNER_ID.getQueryTerm(userId));
 		values.add(ImageDao.Field.ENABLED.getQueryTerm(true));
+		values.add(ImageDao.Field.TYPE.getQueryTerm(ImageType.AVATAR.getName()));
 		Image img = imageDao.findObject(values);
 		
 		File originalFile = new File(img.getLocation());
