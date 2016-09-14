@@ -9,9 +9,10 @@ public interface RelationshipManager {
 	 * Both user ids must be pre-checked
 	 * @param senderId the id of the requester
 	 * @param receiverId the id of the receiver
+	 * @return a string showing the result of the friend request
 	 * @throws IllegalStateException if there are any relationship status error
 	 */
-	public void sendFriendRequest(int senderId, int receiverId) throws IllegalStateException;
+	public String sendFriendRequest(int senderId, int receiverId) throws IllegalStateException;
 
 	/**
 	 * Accept a friend request from sender.

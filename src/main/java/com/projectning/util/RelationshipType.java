@@ -2,7 +2,9 @@ package com.projectning.util;
 
 public enum RelationshipType {
 	FRIEND("Friend"),
-	DENIED("Denied");
+	DENIED("Denied"),
+	FRIEND_CONFIRMED("FC"),
+	FRIEND_REQUESTED("FR");
 	
 	private final String name;
 	

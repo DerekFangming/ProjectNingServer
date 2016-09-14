@@ -30,9 +30,9 @@ public class RelationshipManagerImpl implements RelationshipManager{
 	@Autowired private UserDao userDao;
 
 	@Override
-	public void sendFriendRequest(int senderId, int receiverId) throws IllegalStateException {
+	public String sendFriendRequest(int senderId, int receiverId) throws IllegalStateException {
 		Relationship relationship = new Relationship();
-		
+		String result = "";
 		List<QueryTerm> terms = new ArrayList<QueryTerm>();
 		terms.add(RelationshipDao.Field.RECEIVER_ID.getQueryTerm(senderId));
 		terms.add(RelationshipDao.Field.SENDER_ID.getQueryTerm(receiverId));
@@ -52,9 +52,11 @@ public class RelationshipManagerImpl implements RelationshipManager{
 				NVPair newValue = new NVPair(RelationshipDao.Field.CONFIRMED.name, true);
 				relationshipDao.update(rel.getId(), newValue);
 
+				result = RelationshipType.FRIEND_CONFIRMED.getName();
 			}
 		}else{
 			relationship.setConfirmed(false);
+			result = RelationshipType.FRIEND_REQUESTED.getName();
 		}
 		
 		relationship.setSenderId(senderId);
@@ -63,7 +65,7 @@ public class RelationshipManagerImpl implements RelationshipManager{
 		relationship.setCreatedAt(Instant.now());
 		
 		relationshipDao.persist(relationship);
-		
+		return result;
 	}
 	
 	@Deprecated
