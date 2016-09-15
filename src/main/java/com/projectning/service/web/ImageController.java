@@ -20,6 +20,7 @@ import com.projectning.service.manager.ImageManager;
 import com.projectning.service.manager.RelationshipManager;
 import com.projectning.service.manager.UserManager;
 import com.projectning.util.ErrorMessage;
+import com.projectning.util.RelationshipType;
 import com.projectning.util.Util;
 
 @Controller
@@ -178,7 +179,12 @@ public class ImageController {
 				if(action.equals("deny")){
 					relationshipManager.denyUser(senderId, receiverId);
 				}else if(action.equals("friend")){
-					relationshipManager.sendFriendRequest(senderId, receiverId);
+					String status = relationshipManager.sendFriendRequest(senderId, receiverId);
+					if(status.equals(RelationshipType.FRIEND_CONFIRMED.getName())){
+						respond.put("status", true);
+					}else{
+						respond.put("status", false);
+					}
 				}
 			}catch(NullPointerException npe){
 				//
