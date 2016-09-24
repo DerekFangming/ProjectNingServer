@@ -163,6 +163,7 @@ public class ImageController {
 	public ResponseEntity<Map<String, Object>> getAvatar(@RequestBody Map<String, Object> request) {
 		Map<String, Object> respond = new HashMap<String, Object>();
 		try{
+			Thread.sleep(2000);
 			String accessToken = (String)request.get("accessToken");
 			Map<String, Object> result = helperManager.decodeJWT(accessToken);
 			
@@ -194,7 +195,6 @@ public class ImageController {
 			
 			Image avatar = imageManager.retrieveAvatar(nextUserId);
 			
-			respond.put("error", "");
 			respond.put("userId", nextUserId);
 			respond.put("image", avatar.getImageData());
 			
@@ -211,6 +211,9 @@ public class ImageController {
 			respond.put("error", ErrorMessage.INCORRECT_INTER_IMG_PATH.getMsg());
 		}catch (IOException e) {
 			respond.put("error", ErrorMessage.INCORRECT_INTER_IMG_IO.getMsg());
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 		return new ResponseEntity<Map<String, Object>>(respond, HttpStatus.OK);
 	}
