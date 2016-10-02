@@ -43,14 +43,15 @@ public interface ImageManager {
 	 * @param type the type of the image
 	 * @param ownerId the owner(user) id
 	 * @return a list of IDs that belongs the user and type
+	 * @throws NotFoundException when no id is found
 	 */
-	public List<Integer> getImageIdListByType(String type, int ownerId);
+	public List<Integer> getImageIdListByType(String type, int ownerId) throws NotFoundException;
 	
 	/**
 	 * Directly get the Avatar of a user by its user id
 	 * @param userId the id of the user
 	 * @return Image image object of the Avatar
-	 * @throws NotFoundException
+	 * @throws NotFoundException if there is no more new user (without relationship)
 	 */
 	public Image retrieveAvatar(int userId) throws NotFoundException, FileNotFoundException, IOException;
 	

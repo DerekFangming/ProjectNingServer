@@ -17,6 +17,7 @@ public enum ErrorMessage {
 	INCORRECT_INTER_IMG_PATH("Internal error, image path not found."),
 	INCORRECT_INTER_IMG_IO("Internal error, cannot write image file."),
 	UNAUTHORIZED_DELETE("Cannot delete an image that is not yours."),
+	AVATAR_NOT_FOUND("The user does not have an avatar."),
 	//Relationship related
 	ALREADY_REQUESTED("You have already sent a request to him/her."),
 	ALREADY_FRIEND("You are already friend of him/her."),

@@ -56,7 +56,12 @@ public class ImageManagerImpl implements ImageManager{
 	public void softDeleteImage(int imageId, int ownerId) throws NotFoundException, IllegalStateException {
 		
 		QueryTerm value = ImageDao.Field.ID.getQueryTerm(imageId);
-		Image image = imageDao.findObject(value);
+		Image image;
+		try{
+			image = imageDao.findObject(value);
+		}catch(NotFoundException e){
+			throw new NotFoundException(ErrorMessage.NO_IMAGE_TO_DELETE.getMsg());
+		}
 		
 		if(image.getOwnerId() != ownerId)
 			throw new IllegalStateException(ErrorMessage.UNAUTHORIZED_DELETE.getMsg());
@@ -72,7 +77,12 @@ public class ImageManagerImpl implements ImageManager{
 		values.add(ImageDao.Field.ID.getQueryTerm(imageId));
 		values.add(ImageDao.Field.OWNER_ID.getQueryTerm(ownerId));
 		values.add(ImageDao.Field.ENABLED.getQueryTerm(true));
-		Image img = imageDao.findObject(values);
+		Image img;
+		try{
+			img= imageDao.findObject(values);
+		}catch(NotFoundException e){
+			throw new NotFoundException(ErrorMessage.IMAGE_NOT_FOUND.getMsg());
+		}
 		
 		File originalFile = new File(img.getLocation());
 		String encodedBase64 = null;
@@ -87,7 +97,7 @@ public class ImageManagerImpl implements ImageManager{
 	}
 
 	@Override
-	public List<Integer> getImageIdListByType(String type, int ownerId){
+	public List<Integer> getImageIdListByType(String type, int ownerId) throws NotFoundException{
 		List<QueryTerm> values = new ArrayList<QueryTerm>();
 		values.add(ImageDao.Field.TYPE.getQueryTerm(type));
 		values.add(ImageDao.Field.OWNER_ID.getQueryTerm(ownerId));
@@ -99,7 +109,7 @@ public class ImageManagerImpl implements ImageManager{
 		try{
 			imgList = imageDao.findAllObjects(values);
 		}catch(NotFoundException e){
-			return idList;
+			throw new NotFoundException(ErrorMessage.IMAGE_TYPE_NOT_FOUND.getMsg());
 		}
 		
 		for(Image i : imgList){
@@ -114,7 +124,12 @@ public class ImageManagerImpl implements ImageManager{
 		values.add(ImageDao.Field.OWNER_ID.getQueryTerm(userId));
 		values.add(ImageDao.Field.ENABLED.getQueryTerm(true));
 		values.add(ImageDao.Field.TYPE.getQueryTerm(ImageType.AVATAR.getName()));
-		Image img = imageDao.findObject(values);
+		Image img;
+		try{
+			img = imageDao.findObject(values);
+		}catch(NotFoundException e){
+			throw new NotFoundException(ErrorMessage.AVATAR_NOT_FOUND.getMsg());
+		}
 		
 		File originalFile = new File(img.getLocation());
 		String encodedBase64 = null;
