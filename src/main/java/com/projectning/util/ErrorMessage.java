@@ -1,8 +1,8 @@
 package com.projectning.util;
 
 public enum ErrorMessage {
-	//JWT related
-	//INCORRECT_DATE_FORMAT(""),
+	//General
+	UNKNOWN_ERROR("Unknown error."),
 	//Security related
 	INVALID_ACCESS_TOKEN("The access token you are using is not valid. Please login again."),
 	INVALID_VERIFICATION_CODE("The verification code does not match what's on the record."),

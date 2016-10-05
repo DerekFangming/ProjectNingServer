@@ -1,5 +1,7 @@
 package com.projectning.service.exceptions;
 
+import com.projectning.util.ErrorMessage;
+
 @SuppressWarnings("serial")
 public class NotFoundException extends SdkException
 {
@@ -9,7 +11,7 @@ public class NotFoundException extends SdkException
   // TODO: Could modify message to prepend with typeNotFound.toString()
   public NotFoundException()
   {
-    super();
+    super(ErrorMessage.UNKNOWN_ERROR.getMsg());
   }
 
   public NotFoundException(NotFoundExceptionType typeNotFound)
