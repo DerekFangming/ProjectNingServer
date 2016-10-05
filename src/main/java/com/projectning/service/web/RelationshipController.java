@@ -45,7 +45,7 @@ public class RelationshipController {
 		}catch(IllegalStateException e){
 			respond.put("error", e.getMessage());
 		}catch(NotFoundException e){
-			respond.put("error", ErrorMessage.USER_NOT_FOUND.getMsg());
+			respond.put("error", e.getMessage());
 		}catch(SessionExpiredException e){
 			respond.put("error", ErrorMessage.SESSION_EXPIRED.getMsg());
 		}

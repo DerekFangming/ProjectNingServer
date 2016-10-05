@@ -185,15 +185,22 @@ public class UserManagerImpl implements UserManager{
 		List<QueryTerm> terms = new ArrayList<QueryTerm>();
 		terms.add(UserDao.Field.USERNAME.getQueryTerm(username));
 		terms.add(UserDao.Field.AUTH_TOKEN.getQueryTerm(accessToken));
-		return userDao.findObject(terms).getId();
+		try{
+			return userDao.findObject(terms).getId();
+		}catch(NotFoundException e){
+			throw new NotFoundException(ErrorMessage.USER_NOT_FOUND.getMsg());
+		}
 	}
 
 	@Override
 	public void checkUserIdExistance(int id) throws NotFoundException {
 		List<QueryTerm> terms = new ArrayList<QueryTerm>();
 		terms.add(UserDao.Field.ID.getQueryTerm(id));
-		userDao.findObject(terms);
-		
+		try{
+			userDao.findObject(terms);
+		}catch(NotFoundException e){
+			throw new NotFoundException(ErrorMessage.USER_NOT_FOUND.getMsg());
+		}
 	}
 	
 

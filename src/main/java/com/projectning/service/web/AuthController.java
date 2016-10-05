@@ -76,7 +76,7 @@ public class AuthController {
 		}catch(IllegalStateException e){
 			respond.put("error", e.getMessage());
 		}catch(NotFoundException e){
-			respond.put("error", ErrorMessage.USER_NOT_FOUND.getMsg());
+			respond.put("error", e.getMessage());
 		}
 	
 		return new ResponseEntity<Map<String, Object>>(respond, HttpStatus.OK);
@@ -108,9 +108,9 @@ public class AuthController {
 		}catch(DateTimeParseException e){
 			respond = "Expiration date format incorrect";
 		}catch(NotFoundException e){
-			respond = ErrorMessage.USER_NOT_FOUND.getMsg();
+			respond = e.getMessage();
 		}
-		// Crazy hack to get the page displayed
+		//TODO Crazy hack to get the page displayed
 		return new ResponseEntity<String>(helperManager.getEmailConfirmedPage(respond), HttpStatus.OK);
 	}
 	
@@ -124,7 +124,7 @@ public class AuthController {
 		}catch(NullPointerException e){
 			respond.put("error", ErrorMessage.INCORRECT_PARAM.getMsg());
 		}catch(NotFoundException e){
-			respond.put("error", ErrorMessage.USER_NOT_FOUND.getMsg());
+			respond.put("error", e.getMessage());
 		}
 		return new ResponseEntity<Map<String, Object>>(respond, HttpStatus.OK);
 		
@@ -150,7 +150,7 @@ public class AuthController {
 		}catch(NullPointerException e){
 			respond.put("error", ErrorMessage.INCORRECT_PARAM.getMsg());
 		}catch(NotFoundException e){
-			respond.put("error", ErrorMessage.USER_NOT_FOUND.getMsg());
+			respond.put("error", e.getMessage());
 		}
 		return new ResponseEntity<Map<String, Object>>(respond, HttpStatus.OK);
 		

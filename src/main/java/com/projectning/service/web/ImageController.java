@@ -59,7 +59,7 @@ public class ImageController {
 		}catch(IllegalStateException e){
 			respond.put("error", e.getMessage());
 		}catch(NotFoundException e){
-			respond.put("error", ErrorMessage.USER_NOT_FOUND.getMsg());
+			respond.put("error", e.getMessage());
 		}catch (FileNotFoundException e) {
 			respond.put("error", ErrorMessage.INCORRECT_INTER_IMG_PATH.getMsg());
 		}catch (IOException e) {
@@ -94,7 +94,7 @@ public class ImageController {
 		}catch(IllegalStateException e){
 			respond.put("error", e.getMessage());
 		}catch(NotFoundException e){
-			respond.put("error", ErrorMessage.IMAGE_NOT_FOUND.getMsg());
+			respond.put("error", e.getMessage());
 		}catch (FileNotFoundException e) {
 			respond.put("error", ErrorMessage.INCORRECT_INTER_IMG_PATH.getMsg());
 		}catch (IOException e) {
@@ -125,7 +125,7 @@ public class ImageController {
 		}catch(IllegalStateException e){
 			respond.put("error", e.getMessage());
 		}catch(NotFoundException e){
-			respond.put("error", ErrorMessage.IMAGE_NOT_FOUND.getMsg());
+			respond.put("error", e.getMessage());
 		}catch(SessionExpiredException e){
 			respond.put("error", ErrorMessage.SESSION_EXPIRED.getMsg());
 		}
@@ -152,7 +152,7 @@ public class ImageController {
 		}catch(IllegalStateException e){
 			respond.put("error", e.getMessage());
 		}catch(NotFoundException e){
-			respond.put("error", ErrorMessage.IMAGE_NOT_FOUND.getMsg());
+			respond.put("error", e.getMessage());
 		}catch(SessionExpiredException e){
 			respond.put("error", ErrorMessage.SESSION_EXPIRED.getMsg());
 		}
