@@ -3,13 +3,11 @@ package com.projectning.service.manager.impl;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 import com.projectning.service.manager.AboutManager;
 
-@Component("sampleServiceAboutManager")
-@Qualifier("sampleServiceAboutManager")
+@Component()
 public class AboutManagerImpl implements AboutManager {
 
 	@Override

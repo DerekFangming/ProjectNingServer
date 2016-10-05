@@ -19,6 +19,7 @@ import com.projectning.service.domain.User;
 import com.projectning.service.exceptions.NotFoundException;
 import com.projectning.service.manager.HelperManager;
 import com.projectning.service.manager.UserManager;
+import com.projectning.util.ErrorMessage;
 
 @Component
 public class UserManagerImpl implements UserManager{
@@ -29,13 +30,13 @@ public class UserManagerImpl implements UserManager{
 	@Override
 	public String registerForSalt(String username, int offset) throws IllegalStateException {
 		if(checkUsername(username))
-			throw new IllegalStateException("Username already exist");
+			throw new IllegalStateException(ErrorMessage.USERNAME_UNAVAILABLE.getMsg());
 		if (username.length() > 32)
-			throw new IllegalStateException("Username exceeds maximum length 32");
+			throw new IllegalStateException(ErrorMessage.USERNAME_TOO_LONG.getMsg());
 		Pattern p = Pattern.compile(".+@.+\\.[a-z]+");
 		Matcher m = p.matcher(username);
 		if(!m.matches())
-			throw new IllegalStateException("Username has to be an email");
+			throw new IllegalStateException(ErrorMessage.USERNAME_NOT_EMAIL.getMsg());
 		
 		
 		
@@ -59,14 +60,19 @@ public class UserManagerImpl implements UserManager{
 	@Override
 	public void register(String username, String password) throws IllegalStateException, NotFoundException {
 		if(username.length() > 32)
-			throw new IllegalStateException("Username internal error");
+			throw new IllegalStateException(ErrorMessage.USER_INTERN_ERROR.getMsg());
 		if(password.length() != 32)
-			throw new IllegalStateException("Password internal error");
+			throw new IllegalStateException(ErrorMessage.USER_INTERN_ERROR.getMsg());
 		
 		List<QueryTerm> terms = new ArrayList<QueryTerm>();
 		terms.add(UserDao.Field.USERNAME.getQueryTerm(username));
 		terms.add(UserDao.Field.PASSWORD.getQueryTerm("password"));
-		User user = userDao.findObject(terms);
+		User user;
+		try{
+			user = userDao.findObject(terms);
+		}catch(NotFoundException e){
+			throw new NotFoundException(ErrorMessage.USER_INTERN_ERROR.getMsg());
+		}
 		
 		NVPair newValue = new NVPair(UserDao.Field.PASSWORD.name, password);
 		
@@ -85,7 +91,12 @@ public class UserManagerImpl implements UserManager{
 	public void updateVeriCode(String username, String code) throws NotFoundException{
 		List<QueryTerm> terms = new ArrayList<QueryTerm>();
 		terms.add(UserDao.Field.USERNAME.getQueryTerm(username));
-		User user = userDao.findObject(terms);
+		User user;
+		try{
+			user = userDao.findObject(terms);
+		}catch(NotFoundException e){
+			throw new NotFoundException(ErrorMessage.USER_NOT_FOUND.getMsg());
+		}
 		
 		NVPair newValue = new NVPair(UserDao.Field.VERI_TOKEN.name, code);
 		
@@ -97,15 +108,23 @@ public class UserManagerImpl implements UserManager{
 		List<QueryTerm> terms = new ArrayList<QueryTerm>();
 		terms.add(UserDao.Field.USERNAME.getQueryTerm(username));
 		terms.add(UserDao.Field.VERI_TOKEN.getQueryTerm(code));
-		userDao.findObject(terms);
-		
+		try{
+			userDao.findObject(terms);
+		}catch(NotFoundException e){
+			throw new NotFoundException(ErrorMessage.INVALID_VERIFICATION_CODE.getMsg());
+		}
 	}
 
 	@Override
 	public void confirmEmail(String username) throws NotFoundException {
 		List<QueryTerm> terms = new ArrayList<QueryTerm>();
 		terms.add(UserDao.Field.USERNAME.getQueryTerm(username));
-		User user = userDao.findObject(terms);
+		User user;
+		try{
+			user = userDao.findObject(terms);
+		}catch(NotFoundException e){
+			throw new NotFoundException(ErrorMessage.USER_NOT_FOUND.getMsg());
+		}
 		
 		List<NVPair> newValue = new ArrayList<NVPair>();
 		newValue.add(new NVPair("veri_token", ""));
@@ -119,7 +138,12 @@ public class UserManagerImpl implements UserManager{
 	public void updateAccessToken(String username, String token) throws NotFoundException {
 		List<QueryTerm> terms = new ArrayList<QueryTerm>();
 		terms.add(UserDao.Field.USERNAME.getQueryTerm(username));
-		User user = userDao.findObject(terms);
+		User user;
+		try{
+			user = userDao.findObject(terms);
+		}catch(NotFoundException e){
+			throw new NotFoundException(ErrorMessage.USER_NOT_FOUND.getMsg());
+		}
 		
 		NVPair pair = new NVPair(UserDao.Field.AUTH_TOKEN.name, token);
 		
@@ -131,7 +155,11 @@ public class UserManagerImpl implements UserManager{
 	public String loginForSalt(String username) throws NotFoundException {
 		List<QueryTerm> terms = new ArrayList<QueryTerm>();
 		terms.add(UserDao.Field.USERNAME.getQueryTerm(username));
-		return userDao.findObject(terms).getSalt();
+		try{
+			return userDao.findObject(terms).getSalt();
+		}catch(NotFoundException e){
+			throw new NotFoundException(ErrorMessage.USER_NOT_FOUND.getMsg());
+		}
 	}
 
 	@Override
@@ -139,7 +167,12 @@ public class UserManagerImpl implements UserManager{
 		List<QueryTerm> terms = new ArrayList<QueryTerm>();
 		terms.add(UserDao.Field.USERNAME.getQueryTerm(username));
 		terms.add(UserDao.Field.PASSWORD.getQueryTerm(password));
-		User user = userDao.findObject(terms);
+		User user;
+		try{
+			user = userDao.findObject(terms);
+		}catch(NotFoundException e){
+			throw new NotFoundException(ErrorMessage.USER_INTERN_ERROR.getMsg());
+		}
 		
 		NVPair pair = new NVPair(UserDao.Field.AUTH_TOKEN.name, accessToken);
 		

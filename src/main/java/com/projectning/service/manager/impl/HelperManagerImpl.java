@@ -24,6 +24,7 @@ import com.projectning.auth.JWTVerifier;
 import com.projectning.auth.JWTVerifyException;
 import com.projectning.service.exceptions.SessionExpiredException;
 import com.projectning.service.manager.HelperManager;
+import com.projectning.util.ErrorMessage;
 
 @Component
 public class HelperManagerImpl implements HelperManager{
@@ -92,7 +93,7 @@ public class HelperManagerImpl implements HelperManager{
 			result = verifier.verify(JWTStr);
 		}catch(InvalidKeyException | NoSuchAlgorithmException | IllegalStateException | SignatureException
 				| IOException | JWTVerifyException e){
-			throw new IllegalStateException("Broken access token");
+			throw new IllegalStateException(ErrorMessage.INVALID_ACCESS_TOKEN.getMsg());
 		}
 		return result;
 	}

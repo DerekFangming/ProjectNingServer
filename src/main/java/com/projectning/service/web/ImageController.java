@@ -204,7 +204,7 @@ public class ImageController {
 		}catch(IllegalStateException e){
 			respond.put("error", e.getMessage());
 		}catch(NotFoundException e){
-			respond.put("error", ErrorMessage.RESOURCE_NOT_FOUND.getMsg());
+			respond.put("error", e.getMessage());
 		}catch(SessionExpiredException e){
 			respond.put("error", ErrorMessage.SESSION_EXPIRED.getMsg());
 		}catch (FileNotFoundException e) {

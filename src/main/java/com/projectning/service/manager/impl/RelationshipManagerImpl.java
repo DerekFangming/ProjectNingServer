@@ -99,7 +99,7 @@ public class RelationshipManagerImpl implements RelationshipManager{
 			relationshipDao.deleteById(relationship.getId());
 		}catch (NotFoundException e){
 			if(exceptionFlag){
-				throw e;
+				throw new NotFoundException(ErrorMessage.NOT_FRIEND.getMsg());
 			}
 		}
 	}
@@ -133,8 +133,12 @@ public class RelationshipManagerImpl implements RelationshipManager{
 	    qb.addFirstQueryExpression(new InnerQueryTerm(UserDao.Field.ID.name, RelationalOpType.NIN, inner));
 	    qb.addNextQueryExpression(LogicalOpType.AND ,new QueryTerm(UserDao.Field.ID.name, RelationalOpType.NEQ, userId));
 	    qb.setLimit(1);
+	    try{
+	    	return userDao.findAllObjects(qb.createQuery()).get(0).getId();
+	    }catch(NotFoundException e){
+	    	throw new NotFoundException(ErrorMessage.NO_MORE_USER.getMsg());
+	    }
 	    
-	    return userDao.findAllObjects(qb.createQuery()).get(0).getId();
 	}
 
 }
