@@ -59,9 +59,11 @@ public class NotFoundException extends SdkException
     return this.typeNotFound;
   }
   
+  /*
   @Override
   public String getMessage()
   {
     return this.typeNotFound.toString() + ": " + super.getMessage();
   }
+  */
 }
