@@ -75,8 +75,8 @@ public interface CommonDao<T extends Object>
    * 
    * @throws NotFoundException If no such row exists
    */
-  void update(long dbId, List<NVPair> values) throws NotFoundException;
-  void update(long dbId, NVPair value) throws NotFoundException;
+  void update(int dbId, List<NVPair> values) throws NotFoundException;
+  void update(int dbId, NVPair value) throws NotFoundException;
   
   /**
    * Updates a row in the current table.
@@ -87,7 +87,7 @@ public interface CommonDao<T extends Object>
    *  
    * @throws NotFoundException If no such row exists
    */
-  void update(long dbId, T obj) throws NotFoundException;
+  void update(int dbId, T obj) throws NotFoundException;
     
   /**
    * Returns the domain object for the specified internal database ID. 
@@ -95,7 +95,7 @@ public interface CommonDao<T extends Object>
    * 
    * @throws NotFoundException If no such row exists
    */
-  T findById(long dbId) throws NotFoundException;
+  T findById(int dbId) throws NotFoundException;
 
   /** NOTE: Not easily supported:
    * Short story: Needs custom & potentially complicated RowMapper(s)
@@ -150,9 +150,9 @@ public interface CommonDao<T extends Object>
    * 
    * @throws NotFoundException If no rows exist
    */
-  List<Long> findAllIds(List<QueryTerm> terms);
+  List<Integer> findAllIds(List<QueryTerm> terms);
   
-  List<Long> findAllIds(QueryInstance qi);
+  List<Integer> findAllIds(QueryInstance qi);
   
   /**
    * Returns the first object matching all of the specified fields with exact values.
@@ -199,10 +199,10 @@ public interface CommonDao<T extends Object>
   
   List<T> findAllObjects(QueryInstance qi) throws NotFoundException;
 
-  List<T> findMultipleObjects(List<QueryTerm> terms, long limit) throws NotFoundException;
+  List<T> findMultipleObjects(List<QueryTerm> terms, int limit) throws NotFoundException;
   
   // TODO: Actually this to support "paging" of results.
-  List<T> findMultipleObjects(List<QueryTerm> terms, long start, long limit);
+  List<T> findMultipleObjects(List<QueryTerm> terms, int start, int limit);
   
   /**
    * Determines whether one or more rows exist matching all of the specified fields with exact values.
@@ -237,7 +237,7 @@ public interface CommonDao<T extends Object>
   void requireBuilderUsed(T obj);
 
   //TODO: @NeedsAutority("SYS_ADMIN")
-  int deleteById(long dbid);
+  int deleteById(int dbid);
   int delete(QueryTerm term);
   // ANDed terms
   int delete(List<QueryTerm> terms);

@@ -185,7 +185,7 @@ catch(Throwable t)
   
   
   @Override
-  public void update(long dbId, T obj) throws NotFoundException
+  public void update(int dbId, T obj) throws NotFoundException
   {
     NVPairList values = getNVPairs(obj);
 
@@ -210,7 +210,7 @@ catch(Throwable t)
   }
   
   @Override
-  public void update(long dbId, NVPair value) throws NotFoundException
+  public void update(int dbId, NVPair value) throws NotFoundException
   {
     List<NVPair> values = convertToList(value);
     
@@ -218,7 +218,7 @@ catch(Throwable t)
   }
   
   @Override
-  public void update(long dbId, List<NVPair> values) throws NotFoundException
+  public void update(int dbId, List<NVPair> values) throws NotFoundException
   {
     QueryBuilder qb =  QueryType.getQueryBuilder(this.myTable, QueryType.UPDATE_BY_ID);
     
@@ -240,7 +240,7 @@ catch(Throwable t)
   }
   
   @Override
-  public T findById(long dbId) throws NotFoundException
+  public T findById(int dbId) throws NotFoundException
   {
 //    QueryBuilder qb = QueryType.getQueryBuilder(myTable, QueryType.FIND_BY_ID, ActiveType.ACTIVE);
     QueryBuilder qb = QueryType.getQueryBuilder(myTable, QueryType.FIND);
@@ -336,7 +336,7 @@ catch(Throwable t)
     
 
   @Override
-  public List<Long> findAllIds(List<QueryTerm> terms)
+  public List<Integer> findAllIds(List<QueryTerm> terms)
   {
     QueryBuilder qb = QueryType.getQueryBuilder(this.myTable, QueryType.FIND_ID);
     
@@ -348,26 +348,26 @@ catch(Throwable t)
     
 //    SqlRowSet rows = this.namedTemplate.queryForRowSet(qi.getQueryStr(), qi.getParams());
 //
-//    List<Long> ids = new ArrayList<Long>();
+//    List<Integer> ids = new ArrayList<Integer>();
 //
 //    while (rows.next())
 //    {
-//      ids.add(rows.getLong(myPkName));
+//      ids.add(rows.getInt(myPkName));
 //    }
 //
 //    return ids;    
   }
   
   @Override
-  public List<Long> findAllIds(QueryInstance qi)
+  public List<Integer> findAllIds(QueryInstance qi)
   {
     SqlRowSet rows = this.namedTemplate.queryForRowSet(qi.getQueryStr(), qi.getParams());
 
-    List<Long> ids = new ArrayList<Long>();
+    List<Integer> ids = new ArrayList<Integer>();
 
     while (rows.next())
     {
-      ids.add(rows.getLong(myPkName));
+      ids.add(rows.getInt(myPkName));
     }
 
     return ids;    
@@ -448,7 +448,7 @@ catch(Throwable t)
   }
 
   @Override
-  public List<T> findMultipleObjects(List<QueryTerm> terms, long limit) throws NotFoundException
+  public List<T> findMultipleObjects(List<QueryTerm> terms, int limit) throws NotFoundException
   {
     QueryBuilder qb = QueryType.getQueryBuilder(myTable, QueryType.FIND);
     
@@ -472,7 +472,7 @@ catch(Throwable t)
   }
 
   @Override
-  public List<T> findMultipleObjects(List<QueryTerm> terms, long start, long limit)
+  public List<T> findMultipleObjects(List<QueryTerm> terms, int start, int limit)
   {
     throw new NotImplementedException(
       "Need to implement findMultipleObjects(terms, start, limit)");
@@ -649,7 +649,7 @@ catch(Throwable t)
   
   // TODO: @NeedsAutority("SYS_ADMIN")
   @Override
-  public int deleteById(long dbid)
+  public int deleteById(int dbid)
   {
     QueryBuilder qb = QueryType.getQueryBuilder(this.myTable, QueryType.DELETE);
     
