@@ -137,8 +137,21 @@ public class RelationshipManagerImpl implements RelationshipManager{
 	    	return userDao.findAllObjects(qb.createQuery()).get(0).getId();
 	    }catch(NotFoundException e){
 	    	throw new NotFoundException(ErrorMessage.NO_MORE_USER.getMsg());
-	    }
-	    
+	    } 
+	}
+
+	@Override
+	public List<Integer> getFriendList(int userId) {
+		List<Integer> idList = new ArrayList<Integer>();
+		List<QueryTerm> terms = new ArrayList<QueryTerm>();
+		terms.add(RelationshipDao.Field.SENDER_ID.getQueryTerm(userId));
+		terms.add(RelationshipDao.Field.TYPE.getQueryTerm(RelationshipType.FRIEND.getName()));
+		terms.add(RelationshipDao.Field.CONFIRMED.getQueryTerm(true));
+		try{
+			return relationshipDao.findAllIds(terms);
+		}catch(NotFoundException e){
+			return idList;
+		}
 	}
 
 }

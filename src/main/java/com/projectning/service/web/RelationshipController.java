@@ -1,6 +1,7 @@
 package com.projectning.service.web;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,5 +54,31 @@ public class RelationshipController {
 		
 	}
 	
+	@RequestMapping("/get_friend_list")
+	public ResponseEntity<Map<String, Object>> getFriendList(@RequestBody Map<String, Object> request){
+		Map<String, Object> respond = new HashMap<String, Object>();
+		try{
+			String accessToken = (String) request.get("accessToken");
+			Map<String, Object> result = helperManager.decodeJWT(accessToken);
+			
+			helperManager.checkSessionTimeOut((String)result.get("expire"));
+			
+			int id = userManager.getUserId((String)result.get("username"), accessToken);
+			
+			List<Integer> idList = relationshipManager.getFriendList(id);
+			
+			respond.put("friendList", idList);
+			respond.put("error", "");
+		}catch(NullPointerException e){
+			respond.put("error", ErrorMessage.INCORRECT_PARAM.getMsg());
+		}catch(IllegalStateException e){
+			respond.put("error", e.getMessage());
+		}catch(NotFoundException e){
+			respond.put("error", e.getMessage());
+		}catch(SessionExpiredException e){
+			respond.put("error", ErrorMessage.SESSION_EXPIRED.getMsg());
+		}
+		return new ResponseEntity<Map<String, Object>>(respond, HttpStatus.OK);
+	}
 
 }

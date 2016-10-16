@@ -1,5 +1,7 @@
 package com.projectning.service.manager;
 
+import java.util.List;
+
 import com.projectning.service.exceptions.NotFoundException;
 
 public interface RelationshipManager {
@@ -50,5 +52,13 @@ public interface RelationshipManager {
 	 * @throws NotFoundException if there is no user left in the available list
 	 */
 	public int findNextUser(int userId) throws NotFoundException;
+	
+	/**
+	 * Retrieve the list of friend for the given user
+	 * Return empty list if no friend is found.
+	 * @param userId the user to search for friend list
+	 * @return a list of IDs of the given user
+	 */
+	public List<Integer> getFriendList(int userId);
 	
 }
