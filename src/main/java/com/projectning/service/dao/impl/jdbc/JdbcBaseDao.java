@@ -535,18 +535,14 @@ catch(Throwable t)
     qb.addFirstQueryExpression(terms, LogicalOpType.AND);
     
     QueryInstance qi = qb.createQuery();
-
-    Long count = this.namedTemplate.queryForObject(qi.getQueryStr(), qi.getParams(), Long.class);
     
-    return ((count == null) ? 0 : count.intValue());    
+    return this.namedTemplate.queryForObject(qi.getQueryStr(), qi.getParams(), Integer.class);   
   }
   
   @Override
   public int getCount(QueryInstance qi)
   {
-    Long count = this.namedTemplate.queryForObject(qi.getQueryStr(), qi.getParams(), Long.class);
-    
-    return ((count == null) ? 0 : count.intValue());
+    return this.namedTemplate.queryForObject(qi.getQueryStr(), qi.getParams(), Integer.class);
   }
   
   @Override
