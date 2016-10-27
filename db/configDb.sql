@@ -28,3 +28,14 @@ CREATE TABLE relationships (
     type varchar(10),
     created_at timestamp without time zone NOT NULL
 );
+
+CREATE TABLE user_details (
+    id serial primary key,
+    user_id integer NOT NULL,
+    name varchar(20),
+    nickname varchar(10),
+    age integer,
+    gender varchar(1),
+    location varchar(10),
+    whats_up varchar(200)
+);
