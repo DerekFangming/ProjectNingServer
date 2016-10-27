@@ -2,7 +2,9 @@ package com.projectning.service.manager.impl;
 
 import java.time.Instant;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -141,7 +143,7 @@ public class RelationshipManagerImpl implements RelationshipManager{
 	}
 
 	@Override
-	public List<Integer> getFriendList(int userId) {
+	public List<Integer> getFriendIDList(int userId) {
 		List<Integer> idList = new ArrayList<Integer>();
 		List<QueryTerm> terms = new ArrayList<QueryTerm>();
 		terms.add(RelationshipDao.Field.SENDER_ID.getQueryTerm(userId));
@@ -152,6 +154,22 @@ public class RelationshipManagerImpl implements RelationshipManager{
 		}catch(NotFoundException e){
 			return idList;
 		}
+	}
+	
+	@Override
+	public Map<String, List<Map<String, Object>>> getSortedFriendList(int userId){
+		Map<String, List<Map<String, Object>>> result = new HashMap<String, List<Map<String, Object>>>();
+		
+		List<Integer> idList = getFriendIDList(userId);
+		if(idList.size() == 0){
+			return result;
+		}
+		
+		for(int i : idList){
+			
+		}
+		
+		return result;
 	}
 
 }

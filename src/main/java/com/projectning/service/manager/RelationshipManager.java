@@ -1,6 +1,7 @@
 package com.projectning.service.manager;
 
 import java.util.List;
+import java.util.Map;
 
 import com.projectning.service.exceptions.NotFoundException;
 
@@ -54,11 +55,27 @@ public interface RelationshipManager {
 	public int findNextUser(int userId) throws NotFoundException;
 	
 	/**
-	 * Retrieve the list of friend for the given user
+	 * Retrieve the list of friend ID for the given user
 	 * Return empty list if no friend is found.
 	 * @param userId the user to search for friend list
 	 * @return a list of IDs of the given user
 	 */
-	public List<Integer> getFriendList(int userId);
+	public List<Integer> getFriendIDList(int userId);
+	
+	/**
+	 * Retrieve a map of sorted, detailed friend list with displayed name and id
+	 * Return empty map if no friend is found
+	 * Here is the structure of a sample map
+	 * {"A" : [{"name" : "Alen", "id" : 3},
+	 * 		   {"name" : "Alex", "id" : 31},
+	 * 		   {"name" : "Amy", "id" : 68}],
+	 *  "B" : [{"name" : "Bob", "id" : 14}],
+	 *  "T" : [{"name" : "Tommy", "id" : 97}],
+	 *  ...
+	 *  }
+	 * @param userId
+	 * @return
+	 */
+	public Map<String, List<Map<String, Object>>> getSortedFriendList(int userId);
 	
 }

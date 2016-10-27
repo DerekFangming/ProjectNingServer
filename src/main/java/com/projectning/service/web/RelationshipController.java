@@ -1,5 +1,6 @@
 package com.projectning.service.web;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -54,7 +55,7 @@ public class RelationshipController {
 		
 	}
 	
-	@RequestMapping("/get_friend_list")
+	@RequestMapping("/get_friend_id_list")
 	public ResponseEntity<Map<String, Object>> getFriendList(@RequestBody Map<String, Object> request){
 		Map<String, Object> respond = new HashMap<String, Object>();
 		try{
@@ -65,9 +66,68 @@ public class RelationshipController {
 			
 			int id = userManager.getUserId((String)result.get("username"), accessToken);
 			
-			List<Integer> idList = relationshipManager.getFriendList(id);
+			List<Integer> idList = relationshipManager.getFriendIDList(id);
 			
 			respond.put("friendList", idList);
+			respond.put("error", "");
+		}catch(NullPointerException e){
+			respond.put("error", ErrorMessage.INCORRECT_PARAM.getMsg());
+		}catch(IllegalStateException e){
+			respond.put("error", e.getMessage());
+		}catch(NotFoundException e){
+			respond.put("error", e.getMessage());
+		}catch(SessionExpiredException e){
+			respond.put("error", ErrorMessage.SESSION_EXPIRED.getMsg());
+		}
+		return new ResponseEntity<Map<String, Object>>(respond, HttpStatus.OK);
+	}
+	
+	@RequestMapping("/get_sorted_friend_list")
+	public ResponseEntity<Map<String, Object>> getSortedFriendList(@RequestBody Map<String, Object> request){
+		Map<String, Object> respond = new HashMap<String, Object>();
+		try{
+			/*
+			String accessToken = (String) request.get("accessToken");
+			Map<String, Object> result = helperManager.decodeJWT(accessToken);
+			
+			helperManager.checkSessionTimeOut((String)result.get("expire"));
+			
+			int id = userManager.getUserId((String)result.get("username"), accessToken);
+			
+			List<Integer> idList = relationshipManager.getFriendIDList(id);
+			*/
+			
+			Map<String, List<Map<String, Object>>> result = new HashMap<String, List<Map<String, Object>>>();
+			
+			Map<String, Object> allen = new HashMap<String, Object>();
+			allen.put("name", "allen");
+			allen.put("id", 1);
+			
+			Map<String, Object> abe = new HashMap<String, Object>();
+			abe.put("name", "abe");
+			abe.put("id", 2);
+			
+			Map<String, Object> bob = new HashMap<String, Object>();
+			bob.put("name", "bob");
+			bob.put("id", 3);
+			
+			Map<String, Object> tom = new HashMap<String, Object>();
+			tom.put("name", "tom");
+			tom.put("id", 4);
+			
+			List<Map<String, Object>> list1 = new ArrayList<Map<String, Object>>();
+			List<Map<String, Object>> list2 = new ArrayList<Map<String, Object>>();
+			List<Map<String, Object>> list3 = new ArrayList<Map<String, Object>>();
+			list1.add(abe);
+			list1.add(allen);
+			list2.add(bob);
+			list3.add(tom);
+
+			result.put("T", list3);
+			result.put("B", list2);
+			result.put("A", list1);
+			
+			respond.put("friendList", result);
 			respond.put("error", "");
 		}catch(NullPointerException e){
 			respond.put("error", ErrorMessage.INCORRECT_PARAM.getMsg());
