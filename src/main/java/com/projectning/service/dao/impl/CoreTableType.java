@@ -11,12 +11,14 @@ import com.projectning.service.dao.RelationshipDao;
 import com.projectning.service.dao.SchemaTable;
 import com.projectning.service.dao.SdkDataSource;
 import com.projectning.service.dao.UserDao;
+import com.projectning.service.dao.UserDetailDao;
 import com.projectning.util.Pair;
 
 
 public enum CoreTableType implements SchemaTable
 {
 	USERS(CoreDataSourceType.CORE, UserDao.FieldTypes),
+	USER_DETAILS(CoreDataSourceType.CORE, UserDetailDao.FieldTypes),
 	IMAGES(CoreDataSourceType.CORE, ImageDao.FieldTypes),
 	FRIENDS(CoreDataSourceType.CORE, FriendDao.FieldTypes),
 	RELATIONSHIPS(CoreDataSourceType.CORE, RelationshipDao.FieldTypes)
