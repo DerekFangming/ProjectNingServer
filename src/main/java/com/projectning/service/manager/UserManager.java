@@ -1,5 +1,6 @@
 package com.projectning.service.manager;
 
+import com.projectning.service.domain.UserDetail;
 import com.projectning.service.exceptions.NotFoundException;
 
 public interface UserManager {
@@ -94,4 +95,20 @@ public interface UserManager {
 	 * @throws NotFoundException if the user doesn't exist
 	 */
 	public void checkUserIdExistance(int id) throws NotFoundException;
+	
+	/**
+	 * Return the user detail object
+	 * @param userId the id of the user
+	 * @return the user detail object
+	 * @throws NotFoundException if the user does not have details listed
+	 */
+	public UserDetail getUserDetail(int userId) throws NotFoundException;
+	
+	/**
+	 * Return the username of the user
+	 * @param userId the id of the user
+	 * @return the username of the user
+	 * @throws NotFoundException if the user with the id does not exist
+	 */
+	public String getUsername(int userId) throws NotFoundException;
 }

@@ -13,9 +13,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.projectning.service.dao.UserDao;
+import com.projectning.service.dao.UserDetailDao;
 import com.projectning.service.dao.impl.NVPair;
 import com.projectning.service.dao.impl.QueryTerm;
 import com.projectning.service.domain.User;
+import com.projectning.service.domain.UserDetail;
 import com.projectning.service.exceptions.NotFoundException;
 import com.projectning.service.manager.HelperManager;
 import com.projectning.service.manager.UserManager;
@@ -25,6 +27,7 @@ import com.projectning.util.ErrorMessage;
 public class UserManagerImpl implements UserManager{
 
 	@Autowired UserDao userDao;
+	@Autowired UserDetailDao userDetailDao;
 	@Autowired HelperManager helperManager;
 	
 	@Override
@@ -203,6 +206,19 @@ public class UserManagerImpl implements UserManager{
 		}
 	}
 	
+	@Override
+	public UserDetail getUserDetail(int userId) throws NotFoundException{
+		List<QueryTerm> terms = new ArrayList<QueryTerm>();
+		terms.add(UserDetailDao.Field.USER_ID.getQueryTerm(userId));
+		return userDetailDao.findObject(terms);
+	}
+	
+	@Override
+	public String getUsername(int userId) throws NotFoundException{
+		List<QueryTerm> terms = new ArrayList<QueryTerm>();
+		terms.add(UserDao.Field.ID.getQueryTerm(userId));
+		return userDao.findObject(terms).getUsername();
+	}
 
 }
 
