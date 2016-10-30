@@ -190,6 +190,17 @@ public class RelationshipManagerImpl implements RelationshipManager{
 			}
 			listItem.put("id", i);
 			listItem.put("name", name);
+			
+			String category = Character.toString(name.toUpperCase().charAt(0));
+			List<Map<String, Object>> list = result.get(category);
+			if(list == null){
+				List<Map<String, Object>> newList = new ArrayList<Map<String, Object>>();
+				newList.add(listItem);
+				result.put(category, newList);
+			}else{
+				list.add(listItem);
+				result.put(category, list);
+			}
 		}
 		
 		return result;
