@@ -20,8 +20,10 @@ import com.projectning.service.dao.impl.QueryTerm;
 import com.projectning.service.dao.impl.QueryType;
 import com.projectning.service.dao.impl.RelationalOpType;
 import com.projectning.service.domain.Relationship;
+import com.projectning.service.domain.UserDetail;
 import com.projectning.service.exceptions.NotFoundException;
 import com.projectning.service.manager.RelationshipManager;
+import com.projectning.service.manager.UserManager;
 import com.projectning.util.ErrorMessage;
 import com.projectning.util.RelationshipType;
 
@@ -30,6 +32,7 @@ public class RelationshipManagerImpl implements RelationshipManager{
 
 	@Autowired private RelationshipDao relationshipDao;
 	@Autowired private UserDao userDao;
+	@Autowired private UserManager userManager;
 
 	@Override
 	public String sendFriendRequest(int senderId, int receiverId) throws IllegalStateException {
@@ -166,7 +169,27 @@ public class RelationshipManagerImpl implements RelationshipManager{
 		}
 		
 		for(int i : idList){
-			
+			Map<String, Object> listItem = new HashMap<String, Object>();
+			String name;
+			try{
+				
+				UserDetail userDetail = userManager.getUserDetail(userId);
+				if(!userDetail.getNickname().equals("")){
+					name = userDetail.getNickname();
+				}else if(!userDetail.getName().equals("")){
+					name = userDetail.getName();
+				}else{
+					throw new NotFoundException();
+				}
+			}catch(NotFoundException e){
+				try{
+					name = userManager.getUsername(i);
+				}catch(NotFoundException ex){
+					throw new IllegalStateException(ErrorMessage.INTERNAL_LOGIC_ERROR.getMsg());
+				}
+			}
+			listItem.put("id", i);
+			listItem.put("name", name);
 		}
 		
 		return result;
