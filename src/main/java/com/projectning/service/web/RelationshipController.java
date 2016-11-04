@@ -100,19 +100,19 @@ public class RelationshipController {
 			Map<String, List<Map<String, Object>>> result = new HashMap<String, List<Map<String, Object>>>();
 			
 			Map<String, Object> allen = new HashMap<String, Object>();
-			allen.put("name", "allen");
+			allen.put("name", "Allen");
 			allen.put("id", 1);
 			
 			Map<String, Object> abe = new HashMap<String, Object>();
-			abe.put("name", "abe");
+			abe.put("name", "Abe");
 			abe.put("id", 2);
 			
 			Map<String, Object> bob = new HashMap<String, Object>();
-			bob.put("name", "bob");
+			bob.put("name", "Bob");
 			bob.put("id", 3);
 			
 			Map<String, Object> tom = new HashMap<String, Object>();
-			tom.put("name", "tom");
+			tom.put("name", "Tom");
 			tom.put("id", 4);
 			
 			List<Map<String, Object>> list1 = new ArrayList<Map<String, Object>>();
@@ -120,14 +120,20 @@ public class RelationshipController {
 			List<Map<String, Object>> list3 = new ArrayList<Map<String, Object>>();
 			list1.add(abe);
 			list1.add(allen);
-			list2.add(bob);
-			list3.add(tom);
+			list1.add(bob);
+			list1.add(tom);
 
 			result.put("T", list3);
 			result.put("B", list2);
+			result.put("Z", list1);
+			result.put("S", list1);
+			result.put("K", list1);
+			result.put("N", list1);
+			result.put("V", list1);
+			result.put("C", list1);
 			result.put("A", list1);
 			
-			respond.put("friendList", result);
+			respond.put("friendList", list1);
 			respond.put("error", "");
 		}catch(NullPointerException e){
 			respond.put("error", ErrorMessage.INCORRECT_PARAM.getMsg());
