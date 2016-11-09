@@ -159,8 +159,40 @@ public class ImageController {
 		return new ResponseEntity<Map<String, Object>>(respond, HttpStatus.OK);
 	}
 	
-	@RequestMapping("/get_next_avatar")
+	@RequestMapping("/get_avatar")
 	public ResponseEntity<Map<String, Object>> getAvatar(@RequestBody Map<String, Object> request) {
+		Map<String, Object> respond = new HashMap<String, Object>();
+		try{
+			String accessToken = (String)request.get("accessToken");
+			Map<String, Object> result = helperManager.decodeJWT(accessToken);
+			
+			helperManager.checkSessionTimeOut((String)result.get("expire"));
+			
+			//int id = userManager.getUserId((String)result.get("username"), accessToken);
+			int userId = (Integer)request.get("userId");
+
+			Image avatar = imageManager.retrieveAvatar(userId);
+			respond.put("image", avatar.getImageData());
+			
+			respond.put("error", "");
+		}catch(NullPointerException e){
+			respond.put("error", ErrorMessage.INCORRECT_PARAM.getMsg());
+		}catch(IllegalStateException e){
+			respond.put("error", e.getMessage());
+		}catch(NotFoundException e){
+			respond.put("error", e.getMessage());
+		}catch(SessionExpiredException e){
+			respond.put("error", ErrorMessage.SESSION_EXPIRED.getMsg());
+		}catch (FileNotFoundException e) {
+			respond.put("error", ErrorMessage.INCORRECT_INTER_IMG_PATH.getMsg());
+		}catch (IOException e) {
+			respond.put("error", ErrorMessage.INCORRECT_INTER_IMG_IO.getMsg());
+		}
+		return new ResponseEntity<Map<String, Object>>(respond, HttpStatus.OK);
+	}
+	
+	@RequestMapping("/get_next_avatar")
+	public ResponseEntity<Map<String, Object>> getNextAvatar(@RequestBody Map<String, Object> request) {
 		Map<String, Object> respond = new HashMap<String, Object>();
 		try{
 			Thread.sleep(2000);
