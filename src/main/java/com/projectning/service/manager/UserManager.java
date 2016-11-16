@@ -97,14 +97,6 @@ public interface UserManager {
 	public void checkUserIdExistance(int id) throws NotFoundException;
 	
 	/**
-	 * Return the user detail object
-	 * @param userId the id of the user
-	 * @return the user detail object
-	 * @throws NotFoundException if the user does not have details listed
-	 */
-	public UserDetail getUserDetail(int userId) throws NotFoundException;
-	
-	/**
 	 * Return the username of the user
 	 * @param userId the id of the user
 	 * @return the username of the user
@@ -113,4 +105,13 @@ public interface UserManager {
 	public String getUsername(int userId) throws NotFoundException;
 	
 	/* The following methods are for user details*/
+
+	/**
+	 * Return the user detail object for the given user
+	 * @param userId the id of the user
+	 * @return the user detail object
+	 * @throws NotFoundException if the user does not have details listed
+	 */
+	public UserDetail getUserDetail(int userId) throws NotFoundException;
+	
 }

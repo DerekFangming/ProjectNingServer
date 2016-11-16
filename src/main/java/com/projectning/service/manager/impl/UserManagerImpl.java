@@ -207,21 +207,28 @@ public class UserManagerImpl implements UserManager{
 	}
 	
 	@Override
-	public UserDetail getUserDetail(int userId) throws NotFoundException{
-		List<QueryTerm> terms = new ArrayList<QueryTerm>();
-		terms.add(UserDetailDao.Field.USER_ID.getQueryTerm(userId));
-		return userDetailDao.findObject(terms);
-	}
-	
-	@Override
 	public String getUsername(int userId) throws NotFoundException{
 		List<QueryTerm> terms = new ArrayList<QueryTerm>();
 		terms.add(UserDao.Field.ID.getQueryTerm(userId));
-		return userDao.findObject(terms).getUsername();
+		try{
+			return userDao.findObject(terms).getUsername();
+		}catch(NotFoundException e){
+			throw new NotFoundException(ErrorMessage.USER_NOT_FOUND.getMsg());
+		}
 	}
 	
 	/* The following methods are for user details*/
 
+	@Override
+	public UserDetail getUserDetail(int userId) throws NotFoundException{
+		List<QueryTerm> terms = new ArrayList<QueryTerm>();
+		terms.add(UserDetailDao.Field.USER_ID.getQueryTerm(userId));
+		try{
+			return userDetailDao.findObject(terms);
+		}catch(NotFoundException e){
+			throw new NotFoundException(ErrorMessage.USER_DETAIL_NOT_FOUND.getMsg());
+		}
+	}
 }
 
 	
