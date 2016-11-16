@@ -153,15 +153,19 @@ public class RelationshipManagerImpl implements RelationshipManager{
 		terms.add(RelationshipDao.Field.TYPE.getQueryTerm(RelationshipType.FRIEND.getName()));
 		terms.add(RelationshipDao.Field.CONFIRMED.getQueryTerm(true));
 		try{
-			return relationshipDao.findAllIds(terms);
+			List<Relationship> results = relationshipDao.findAllObjects(terms);
+			for(Relationship r : results){
+				idList.add(r.getReceiverId());
+			}
+			return idList;
 		}catch(NotFoundException e){
 			return idList;
 		}
 	}
 	
 	@Override
-	public Map<String, List<Map<String, Object>>> getSortedFriendList(int userId){
-		Map<String, List<Map<String, Object>>> result = new HashMap<String, List<Map<String, Object>>>();
+	public List<Map<String, Object>> getSortedFriendList(int userId){
+		List<Map<String, Object>> result = new ArrayList<Map<String, Object>>();
 		
 		List<Integer> idList = getFriendIDList(userId);
 		if(idList.size() == 0){
@@ -189,18 +193,9 @@ public class RelationshipManagerImpl implements RelationshipManager{
 				}
 			}
 			listItem.put("id", i);
-			listItem.put("name", name);
+			listItem.put("name", name.substring(0, 1).toUpperCase() + name.substring(1));
 			
-			String category = Character.toString(name.toUpperCase().charAt(0));
-			List<Map<String, Object>> list = result.get(category);
-			if(list == null){
-				List<Map<String, Object>> newList = new ArrayList<Map<String, Object>>();
-				newList.add(listItem);
-				result.put(category, newList);
-			}else{
-				list.add(listItem);
-				result.put(category, list);
-			}
+			result.add(listItem);
 		}
 		
 		return result;

@@ -63,19 +63,19 @@ public interface RelationshipManager {
 	public List<Integer> getFriendIDList(int userId);
 	
 	/**
-	 * Retrieve a map of sorted, detailed friend list with displayed name and id
-	 * Return empty map if no friend is found
-	 * Here is the structure of a sample map
-	 * {"A" : [{"name" : "Alen", "id" : 3},
-	 * 		   {"name" : "Alex", "id" : 31},
-	 * 		   {"name" : "Amy", "id" : 68}],
-	 *  "B" : [{"name" : "Bob", "id" : 14}],
-	 *  "T" : [{"name" : "Tommy", "id" : 97}],
+	 * Retrieve a List of friend maps with displayed name and id
+	 * Return empty list if no friend is found
+	 * Here is the structure of a sample list
+	 * [{"name" : "Alen", "id" : 3},
+	 * {"name" : "Alex", "id" : 31},
+	 * {"name" : "Amy", "id" : 68},
+	 * {"name" : "Bob", "id" : 14},
+	 * {"name" : "Tommy", "id" : 97},
 	 *  ...
-	 *  }
+	 * ]
 	 * @param userId
 	 * @return
 	 */
-	public Map<String, List<Map<String, Object>>> getSortedFriendList(int userId);
+	public List<Map<String, Object>> getSortedFriendList(int userId);
 	
 }

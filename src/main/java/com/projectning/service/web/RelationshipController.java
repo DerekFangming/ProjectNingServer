@@ -86,7 +86,7 @@ public class RelationshipController {
 	public ResponseEntity<Map<String, Object>> getSortedFriendList(@RequestBody Map<String, Object> request){
 		Map<String, Object> respond = new HashMap<String, Object>();
 		try{
-			/*
+			
 			String accessToken = (String) request.get("accessToken");
 			Map<String, Object> result = helperManager.decodeJWT(accessToken);
 			
@@ -94,9 +94,9 @@ public class RelationshipController {
 			
 			int id = userManager.getUserId((String)result.get("username"), accessToken);
 			
-			List<Integer> idList = relationshipManager.getFriendIDList(id);
-			*/
+			List<Map<String, Object>> friendList = relationshipManager.getSortedFriendList(id);
 			
+			/*
 			Map<String, List<Map<String, Object>>> result = new HashMap<String, List<Map<String, Object>>>();
 			
 			Map<String, Object> allen = new HashMap<String, Object>();
@@ -122,6 +122,16 @@ public class RelationshipController {
 			list1.add(allen);
 			list1.add(bob);
 			list1.add(tom);
+			list1.add(bob);
+			list1.add(tom);
+			list1.add(bob);
+			list1.add(tom);
+			list1.add(bob);
+			list1.add(tom);
+			list1.add(bob);
+			list1.add(tom);
+			list1.add(bob);
+			list1.add(tom);
 
 			result.put("T", list3);
 			result.put("B", list2);
@@ -131,9 +141,9 @@ public class RelationshipController {
 			result.put("N", list1);
 			result.put("V", list1);
 			result.put("C", list1);
-			result.put("A", list1);
+			result.put("A", list1);*/
 			
-			respond.put("friendList", list1);
+			respond.put("friendList", friendList);
 			respond.put("error", "");
 		}catch(NullPointerException e){
 			respond.put("error", ErrorMessage.INCORRECT_PARAM.getMsg());
