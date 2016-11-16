@@ -219,6 +219,8 @@ public class UserManagerImpl implements UserManager{
 		terms.add(UserDao.Field.ID.getQueryTerm(userId));
 		return userDao.findObject(terms).getUsername();
 	}
+	
+	/* The following methods are for user details*/
 
 }
 

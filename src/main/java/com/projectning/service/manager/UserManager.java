@@ -111,4 +111,6 @@ public interface UserManager {
 	 * @throws NotFoundException if the user with the id does not exist
 	 */
 	public String getUsername(int userId) throws NotFoundException;
+	
+	/* The following methods are for user details*/
 }
