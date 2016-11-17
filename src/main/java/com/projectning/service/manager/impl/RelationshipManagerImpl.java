@@ -177,10 +177,10 @@ public class RelationshipManagerImpl implements RelationshipManager{
 			String name;
 			try{
 				
-				UserDetail userDetail = userManager.getUserDetail(userId);
-				if(!userDetail.getNickname().equals("")){
+				UserDetail userDetail = userManager.getUserDetail(i);
+				if(userDetail.getNickname() != null){
 					name = userDetail.getNickname();
-				}else if(!userDetail.getName().equals("")){
+				}else if(userDetail.getName() != null){
 					name = userDetail.getName();
 				}else{
 					throw new NotFoundException();

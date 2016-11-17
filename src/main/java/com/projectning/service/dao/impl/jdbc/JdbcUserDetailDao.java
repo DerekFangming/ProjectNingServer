@@ -45,6 +45,7 @@ public class JdbcUserDetailDao extends JdbcBaseDao<UserDetail> implements UserDe
 	      {
 	    	  UserDetail obj = new UserDetail();
 	    	  obj.setId(rs.getInt(UserDetailDao.Field.ID.name));
+	    	  obj.setUserId(rs.getInt(UserDetailDao.Field.USER_ID.name));
 	    	  obj.setName(rs.getString(UserDetailDao.Field.NAME.name));
 	    	  obj.setNickname(rs.getString(UserDetailDao.Field.NICKNAME.name));
 	    	  obj.setAge(rs.getInt(UserDetailDao.Field.AGE.name));
