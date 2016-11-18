@@ -16,6 +16,7 @@ import com.projectning.service.exceptions.SessionExpiredException;
 import com.projectning.service.manager.HelperManager;
 import com.projectning.service.manager.UserManager;
 import com.projectning.util.ErrorMessage;
+import com.projectning.util.Util;
 
 @Controller
 public class UserController {
@@ -34,12 +35,12 @@ public class UserController {
 			
 			UserDetail detail = userManager.getUserDetail((int)request.get("userId"));
 			
-			respond.put("name", detail.getName());
-			respond.put("nickname", detail.getNickname());
+			respond.put("name", Util.nullToEmptyString(detail.getName()));
+			respond.put("nickname", Util.nullToEmptyString(detail.getNickname()));
 			respond.put("age", detail.getAge());
-			respond.put("gender", detail.getGender());
-			respond.put("location", detail.getLocation());
-			respond.put("whatsUp", detail.getWhatsUp());
+			respond.put("gender", Util.nullToEmptyString(detail.getGender()));
+			respond.put("location", Util.nullToEmptyString(detail.getLocation()));
+			respond.put("whatsUp", Util.nullToEmptyString(detail.getWhatsUp()));
 			
 		}catch(NullPointerException e){
 			respond.put("error", ErrorMessage.INCORRECT_PARAM.getMsg());

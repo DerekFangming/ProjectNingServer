@@ -16,4 +16,20 @@ public class Util {
 		
 		return ImageType.OTHERS.getName();
     }
+	
+	public static String nullToEmptyString(String input){
+		if(input == null){
+			return "";
+		}else{
+			return input;
+		}
+	}
+	
+	public static String emptyStringToNull(String input){
+		if(input.trim().equals("")){
+			return null;
+		}else{
+			return input.trim();
+		}
+	}
 }
