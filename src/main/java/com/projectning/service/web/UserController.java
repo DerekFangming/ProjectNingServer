@@ -41,6 +41,7 @@ public class UserController {
 			respond.put("gender", Util.nullToEmptyString(detail.getGender()));
 			respond.put("location", Util.nullToEmptyString(detail.getLocation()));
 			respond.put("whatsUp", Util.nullToEmptyString(detail.getWhatsUp()));
+			respond.put("error", "");
 			
 		}catch(NullPointerException e){
 			respond.put("error", ErrorMessage.INCORRECT_PARAM.getMsg());
