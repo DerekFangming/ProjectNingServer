@@ -23,11 +23,10 @@ public interface ImageManager {
 	/**
 	 * Retrieve image by id
 	 * @param imageId the id of the image
-	 * @param ownerId the id of the owner
 	 * @return Image image object
 	 * @throws NotFoundException if the file is not found
 	 */
-	public Image retrieveImageById(int imageId, int ownerId) throws NotFoundException, FileNotFoundException, IOException;
+	public Image retrieveImageById(int imageId) throws NotFoundException, FileNotFoundException, IOException;
 	
 	/**
 	 * Soft delete (disable) a image base on the id
@@ -47,12 +46,5 @@ public interface ImageManager {
 	 */
 	public List<Integer> getImageIdListByType(String type, int ownerId) throws NotFoundException;
 	
-	/**
-	 * Directly get the Avatar of a user by its user id
-	 * @param userId the id of the user
-	 * @return Image image object of the Avatar
-	 * @throws NotFoundException if there is no more new user (without relationship)
-	 */
-	public Image retrieveAvatar(int userId) throws NotFoundException, FileNotFoundException, IOException;
 	
 }

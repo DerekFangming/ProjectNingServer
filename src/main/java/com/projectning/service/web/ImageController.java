@@ -3,6 +3,7 @@ package com.projectning.service.web;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +21,7 @@ import com.projectning.service.manager.ImageManager;
 import com.projectning.service.manager.RelationshipManager;
 import com.projectning.service.manager.UserManager;
 import com.projectning.util.ErrorMessage;
+import com.projectning.util.ImageType;
 import com.projectning.util.RelationshipType;
 import com.projectning.util.Util;
 
@@ -81,9 +83,9 @@ public class ImageController {
 			
 			helperManager.checkSessionTimeOut((String)result.get("expire"));
 			
-			int id = userManager.getUserId((String)result.get("username"), accessToken);
+			//int id = userManager.getUserId((String)result.get("username"), accessToken);
 			
-			Image image = imageManager.retrieveImageById(imageId, id);
+			Image image = imageManager.retrieveImageById(imageId);
 			
 			respond.put("error", "");
 			respond.put("createdAt", image.getCreatedAt().toString());
@@ -171,7 +173,17 @@ public class ImageController {
 			//int id = userManager.getUserId((String)result.get("username"), accessToken);
 			int userId = (Integer)request.get("userId");
 
-			Image avatar = imageManager.retrieveAvatar(userId);
+			List<Integer> idList;
+			try{
+				idList = imageManager.getImageIdListByType(ImageType.AVATAR.getName(), userId);
+			}catch(NotFoundException nfe){
+				throw new NotFoundException(ErrorMessage.AVATAR_NOT_FOUND.getMsg());
+			}
+			if(idList.size() != 1){
+				throw new IllegalStateException(ErrorMessage.INTERNAL_LOGIC_ERROR.getMsg());
+			}
+			
+			Image avatar = imageManager.retrieveImageById(idList.get(0));
 			respond.put("image", avatar.getImageData());
 			
 			respond.put("error", "");
@@ -224,12 +236,20 @@ public class ImageController {
 			}
 			
 			int nextUserId = relationshipManager.findNextUser(senderId);
+			List<Integer> idList;
+			try{
+				idList = imageManager.getImageIdListByType(ImageType.AVATAR.getName(), nextUserId);
+			}catch(NotFoundException nfe){
+				throw new NotFoundException(ErrorMessage.AVATAR_NOT_FOUND.getMsg());
+			}
+			if(idList.size() != 1){
+				throw new IllegalStateException(ErrorMessage.INTERNAL_LOGIC_ERROR.getMsg());
+			}
 			
-			Image avatar = imageManager.retrieveAvatar(nextUserId);
+			Image avatar = imageManager.retrieveImageById(idList.get(0));
 			
 			respond.put("userId", nextUserId);
 			respond.put("image", avatar.getImageData());
-			
 			respond.put("error", "");
 		}catch(NullPointerException e){
 			respond.put("error", ErrorMessage.INCORRECT_PARAM.getMsg());
@@ -249,5 +269,6 @@ public class ImageController {
 		}
 		return new ResponseEntity<Map<String, Object>>(respond, HttpStatus.OK);
 	}
+	
 
 }

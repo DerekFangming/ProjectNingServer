@@ -21,7 +21,6 @@ import com.projectning.service.domain.Image;
 import com.projectning.service.exceptions.NotFoundException;
 import com.projectning.service.manager.ImageManager;
 import com.projectning.util.ErrorMessage;
-import com.projectning.util.ImageType;
 import com.projectning.util.Util;
 
 @Component
@@ -71,11 +70,10 @@ public class ImageManagerImpl implements ImageManager{
 	}
 
 	@Override
-	public Image retrieveImageById(int imageId, int ownerId) throws NotFoundException, FileNotFoundException, IOException{
+	public Image retrieveImageById(int imageId) throws NotFoundException, FileNotFoundException, IOException{
 		
 		List<QueryTerm> values = new ArrayList<QueryTerm>();
 		values.add(ImageDao.Field.ID.getQueryTerm(imageId));
-		values.add(ImageDao.Field.OWNER_ID.getQueryTerm(ownerId));
 		values.add(ImageDao.Field.ENABLED.getQueryTerm(true));
 		Image img;
 		try{
@@ -117,30 +115,4 @@ public class ImageManagerImpl implements ImageManager{
 		}
 		return idList;
 	}
-
-	@Override
-	public Image retrieveAvatar(int userId) throws NotFoundException, FileNotFoundException, IOException {
-		List<QueryTerm> values = new ArrayList<QueryTerm>();
-		values.add(ImageDao.Field.OWNER_ID.getQueryTerm(userId));
-		values.add(ImageDao.Field.ENABLED.getQueryTerm(true));
-		values.add(ImageDao.Field.TYPE.getQueryTerm(ImageType.AVATAR.getName()));
-		Image img;
-		try{
-			img = imageDao.findObject(values);
-		}catch(NotFoundException e){
-			throw new NotFoundException(ErrorMessage.AVATAR_NOT_FOUND.getMsg());
-		}
-		
-		File originalFile = new File(img.getLocation());
-		String encodedBase64 = null;
-		FileInputStream fileInputStreamReader = new FileInputStream(originalFile);
-        byte[] bytes = new byte[(int)originalFile.length()];
-        fileInputStreamReader.read(bytes);
-        encodedBase64 = new String(Base64.encodeBase64(bytes));
-        fileInputStreamReader.close();
-        
-        img.setImageData(encodedBase64);
-        return img;
-	}
-
 }
