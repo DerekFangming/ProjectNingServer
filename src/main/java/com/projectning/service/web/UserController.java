@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import com.projectning.service.domain.UserDetail;
 import com.projectning.service.exceptions.NotFoundException;
 import com.projectning.service.exceptions.SessionExpiredException;
-import com.projectning.service.manager.HelperManager;
 import com.projectning.service.manager.UserManager;
 import com.projectning.util.ErrorMessage;
 import com.projectning.util.Util;
@@ -21,17 +20,13 @@ import com.projectning.util.Util;
 @Controller
 public class UserController {
 	
-	@Autowired private HelperManager helperManager;
 	@Autowired private UserManager userManager;
 	
 	@RequestMapping("/get_user_detail")
     public ResponseEntity<Map<String, Object>> getUserDetail(@RequestBody Map<String, Object> request) {
 		Map<String, Object> respond = new HashMap<String, Object>();
 		try{
-			String accessToken = (String) request.get("accessToken");
-			Map<String, Object> result = helperManager.decodeJWT(accessToken);
-			
-			helperManager.checkSessionTimeOut((String)result.get("expire"));
+			userManager.validateAccessToken(request);
 			
 			UserDetail detail = userManager.getUserDetail((int)request.get("userId"));
 			

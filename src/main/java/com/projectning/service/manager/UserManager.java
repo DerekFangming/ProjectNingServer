@@ -1,5 +1,7 @@
 package com.projectning.service.manager;
 
+import java.util.Map;
+
 import com.projectning.service.domain.UserDetail;
 import com.projectning.service.exceptions.NotFoundException;
 
@@ -81,13 +83,12 @@ public interface UserManager {
 	public void login (String username, String password, String accessToken) throws NotFoundException;
 
 	/**
-	 * Return the database id for the given user
-	 * @param username the user
-	 * @param accessToken the accessToken of the user
+	 * Get user ID by username
+	 * @param username the username of this user
 	 * @return the database id of the user
 	 * @throws NotFoundException if the user is not found
 	 */
-	public int getUserId(String username, String accessToken) throws NotFoundException;
+	public int getUserId(String username) throws NotFoundException;
 	
 	/**
 	 * Check if the given user id exists in the user table or not
@@ -103,6 +104,17 @@ public interface UserManager {
 	 * @throws NotFoundException if the user with the id does not exist
 	 */
 	public String getUsername(int userId) throws NotFoundException;
+	
+	/**
+	 * Validate the access token. Check if the access token is valid, if it expires.
+	 * @param request the request object (JSON object, map)
+	 * @return the user id for this access token
+	 * @throws NullPointerException if the request does not have access token string
+	 * @throws NotFoundException if the user does not exist
+	 * @throws IllegalStateException if the access token is invalid
+	 */
+	public int validateAccessToken(Map<String, Object> request) 
+			throws NullPointerException, NotFoundException, IllegalStateException;
 	
 	/* The following methods are for user details*/
 

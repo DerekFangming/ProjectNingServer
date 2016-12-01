@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.projectning.service.exceptions.NotFoundException;
 import com.projectning.service.exceptions.SessionExpiredException;
-import com.projectning.service.manager.HelperManager;
 import com.projectning.service.manager.RelationshipManager;
 import com.projectning.service.manager.UserManager;
 import com.projectning.util.ErrorMessage;
@@ -22,19 +21,13 @@ import com.projectning.util.ErrorMessage;
 public class RelationshipController {
 	
 	@Autowired private RelationshipManager relationshipManager;
-	@Autowired private HelperManager helperManager;
 	@Autowired private UserManager userManager;
 	
 	@RequestMapping("/send_friend_request")
     public ResponseEntity<Map<String, Object>> sendFriendRequest(@RequestBody Map<String, Object> request) {
 		Map<String, Object> respond = new HashMap<String, Object>();
 		try{
-			String accessToken = (String) request.get("accessToken");
-			Map<String, Object> result = helperManager.decodeJWT(accessToken);
-			
-			helperManager.checkSessionTimeOut((String)result.get("expire"));
-			
-			int id = userManager.getUserId((String)result.get("username"), accessToken);
+			int id = userManager.validateAccessToken(request);
 			
 			userManager.checkUserIdExistance((int)request.get("receiverId"));
 			
@@ -58,12 +51,7 @@ public class RelationshipController {
 	public ResponseEntity<Map<String, Object>> getFriendList(@RequestBody Map<String, Object> request){
 		Map<String, Object> respond = new HashMap<String, Object>();
 		try{
-			String accessToken = (String) request.get("accessToken");
-			Map<String, Object> result = helperManager.decodeJWT(accessToken);
-			
-			helperManager.checkSessionTimeOut((String)result.get("expire"));
-			
-			int id = userManager.getUserId((String)result.get("username"), accessToken);
+			int id = userManager.validateAccessToken(request);
 			
 			List<Integer> idList = relationshipManager.getFriendIDList(id);
 			
@@ -85,13 +73,7 @@ public class RelationshipController {
 	public ResponseEntity<Map<String, Object>> getSortedFriendList(@RequestBody Map<String, Object> request){
 		Map<String, Object> respond = new HashMap<String, Object>();
 		try{
-			
-			String accessToken = (String) request.get("accessToken");
-			Map<String, Object> result = helperManager.decodeJWT(accessToken);
-			
-			helperManager.checkSessionTimeOut((String)result.get("expire"));
-			
-			int id = userManager.getUserId((String)result.get("username"), accessToken);
+			int id = userManager.validateAccessToken(request);
 			
 			List<Map<String, Object>> friendList = relationshipManager.getSortedFriendList(id);
 			

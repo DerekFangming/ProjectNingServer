@@ -4,6 +4,7 @@ import java.security.SecureRandom;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -184,10 +185,9 @@ public class UserManagerImpl implements UserManager{
 	}
 
 	@Override
-	public int getUserId(String username, String accessToken) throws NotFoundException {
+	public int getUserId(String username) throws NotFoundException {
 		List<QueryTerm> terms = new ArrayList<QueryTerm>();
 		terms.add(UserDao.Field.USERNAME.getQueryTerm(username));
-		terms.add(UserDao.Field.AUTH_TOKEN.getQueryTerm(accessToken));
 		try{
 			return userDao.findObject(terms).getId();
 		}catch(NotFoundException e){
@@ -214,6 +214,23 @@ public class UserManagerImpl implements UserManager{
 			return userDao.findObject(terms).getUsername();
 		}catch(NotFoundException e){
 			throw new NotFoundException(ErrorMessage.USER_NOT_FOUND.getMsg());
+		}
+	}
+	
+	public int validateAccessToken(Map<String, Object> request) 
+			throws NullPointerException, NotFoundException, IllegalStateException{
+		String accessToken = (String) request.get("accessToken");
+		Map<String, Object> result = helperManager.decodeJWT(accessToken);
+		
+		helperManager.checkSessionTimeOut((String)result.get("expire"));
+		
+		List<QueryTerm> terms = new ArrayList<QueryTerm>();
+		terms.add(UserDao.Field.USERNAME.getQueryTerm((String)result.get("username")));
+		terms.add(UserDao.Field.AUTH_TOKEN.getQueryTerm(accessToken));
+		try{
+			return userDao.findObject(terms).getId();
+		}catch(NotFoundException e){
+			throw new NotFoundException(ErrorMessage.INVALID_ACCESS_TOKEN.getMsg());
 		}
 	}
 	

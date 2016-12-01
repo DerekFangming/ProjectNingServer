@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import com.projectning.service.domain.Image;
 import com.projectning.service.exceptions.NotFoundException;
 import com.projectning.service.exceptions.SessionExpiredException;
-import com.projectning.service.manager.HelperManager;
 import com.projectning.service.manager.ImageManager;
 import com.projectning.service.manager.RelationshipManager;
 import com.projectning.service.manager.UserManager;
@@ -29,7 +28,6 @@ import com.projectning.util.Util;
 public class ImageController {
 	
 	@Autowired private ImageManager imageManager;
-	@Autowired private HelperManager helperManager;
 	@Autowired private UserManager userManager;
 	@Autowired private RelationshipManager relationshipManager;
 	
@@ -37,12 +35,7 @@ public class ImageController {
     public ResponseEntity<Map<String, Object>> uploadImage(@RequestBody Map<String, Object> request) {
 		Map<String, Object> respond = new HashMap<String, Object>();
 		try{
-			String accessToken = (String) request.get("accessToken");
-			Map<String, Object> result = helperManager.decodeJWT(accessToken);
-			
-			helperManager.checkSessionTimeOut((String)result.get("expire"));
-			
-			int id = userManager.getUserId((String)result.get("username"), accessToken);
+			int id = userManager.validateAccessToken(request);
 			
 			String title = "";
 			try{
@@ -77,13 +70,8 @@ public class ImageController {
     public ResponseEntity<Map<String, Object>> downloadImageById(@RequestBody Map<String, Object> request) {
 		Map<String, Object> respond = new HashMap<String, Object>();
 		try{
-			String accessToken = (String)request.get("accessToken");
+			userManager.validateAccessToken(request);
 			int imageId = (int)request.get("imageId");
-			Map<String, Object> result = helperManager.decodeJWT(accessToken);
-			
-			helperManager.checkSessionTimeOut((String)result.get("expire"));
-			
-			//int id = userManager.getUserId((String)result.get("username"), accessToken);
 			
 			Image image = imageManager.retrieveImageById(imageId);
 			
@@ -111,14 +99,9 @@ public class ImageController {
     public ResponseEntity<Map<String, Object>> deleteImage(@RequestBody Map<String, Object> request) {
 		Map<String, Object> respond = new HashMap<String, Object>();
 		try{
-			String accessToken = (String)request.get("accessToken");
+			int id = userManager.validateAccessToken(request);
+			
 			int imageId = (int)request.get("imageId");
-			Map<String, Object> result = helperManager.decodeJWT(accessToken);
-			
-			helperManager.checkSessionTimeOut((String)result.get("expire"));
-			
-			int id = userManager.getUserId((String)result.get("username"), accessToken);
-			
 			imageManager.softDeleteImage(imageId, id);
 			
 			respond.put("error", "");
@@ -139,12 +122,7 @@ public class ImageController {
 	public ResponseEntity<Map<String, Object>> getImageIds(@RequestBody Map<String, Object> request) {
 		Map<String, Object> respond = new HashMap<String, Object>();
 		try{
-			String accessToken = (String)request.get("accessToken");
-			Map<String, Object> result = helperManager.decodeJWT(accessToken);
-			
-			helperManager.checkSessionTimeOut((String)result.get("expire"));
-			
-			int id = userManager.getUserId((String)result.get("username"), accessToken);
+			int id = userManager.validateAccessToken(request);
 			
 			respond.put("idList", imageManager.getImageIdListByType((String)request.get("type"), id));
 			
@@ -165,12 +143,8 @@ public class ImageController {
 	public ResponseEntity<Map<String, Object>> getAvatar(@RequestBody Map<String, Object> request) {
 		Map<String, Object> respond = new HashMap<String, Object>();
 		try{
-			String accessToken = (String)request.get("accessToken");
-			Map<String, Object> result = helperManager.decodeJWT(accessToken);
+			userManager.validateAccessToken(request);
 			
-			helperManager.checkSessionTimeOut((String)result.get("expire"));
-			
-			//int id = userManager.getUserId((String)result.get("username"), accessToken);
 			int userId = (Integer)request.get("userId");
 
 			List<Integer> idList;
@@ -208,12 +182,7 @@ public class ImageController {
 		Map<String, Object> respond = new HashMap<String, Object>();
 		try{
 			Thread.sleep(2000);
-			String accessToken = (String)request.get("accessToken");
-			Map<String, Object> result = helperManager.decodeJWT(accessToken);
-			
-			helperManager.checkSessionTimeOut((String)result.get("expire"));
-			
-			int senderId = userManager.getUserId((String)result.get("username"), accessToken);
+			int senderId = userManager.validateAccessToken(request);
 			
 			try{
 				int receiverId = (int)request.get("userId");
