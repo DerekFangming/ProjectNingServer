@@ -32,7 +32,9 @@ public enum ErrorMessage {
 	ALREADY_REQUESTED("You have already sent a request to him/her."),
 	ALREADY_FRIEND("You are already friend of him/her."),
 	ALREADY_DENIED("You have already denied him/her."),
-	NO_MORE_USER("There are no more users. Please try again later.");
+	NO_MORE_USER("There are no more users. Please try again later."),
+	//Test case related
+	SHOULD_NOT_PASS_ERROR("This method should fail, but passed.");
 	
 	private final String msg;
 	
