@@ -28,8 +28,7 @@ public class UserManagerTests {
 	}
 	
 	@Test
-	public void testLoginForSalt()
-	{
+	public void testLoginForSalt(){
 		try {
 			assertEquals(userManager.loginForSalt("TestUser@fmning.com"), "testUserSalt");
 		} catch (NotFoundException e) {
@@ -44,8 +43,7 @@ public class UserManagerTests {
 	}
 	
 	@Test
-	public void testLogin()
-	  {
+	public void testLogin(){
 		try {
 			userManager.login("TestUser@fmning.com", "testUserPassword", "");
 		} catch (NotFoundException e) {
@@ -62,7 +60,36 @@ public class UserManagerTests {
 		} catch (NotFoundException e){
 			return;
 		}
-	  }
+	}
+	
+	@Test
+	public void testCheckUsername(){
+		assertTrue(userManager.checkUsername("TestUser@fmning.com"));
+		assertFalse(userManager.checkUsername("WRONG"));
+	}
+	
+	@Test
+	public void testUpdateVerificationCode(){
+		try{
+			userManager.updateVeriCode("WRONG", "");
+		}catch(NotFoundException e){
+			assertEquals(e.getMessage(), ErrorMessage.USER_NOT_FOUND.getMsg());
+		}
+	}
+	
+	@Test
+	public void testCheckVerificationCode(){
+		try{
+			userManager.checkVeriCode("WRONG","");
+			fail(ErrorMessage.SHOULD_NOT_PASS_ERROR.getMsg());
+		}catch(NotFoundException e){
+		}
+		try{
+			userManager.checkVeriCode("TestUser@fmning.com","");
+		}catch(NotFoundException e){
+			fail(e.toString());
+		}
+	}
 	
 //	@Test
 //	public void createUser()
