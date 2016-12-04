@@ -1,7 +1,5 @@
 package com.projectning.service.web;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -15,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.projectning.service.domain.Image;
 import com.projectning.service.exceptions.NotFoundException;
-import com.projectning.service.exceptions.SessionExpiredException;
 import com.projectning.service.manager.ImageManager;
 import com.projectning.service.manager.RelationshipManager;
 import com.projectning.service.manager.UserManager;
@@ -49,18 +46,8 @@ public class ImageController {
 			imageManager.saveImage((String)request.get("image"), verifiedType, id, title);
 			
 			respond.put("error", "");
-		}catch(NullPointerException e){
-			respond.put("error", ErrorMessage.INCORRECT_PARAM.getMsg());
-		}catch(IllegalStateException e){
-			respond.put("error", e.getMessage());
-		}catch(NotFoundException e){
-			respond.put("error", e.getMessage());
-		}catch (FileNotFoundException e) {
-			respond.put("error", ErrorMessage.INCORRECT_INTER_IMG_PATH.getMsg());
-		}catch (IOException e) {
-			respond.put("error", ErrorMessage.INCORRECT_INTER_IMG_IO.getMsg());
-		}catch(SessionExpiredException e){
-			respond.put("error", ErrorMessage.SESSION_EXPIRED.getMsg());
+		}catch(Exception e){
+			respond = Util.createErrorRespondFromException(e);
 		}
 		return new ResponseEntity<Map<String, Object>>(respond, HttpStatus.OK);
 		
@@ -79,18 +66,8 @@ public class ImageController {
 			respond.put("createdAt", image.getCreatedAt().toString());
 			respond.put("image", image.getImageData());
 			respond.put("title", image.getTitle());
-		}catch(NullPointerException e){
-			respond.put("error", ErrorMessage.INCORRECT_PARAM.getMsg());
-		}catch(IllegalStateException e){
-			respond.put("error", e.getMessage());
-		}catch(NotFoundException e){
-			respond.put("error", e.getMessage());
-		}catch (FileNotFoundException e) {
-			respond.put("error", ErrorMessage.INCORRECT_INTER_IMG_PATH.getMsg());
-		}catch (IOException e) {
-			respond.put("error", ErrorMessage.INCORRECT_INTER_IMG_IO.getMsg());
-		}catch(SessionExpiredException e){
-			respond.put("error", "Session timeout");
+		}catch(Exception e){
+			respond = Util.createErrorRespondFromException(e);
 		}
 		return new ResponseEntity<Map<String, Object>>(respond, HttpStatus.OK);
 	}
@@ -105,14 +82,8 @@ public class ImageController {
 			imageManager.softDeleteImage(imageId, id);
 			
 			respond.put("error", "");
-		}catch(NullPointerException e){
-			respond.put("error", ErrorMessage.INCORRECT_PARAM.getMsg());
-		}catch(IllegalStateException e){
-			respond.put("error", e.getMessage());
-		}catch(NotFoundException e){
-			respond.put("error", e.getMessage());
-		}catch(SessionExpiredException e){
-			respond.put("error", ErrorMessage.SESSION_EXPIRED.getMsg());
+		}catch(Exception e){
+			respond = Util.createErrorRespondFromException(e);
 		}
 		return new ResponseEntity<Map<String, Object>>(respond, HttpStatus.OK);
 		
@@ -127,14 +98,8 @@ public class ImageController {
 			respond.put("idList", imageManager.getImageIdListByType((String)request.get("type"), id));
 			
 			respond.put("error", "");
-		}catch(NullPointerException e){
-			respond.put("error", ErrorMessage.INCORRECT_PARAM.getMsg());
-		}catch(IllegalStateException e){
-			respond.put("error", e.getMessage());
-		}catch(NotFoundException e){
-			respond.put("error", e.getMessage());
-		}catch(SessionExpiredException e){
-			respond.put("error", ErrorMessage.SESSION_EXPIRED.getMsg());
+		}catch(Exception e){
+			respond = Util.createErrorRespondFromException(e);
 		}
 		return new ResponseEntity<Map<String, Object>>(respond, HttpStatus.OK);
 	}
@@ -161,18 +126,8 @@ public class ImageController {
 			respond.put("image", avatar.getImageData());
 			
 			respond.put("error", "");
-		}catch(NullPointerException e){
-			respond.put("error", ErrorMessage.INCORRECT_PARAM.getMsg());
-		}catch(IllegalStateException e){
-			respond.put("error", e.getMessage());
-		}catch(NotFoundException e){
-			respond.put("error", e.getMessage());
-		}catch(SessionExpiredException e){
-			respond.put("error", ErrorMessage.SESSION_EXPIRED.getMsg());
-		}catch (FileNotFoundException e) {
-			respond.put("error", ErrorMessage.INCORRECT_INTER_IMG_PATH.getMsg());
-		}catch (IOException e) {
-			respond.put("error", ErrorMessage.INCORRECT_INTER_IMG_IO.getMsg());
+		}catch(Exception e){
+			respond = Util.createErrorRespondFromException(e);
 		}
 		return new ResponseEntity<Map<String, Object>>(respond, HttpStatus.OK);
 	}
@@ -220,21 +175,8 @@ public class ImageController {
 			respond.put("userId", nextUserId);
 			respond.put("image", avatar.getImageData());
 			respond.put("error", "");
-		}catch(NullPointerException e){
-			respond.put("error", ErrorMessage.INCORRECT_PARAM.getMsg());
-		}catch(IllegalStateException e){
-			respond.put("error", e.getMessage());
-		}catch(NotFoundException e){
-			respond.put("error", e.getMessage());
-		}catch(SessionExpiredException e){
-			respond.put("error", ErrorMessage.SESSION_EXPIRED.getMsg());
-		}catch (FileNotFoundException e) {
-			respond.put("error", ErrorMessage.INCORRECT_INTER_IMG_PATH.getMsg());
-		}catch (IOException e) {
-			respond.put("error", ErrorMessage.INCORRECT_INTER_IMG_IO.getMsg());
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		}catch(Exception e){
+			respond = Util.createErrorRespondFromException(e);
 		}
 		return new ResponseEntity<Map<String, Object>>(respond, HttpStatus.OK);
 	}

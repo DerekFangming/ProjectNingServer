@@ -11,11 +11,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.projectning.service.exceptions.NotFoundException;
-import com.projectning.service.exceptions.SessionExpiredException;
 import com.projectning.service.manager.RelationshipManager;
 import com.projectning.service.manager.UserManager;
-import com.projectning.util.ErrorMessage;
+import com.projectning.util.Util;
 
 @Controller
 public class RelationshipController {
@@ -34,14 +32,8 @@ public class RelationshipController {
 			relationshipManager.sendFriendRequest(id, (int)request.get("receiverId"));
 			
 			respond.put("error", "");
-		}catch(NullPointerException e){
-			respond.put("error", ErrorMessage.INCORRECT_PARAM.getMsg());
-		}catch(IllegalStateException e){
-			respond.put("error", e.getMessage());
-		}catch(NotFoundException e){
-			respond.put("error", e.getMessage());
-		}catch(SessionExpiredException e){
-			respond.put("error", ErrorMessage.SESSION_EXPIRED.getMsg());
+		}catch(Exception e){
+			respond = Util.createErrorRespondFromException(e);
 		}
 		return new ResponseEntity<Map<String, Object>>(respond, HttpStatus.OK);
 		
@@ -57,14 +49,8 @@ public class RelationshipController {
 			
 			respond.put("friendList", idList);
 			respond.put("error", "");
-		}catch(NullPointerException e){
-			respond.put("error", ErrorMessage.INCORRECT_PARAM.getMsg());
-		}catch(IllegalStateException e){
-			respond.put("error", e.getMessage());
-		}catch(NotFoundException e){
-			respond.put("error", e.getMessage());
-		}catch(SessionExpiredException e){
-			respond.put("error", ErrorMessage.SESSION_EXPIRED.getMsg());
+		}catch(Exception e){
+			respond = Util.createErrorRespondFromException(e);
 		}
 		return new ResponseEntity<Map<String, Object>>(respond, HttpStatus.OK);
 	}
@@ -80,14 +66,8 @@ public class RelationshipController {
 			
 			respond.put("friendList", friendList);
 			respond.put("error", "");
-		}catch(NullPointerException e){
-			respond.put("error", ErrorMessage.INCORRECT_PARAM.getMsg());
-		}catch(IllegalStateException e){
-			respond.put("error", e.getMessage());
-		}catch(NotFoundException e){
-			respond.put("error", e.getMessage());
-		}catch(SessionExpiredException e){
-			respond.put("error", ErrorMessage.SESSION_EXPIRED.getMsg());
+		}catch(Exception e){
+			respond = Util.createErrorRespondFromException(e);
 		}
 		return new ResponseEntity<Map<String, Object>>(respond, HttpStatus.OK);
 	}

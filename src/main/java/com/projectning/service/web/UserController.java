@@ -11,10 +11,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.projectning.service.domain.UserDetail;
-import com.projectning.service.exceptions.NotFoundException;
-import com.projectning.service.exceptions.SessionExpiredException;
 import com.projectning.service.manager.UserManager;
-import com.projectning.util.ErrorMessage;
 import com.projectning.util.Util;
 
 @Controller
@@ -38,14 +35,8 @@ public class UserController {
 			respond.put("whatsUp", Util.nullToEmptyString(detail.getWhatsUp()));
 			respond.put("error", "");
 			
-		}catch(NullPointerException e){
-			respond.put("error", ErrorMessage.INCORRECT_PARAM.getMsg());
-		}catch(IllegalStateException e){
-			respond.put("error", e.getMessage());
-		}catch(NotFoundException e){
-			respond.put("error", e.getMessage());
-		}catch(SessionExpiredException e){
-			respond.put("error", ErrorMessage.SESSION_EXPIRED.getMsg());
+		}catch(Exception e){
+			respond = Util.createErrorRespondFromException(e);
 		}
 		return new ResponseEntity<Map<String, Object>>(respond, HttpStatus.OK);
 		

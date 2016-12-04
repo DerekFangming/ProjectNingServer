@@ -20,7 +20,7 @@ import com.projectning.service.exceptions.NotFoundException;
 import com.projectning.service.manager.HelperManager;
 import com.projectning.service.manager.RelationshipManager;
 import com.projectning.service.manager.UserManager;
-import com.projectning.util.ErrorMessage;
+import com.projectning.util.Util;
 
 @Controller
 public class AuthController {
@@ -39,10 +39,8 @@ public class AuthController {
 					(int)request.get("offset"));
 			respond.put("salt", salt);
 			respond.put("error", "");
-		}catch(IllegalStateException e){
-			respond.put("error", e.getMessage());
-		}catch(NullPointerException e){
-			respond.put("error", ErrorMessage.INCORRECT_PARAM.getMsg());
+		}catch(Exception e){
+			respond = Util.createErrorRespondFromException(e);
 		}
 	
 		return new ResponseEntity<Map<String, Object>>(respond, HttpStatus.OK);
@@ -71,12 +69,8 @@ public class AuthController {
 			respond.put("expire", exp.toString());
 			respond.put("emailConfirmed","false");
 			respond.put("error", "");
-		}catch(NullPointerException e){
-			respond.put("error", ErrorMessage.INCORRECT_PARAM.getMsg());
-		}catch(IllegalStateException e){
-			respond.put("error", e.getMessage());
-		}catch(NotFoundException e){
-			respond.put("error", e.getMessage());
+		}catch(Exception e){
+			respond = Util.createErrorRespondFromException(e);
 		}
 	
 		return new ResponseEntity<Map<String, Object>>(respond, HttpStatus.OK);
@@ -121,10 +115,8 @@ public class AuthController {
 			String username = (String)request.get("username");
 			respond.put("salt", userManager.loginForSalt(username));
 			respond.put("error", "");
-		}catch(NullPointerException e){
-			respond.put("error", ErrorMessage.INCORRECT_PARAM.getMsg());
-		}catch(NotFoundException e){
-			respond.put("error", e.getMessage());
+		}catch(Exception e){
+			respond = Util.createErrorRespondFromException(e);
 		}
 		return new ResponseEntity<Map<String, Object>>(respond, HttpStatus.OK);
 		
@@ -147,10 +139,8 @@ public class AuthController {
 			respond.put("expire", exp.toString());
 			respond.put("emailConfirmed","false");
 			respond.put("error", "");
-		}catch(NullPointerException e){
-			respond.put("error", ErrorMessage.INCORRECT_PARAM.getMsg());
-		}catch(NotFoundException e){
-			respond.put("error", e.getMessage());
+		}catch(Exception e){
+			respond = Util.createErrorRespondFromException(e);
 		}
 		return new ResponseEntity<Map<String, Object>>(respond, HttpStatus.OK);
 		
