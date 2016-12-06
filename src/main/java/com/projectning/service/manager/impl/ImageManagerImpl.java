@@ -115,4 +115,13 @@ public class ImageManagerImpl implements ImageManager{
 		}
 		return idList;
 	}
+
+	@Override
+	public int getSingltonImageIdByType(String type, int ownerId) throws NotFoundException, IllegalStateException {
+		List<Integer> idList = getImageIdListByType(type, ownerId);
+		if(idList.size() != 1){
+			throw new IllegalStateException(ErrorMessage.INTERNAL_LOGIC_ERROR.getMsg());
+		}
+		return idList.get(0);
+	}
 }

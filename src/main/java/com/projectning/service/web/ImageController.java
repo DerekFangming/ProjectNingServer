@@ -112,17 +112,14 @@ public class ImageController {
 			
 			int userId = (Integer)request.get("userId");
 
-			List<Integer> idList;
+			int avatarId;
 			try{
-				idList = imageManager.getImageIdListByType(ImageType.AVATAR.getName(), userId);
+				avatarId = imageManager.getSingltonImageIdByType(ImageType.AVATAR.getName(), userId);
 			}catch(NotFoundException nfe){
 				throw new NotFoundException(ErrorMessage.AVATAR_NOT_FOUND.getMsg());
 			}
-			if(idList.size() != 1){
-				throw new IllegalStateException(ErrorMessage.INTERNAL_LOGIC_ERROR.getMsg());
-			}
 			
-			Image avatar = imageManager.retrieveImageById(idList.get(0));
+			Image avatar = imageManager.retrieveImageById(avatarId);
 			respond.put("image", avatar.getImageData());
 			
 			respond.put("error", "");
@@ -160,17 +157,14 @@ public class ImageController {
 			}
 			
 			int nextUserId = relationshipManager.findNextUser(senderId);
-			List<Integer> idList;
+			int avatarId;
 			try{
-				idList = imageManager.getImageIdListByType(ImageType.AVATAR.getName(), nextUserId);
+				avatarId = imageManager.getSingltonImageIdByType(ImageType.AVATAR.getName(), nextUserId);
 			}catch(NotFoundException nfe){
 				throw new NotFoundException(ErrorMessage.AVATAR_NOT_FOUND.getMsg());
 			}
-			if(idList.size() != 1){
-				throw new IllegalStateException(ErrorMessage.INTERNAL_LOGIC_ERROR.getMsg());
-			}
 			
-			Image avatar = imageManager.retrieveImageById(idList.get(0));
+			Image avatar = imageManager.retrieveImageById(avatarId);
 			
 			respond.put("userId", nextUserId);
 			respond.put("image", avatar.getImageData());

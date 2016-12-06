@@ -46,5 +46,15 @@ public interface ImageManager {
 	 */
 	public List<Integer> getImageIdListByType(String type, int ownerId) throws NotFoundException;
 	
+	/**
+	 * Get image id by owner ID and image type. There should be only one image. If there are more or nothing,
+	 * throw exceptions
+	 * @param type the type of the image
+	 * @param ownerId the owner(user) id
+	 * @return the single image id
+	 * @throws NotFoundException when no id is found
+	 * @throws IllegalStateException when there are more than 1 image.
+	 */
+	public int getSingltonImageIdByType(String type, int ownerId) throws NotFoundException, IllegalStateException;
 	
 }
