@@ -110,12 +110,12 @@ public class ImageController {
 			userManager.validateAccessToken(request);
 			
 			int userId = (Integer)request.get("userId");
-
+			String imgType = (String)request.get("imgType");
 			int avatarId;
 			try{
-				avatarId = imageManager.getSingltonImageIdByType((String)request.get("imgType"), userId);
+				avatarId = imageManager.getSingltonImageIdByType(imgType, userId);
 			}catch(NotFoundException nfe){
-				throw new NotFoundException(ErrorMessage.AVATAR_NOT_FOUND.getMsg());
+				throw new NotFoundException(ErrorMessage.SINGLETON_IMG_NOT_FOUND.getMsg() + imgType.toLowerCase());
 			}
 			
 			Image avatar = imageManager.retrieveImageById(avatarId);
