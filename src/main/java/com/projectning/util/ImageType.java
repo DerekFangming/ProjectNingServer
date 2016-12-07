@@ -2,7 +2,7 @@ package com.projectning.util;
 
 public enum ImageType {
 	AVATAR("Avatar"),
-	COVER_PAGE("CoverPage"),
+	COVER_IMG("Cover Image"),
 	OTHERS("Others");
 	
 	private final String name;

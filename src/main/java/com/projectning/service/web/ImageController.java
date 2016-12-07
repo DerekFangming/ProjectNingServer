@@ -1,7 +1,6 @@
 package com.projectning.service.web;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -104,7 +103,7 @@ public class ImageController {
 		return new ResponseEntity<Map<String, Object>>(respond, HttpStatus.OK);
 	}
 	
-	@RequestMapping("/get_avatar")
+	@RequestMapping("/get_singleton_img_by_type")
 	public ResponseEntity<Map<String, Object>> getAvatar(@RequestBody Map<String, Object> request) {
 		Map<String, Object> respond = new HashMap<String, Object>();
 		try{
@@ -114,7 +113,7 @@ public class ImageController {
 
 			int avatarId;
 			try{
-				avatarId = imageManager.getSingltonImageIdByType(ImageType.AVATAR.getName(), userId);
+				avatarId = imageManager.getSingltonImageIdByType((String)request.get("imgType"), userId);
 			}catch(NotFoundException nfe){
 				throw new NotFoundException(ErrorMessage.AVATAR_NOT_FOUND.getMsg());
 			}
@@ -174,6 +173,6 @@ public class ImageController {
 		}
 		return new ResponseEntity<Map<String, Object>>(respond, HttpStatus.OK);
 	}
-	
+
 
 }
