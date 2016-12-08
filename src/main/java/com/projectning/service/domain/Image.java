@@ -6,6 +6,7 @@ public class Image {
 	private int id;
 	private String location;
 	private String type;
+	private int typeMappingId;
 	private int ownerId;
 	private Instant createdAt;
 	private boolean enabled;
@@ -34,6 +35,14 @@ public class Image {
 	
 	public void setType(String type){
 		this.type = type;
+	}
+	
+	public int getTypeMappingId(){
+		return typeMappingId;
+	}
+	
+	public void setTypeMappingId(int typeMappingId){
+		this.typeMappingId = typeMappingId;
 	}
 	
 	public int getOwnerId(){

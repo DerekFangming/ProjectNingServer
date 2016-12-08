@@ -14,6 +14,7 @@ CREATE TABLE images (
     id serial primary key,
     location varchar(50) NOT NULL,
     type varchar(10),
+    type_mapping_id integer,
     owner_id integer NOT NULL,
     created_at timestamp without time zone NOT NULL,
 	enabled boolean NOT NULL DEFAULT true,

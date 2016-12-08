@@ -27,7 +27,8 @@ public class JdbcImageDao extends JdbcBaseDao<Image> implements ImageDao{
 	    
 	    params.addValue(ImageDao.Field.LOCATION.name, obj.getLocation());
 	    params.addValue(ImageDao.Field.OWNER_ID.name, obj.getOwnerId());
-	    params.addValue(ImageDao.Field.TYPE.name, obj.getType() == "" ? null : obj.getType());
+	    params.addValue(ImageDao.Field.TYPE.name, obj.getType());
+	    params.addValue(ImageDao.Field.TYPE_MAPPING_ID.name, obj.getTypeMappingId());
 	    params.addValue(ImageDao.Field.CREATED_AT.name, Date.from(obj.getCreatedAt()));
 	    params.addValue(ImageDao.Field.ENABLED.name, obj.getEnabled());
 	    params.addValue(ImageDao.Field.TITLE.name, obj.getTitle());
@@ -47,6 +48,7 @@ public class JdbcImageDao extends JdbcBaseDao<Image> implements ImageDao{
 	    	  obj.setId(rs.getInt(ImageDao.Field.ID.name));
 	    	  obj.setLocation(rs.getString(ImageDao.Field.LOCATION.name));
 	    	  obj.setType(rs.getString(ImageDao.Field.TYPE.name));
+	    	  obj.setTypeMappingId(rs.getInt(ImageDao.Field.TYPE_MAPPING_ID.name));
 	    	  obj.setOwnerId(rs.getInt(ImageDao.Field.OWNER_ID.name));
 	    	  obj.setCreatedAt(rs.getTimestamp(ImageDao.Field.CREATED_AT.name).toInstant());
 	    	  obj.setEnabled(rs.getBoolean(ImageDao.Field.ENABLED.name));

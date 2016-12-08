@@ -14,6 +14,7 @@ public interface ImageDao extends CommonDao<Image>{
 		ID(true),
 	    LOCATION,
 	    TYPE,
+	    TYPE_MAPPING_ID,
 	    OWNER_ID,
 	    CREATED_AT,
 	    ENABLED,
@@ -49,8 +50,9 @@ public interface ImageDao extends CommonDao<Image>{
 	List<Pair<Enum<?>, String>> FieldTypes = Arrays.asList(
 		    new Pair<Enum<?>, String>(Field.ID, "SERIAL NOT NULL"),
 		    new Pair<Enum<?>, String>(Field.LOCATION, "TEXT NOT NULL"),
-		    new Pair<Enum<?>, String>(Field.TYPE, "TEXT NOT NULL"),
-		    new Pair<Enum<?>, String>(Field.OWNER_ID, "TEXT"),
+		    new Pair<Enum<?>, String>(Field.TYPE, "TEXT"),
+		    new Pair<Enum<?>, String>(Field.TYPE_MAPPING_ID, "INTEGER"),
+		    new Pair<Enum<?>, String>(Field.OWNER_ID, "INTEGER NOT NULL"),
 		    new Pair<Enum<?>, String>(Field.CREATED_AT, "TIMESTAMP WITHOUT TIME ZONE NOT NULL"),
 		    new Pair<Enum<?>, String>(Field.ENABLED, "BOOLEAN NOT NULL"),
 		    new Pair<Enum<?>, String>(Field.TITLE, "TEXT"));
