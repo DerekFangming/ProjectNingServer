@@ -7,6 +7,7 @@ import com.projectning.service.dao.DataSourceRegistry;
 import com.projectning.service.dao.DataSourceType;
 import com.projectning.service.dao.FriendDao;
 import com.projectning.service.dao.ImageDao;
+import com.projectning.service.dao.MomentDao;
 import com.projectning.service.dao.RelationshipDao;
 import com.projectning.service.dao.SchemaTable;
 import com.projectning.service.dao.SdkDataSource;
@@ -21,7 +22,8 @@ public enum CoreTableType implements SchemaTable
 	USER_DETAILS(CoreDataSourceType.CORE, UserDetailDao.FieldTypes),
 	IMAGES(CoreDataSourceType.CORE, ImageDao.FieldTypes),
 	FRIENDS(CoreDataSourceType.CORE, FriendDao.FieldTypes),
-	RELATIONSHIPS(CoreDataSourceType.CORE, RelationshipDao.FieldTypes)
+	RELATIONSHIPS(CoreDataSourceType.CORE, RelationshipDao.FieldTypes),
+	MOMENTS(CoreDataSourceType.CORE, MomentDao.FieldTypes)
 ;
 
 

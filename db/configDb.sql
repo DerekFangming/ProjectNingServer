@@ -40,3 +40,11 @@ CREATE TABLE user_details (
     location varchar(10),
     whats_up varchar(200)
 );
+
+CREATE TABLE Moments (
+    id serial primary key,
+    body varchar(400),
+    owner_id integer NOT NULL,
+    enabled boolean NOT NULL DEFAULT true,
+    created_at timestamp without time zone NOT NULL
+);
