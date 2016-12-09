@@ -19,7 +19,7 @@ public class QueryBuilder
   // May be set externally. If not we'll generate them here.
   private MapSqlParameterSource params = null;
   
-  private long limit = 0;
+  private int limit = 0;
   private ResultsOrderType ordering = ResultsOrderType.NONE;
   private String orderingField = null;
   
@@ -417,14 +417,19 @@ public class QueryBuilder
     this.nvpList.addAll(nvps);
   }
   
-  public QueryBuilder setLimit(long limit)
+  public QueryBuilder setLimit(int limit)
   {
     this.limit = limit;
     
     return this;
   }
   
-
+  public QueryBuilder setOrdering(String orderingField, ResultsOrderType orderType){
+	  this.ordering = orderType;
+	  this.orderingField = orderingField;
+	  
+	  return this;
+  }
     
   public QueryInstance createQuery()
   {    
