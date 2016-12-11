@@ -25,7 +25,7 @@ public enum ErrorMessage {
 	NO_IMAGE_TO_DELETE("The image you are trying to delete does not exist."),
 	INCORRECT_INTER_IMG_PATH("Internal error, image path not found."),
 	INCORRECT_INTER_IMG_IO("Internal error, cannot write image file."),
-	UNAUTHORIZED_DELETE("Cannot delete an image that is not yours."),
+	UNAUTHORIZED_IMAGE_DELETE("Cannot delete an image that is not yours."),
 	SINGLETON_IMG_NOT_FOUND("The user does not have "),
 	AVATAR_NOT_FOUND("The user does not have an avatar."),
 	//Relationship related
@@ -34,8 +34,13 @@ public enum ErrorMessage {
 	ALREADY_FRIEND("You are already friend of him/her."),
 	ALREADY_DENIED("You have already denied him/her."),
 	NO_MORE_USER("There are no more users. Please try again later."),
+	//Moment related
+	MOMENT_NOT_FOUND("The moment you are looking for does not exist."),
+	NO_MORE_MOMENTS_FOUND("There are no more moments."),
+	NO_MOMENT_TO_DELETE("The moement you are trying to delete does not exist."),
+	UNAUTHORIZED_MOMENT_DELETE("Cannot delete an image that is not yours."),
 	//Test case related
-	SHOULD_NOT_PASS_ERROR("This method should fail, but passed.");
+	SHOULD_NOT_PASS_ERROR("This method should fail, but passed."),;
 	
 	private final String msg;
 	

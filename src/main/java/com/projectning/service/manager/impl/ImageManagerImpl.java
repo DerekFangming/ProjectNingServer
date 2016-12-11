@@ -63,7 +63,7 @@ public class ImageManagerImpl implements ImageManager{
 		}
 		
 		if(image.getOwnerId() != ownerId)
-			throw new IllegalStateException(ErrorMessage.UNAUTHORIZED_DELETE.getMsg());
+			throw new IllegalStateException(ErrorMessage.UNAUTHORIZED_IMAGE_DELETE.getMsg());
 		
 		NVPair pair = new NVPair(ImageDao.Field.ENABLED.name, false);
 		imageDao.update(image.getId(), pair);
