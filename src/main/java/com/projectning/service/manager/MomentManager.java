@@ -1,5 +1,8 @@
 package com.projectning.service.manager;
 
+import java.time.Instant;
+import java.util.List;
+
 import com.projectning.service.domain.Moment;
 import com.projectning.service.exceptions.NotFoundException;
 
@@ -14,13 +17,15 @@ public interface MomentManager {
 	public int saveMoment(String body, int ownerId);
 	
 	/**
-	 * Remove an accepted friend request
-	 * Both user ids must be pre-checked
-	 * @param senderId the id of the requester
-	 * @param receiverId the id of the receiver
-	 * @throws NotFoundException if the friend request does not exist
+	 * Get a list of most recent moment by the provided date. The maximum number of moment returned
+	 * is smaller or equal to the limit
+	 * @param ownerId the owner of the moment
+	 * @param date the date for the most recent line
+	 * @param limit the maximum of moment that will be returned at once
+	 * @return a list of moment that meet the criteria
+	 * @throws NotFoundException if no moment meets the criteria
 	 */
-	public Moment getMoment (int senderId, int receiverId) throws NotFoundException;
+	public List<Moment> getRecentMomentByDate (int ownerId, Instant date, int limit) throws NotFoundException;
 	
 	
 	

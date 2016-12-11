@@ -1,5 +1,6 @@
 package com.projectning.service.web;
 
+import java.time.Instant;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -11,7 +12,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.projectning.service.manager.MomentManager;
-import com.projectning.service.manager.RelationshipManager;
 import com.projectning.service.manager.UserManager;
 import com.projectning.util.Util;
 
@@ -27,7 +27,7 @@ public class MomentController {
 		try{
 			//int id = userManager.validateAccessToken(request);
 			
-			momentManager.getMoment(1, 1);
+			momentManager.getRecentMomentByDate(1, Instant.now(), 10);
 			
 			respond.put("error", "");
 		}catch(Exception e){
