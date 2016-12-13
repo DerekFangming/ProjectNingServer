@@ -41,6 +41,9 @@ public class Util {
 			respond.put("error", ErrorMessage.INCORRECT_INTER_IMG_IO.getMsg());
 		}else if(e instanceof InterruptedException){
 			// test delay only
+		}else{
+			//TODO Put into db
+			respond.put("error", ErrorMessage.UNKNOWN_ERROR.getMsg());
 		}
 		return respond;
 	}

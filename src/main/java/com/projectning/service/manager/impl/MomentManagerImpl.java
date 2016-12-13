@@ -1,5 +1,6 @@
 package com.projectning.service.manager.impl;
 
+import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
@@ -7,7 +8,6 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.projectning.service.dao.ImageDao;
 import com.projectning.service.dao.MomentDao;
 import com.projectning.service.dao.impl.CoreTableType;
 import com.projectning.service.dao.impl.LogicalOpType;
@@ -74,7 +74,8 @@ public class MomentManagerImpl implements MomentManager{
 		QueryBuilder qb = QueryType.getQueryBuilder(CoreTableType.MOMENTS, QueryType.FIND);
 	    
 	    qb.addFirstQueryExpression(new QueryTerm(MomentDao.Field.OWNER_ID.name, RelationalOpType.EQ, ownerId));
-	    qb.addNextQueryExpression(LogicalOpType.AND,new QueryTerm(MomentDao.Field.CREATED_AT.name, RelationalOpType.LT, date));
+	    qb.addNextQueryExpression(LogicalOpType.AND,
+	    		new QueryTerm(MomentDao.Field.CREATED_AT.name, RelationalOpType.LT, Timestamp.from(date)));
 	    qb.setOrdering(MomentDao.Field.CREATED_AT.name, ResultsOrderType.DESCENDING);
 	    qb.setLimit(limit);
 	    

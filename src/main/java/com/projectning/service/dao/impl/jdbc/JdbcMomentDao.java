@@ -1,6 +1,5 @@
 package com.projectning.service.dao.impl.jdbc;
 
-import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
@@ -29,7 +28,7 @@ public class JdbcMomentDao extends JdbcBaseDao<Moment> implements MomentDao{
 		params.addValue(MomentDao.Field.BODY.name, obj.getBody());
 	    params.addValue(MomentDao.Field.OWNER_ID.name, obj.getOwnerId());
 	    params.addValue(ImageDao.Field.ENABLED.name, obj.getEnabled());
-	    params.addValue(MomentDao.Field.CREATED_AT.name, Date.from(obj.getCreatedAt()));
+	    params.addValue(MomentDao.Field.CREATED_AT.name, obj.getCreatedAt());
 	        
 	    return params;
 	  }

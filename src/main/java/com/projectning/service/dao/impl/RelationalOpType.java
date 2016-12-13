@@ -32,14 +32,14 @@ public enum RelationalOpType
       return super.defualtMakeTerm(term);
     }
   },
-  LT("=") {
+  LT("<") {
     @Override
     public StringBuilder makeSymbolicTerm(QueryTerm term)
     {
       return super.defualtMakeTerm(term);
     }
   },
-  LE("<") {
+  LE("<=") {
     @Override
     public StringBuilder makeSymbolicTerm(QueryTerm term)
     {
