@@ -1,6 +1,5 @@
 package com.projectning.service.web;
 
-import java.time.Duration;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -29,9 +28,22 @@ public class MomentController {
     public ResponseEntity<Map<String, Object>> uploadImage(@RequestBody Map<String, Object> request) {
 		Map<String, Object> respond = new HashMap<String, Object>();
 		try{
-			//int id = userManager.validateAccessToken(request);
-			
-			List<Moment> momentList = momentManager.getRecentMomentByDate(4, Instant.now().minus(Duration.ofDays(1)), 10);
+			userManager.validateAccessToken(request);
+			int userId = (int)request.get("userId");
+			int limit = 10;
+			try{
+				limit = (int)request.get("limit");
+			}catch(NullPointerException e){
+				//
+			}
+			Instant checkPoint = Instant.now();
+			try{
+				String timeStr = (String)request.get("checkPoint");
+				checkPoint = Instant.parse(timeStr);
+			}catch(NullPointerException e){
+				//
+			}
+			List<Moment> momentList = momentManager.getRecentMomentByDate(userId, checkPoint, limit);
 			List<Map<String, Object>> processedMomentList = new ArrayList<Map<String, Object>>();
 			
 			for(Moment m : momentList){
