@@ -25,7 +25,7 @@ public class MomentController {
 	@Autowired private MomentManager momentManager;
 	
 	@RequestMapping("/get_recent_moments")
-    public ResponseEntity<Map<String, Object>> uploadImage(@RequestBody Map<String, Object> request) {
+    public ResponseEntity<Map<String, Object>> getRecentMoments(@RequestBody Map<String, Object> request) {
 		Map<String, Object> respond = new HashMap<String, Object>();
 		try{
 			userManager.validateAccessToken(request);
