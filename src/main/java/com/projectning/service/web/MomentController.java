@@ -48,7 +48,7 @@ public class MomentController {
 			
 			for(Moment m : momentList){
 				Map<String, Object> processedMoment = new HashMap<String, Object>();
-				processedMoment.put("momenrId", m.getId());
+				processedMoment.put("momentId", m.getId());
 				processedMoment.put("momentBody", m.getBody());
 				processedMoment.put("createdAt", m.getCreatedAt().toString());
 				processedMomentList.add(processedMoment);
