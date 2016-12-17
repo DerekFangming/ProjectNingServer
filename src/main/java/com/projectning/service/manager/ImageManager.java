@@ -37,14 +37,23 @@ public interface ImageManager {
 	public void softDeleteImage(int imageId, int ownerId) throws NotFoundException, IllegalStateException;
 	
 	/**
-	 * Get a list of image IDs by image type
-	 * Return an empty list if no image found
+	 * Get a list of image IDs by image type and owner id
 	 * @param type the type of the image
 	 * @param ownerId the owner(user) id
-	 * @return a list of IDs that belongs the user and type
+	 * @return a list of image IDs that belongs to the user with the specific type
 	 * @throws NotFoundException when no id is found
 	 */
 	public List<Integer> getImageIdListByType(String type, int ownerId) throws NotFoundException;
+	
+	/**
+	 * Get a list of IDs by image type, owner id and the mapping id for the image type
+	 * @param type the type of the image
+	 * @param mappingId the mapping id for the image type
+	 * @param ownerId the owner(user) id
+	 * @return a list of image IDs that belongs to the user with the specific type and type mapping id
+	 * @throws NotFoundException  when no id is found
+	 */
+	public List<Integer> getImageIdListByTypeAndMappingId(String type, int mappingId, int ownerId) throws NotFoundException;
 	
 	/**
 	 * Get image id by owner ID and image type. There should be only one image. If there are more or nothing,

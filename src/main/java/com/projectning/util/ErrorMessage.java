@@ -21,7 +21,6 @@ public enum ErrorMessage {
 	USER_DETAIL_NOT_FOUND("The user does not have detail information."),
 	//Image related
 	IMAGE_NOT_FOUND("The image you are looking for does not exist."),
-	IMAGE_TYPE_NOT_FOUND("No image exists with the given type."),
 	NO_IMAGE_TO_DELETE("The image you are trying to delete does not exist."),
 	INCORRECT_INTER_IMG_PATH("Internal error, image path not found."),
 	INCORRECT_INTER_IMG_IO("Internal error, cannot write image file."),
