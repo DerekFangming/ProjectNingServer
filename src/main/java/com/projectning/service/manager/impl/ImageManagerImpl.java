@@ -39,14 +39,14 @@ public class ImageManagerImpl implements ImageManager{
 		image.setTitle(title);
 		
 		int id = imageDao.persist(image);
-		NVPair pair = new NVPair(ImageDao.Field.LOCATION.name, Util.imagePath + Integer.toString(id) + ".bmp");
+		NVPair pair = new NVPair(ImageDao.Field.LOCATION.name, Util.imagePath + Integer.toString(id) + ".jpg");
 		imageDao.update(id, pair);
 		
 		if(base64.contains(","))
 			base64 = base64.split(",")[1];
 		
 		byte[] data = Base64.decodeBase64(base64);
-		try (OutputStream stream = new FileOutputStream(Util.imagePath + Integer.toString(id) + ".bmp")) {
+		try (OutputStream stream = new FileOutputStream(Util.imagePath + Integer.toString(id) + ".jpg")) {
 		    stream.write(data);
 		}
 	}
