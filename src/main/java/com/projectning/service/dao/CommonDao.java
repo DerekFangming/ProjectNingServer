@@ -150,9 +150,9 @@ public interface CommonDao<T extends Object>
    * 
    * @throws NotFoundException If no rows exist
    */
-  List<Integer> findAllIds(List<QueryTerm> terms);
+  List<Integer> findAllIds(List<QueryTerm> terms) throws NotFoundException;
   
-  List<Integer> findAllIds(QueryInstance qi);
+  List<Integer> findAllIds(QueryInstance qi) throws NotFoundException;
   
   /**
    * Returns the first object matching all of the specified fields with exact values.

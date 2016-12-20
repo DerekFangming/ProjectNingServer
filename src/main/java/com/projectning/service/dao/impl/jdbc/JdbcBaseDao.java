@@ -336,7 +336,7 @@ catch(Throwable t)
     
 
   @Override
-  public List<Integer> findAllIds(List<QueryTerm> terms)
+  public List<Integer> findAllIds(List<QueryTerm> terms) throws NotFoundException
   {
     QueryBuilder qb = QueryType.getQueryBuilder(this.myTable, QueryType.FIND_ID);
     
@@ -359,7 +359,7 @@ catch(Throwable t)
   }
   
   @Override
-  public List<Integer> findAllIds(QueryInstance qi)
+  public List<Integer> findAllIds(QueryInstance qi) throws NotFoundException
   {
     SqlRowSet rows = this.namedTemplate.queryForRowSet(qi.getQueryStr(), qi.getParams());
 
@@ -370,6 +370,9 @@ catch(Throwable t)
       ids.add(rows.getInt(myPkName));
     }
 
+    if (ids.size() == 0)
+    	throw new NotFoundException();
+    
     return ids;    
   }
   
