@@ -1,5 +1,7 @@
 package com.projectning.service.manager.impl;
 
+import java.awt.Graphics2D;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -123,4 +125,31 @@ public class ImageManagerImpl implements ImageManager{
 		}
 		return idList.get(0);
 	}
+	
+	//Image processing helpers
+	private BufferedImage cropImageToSquare(BufferedImage img){
+		int width = img.getWidth();
+		int height = img.getHeight();
+		int cropStart;
+		if(width > height){
+			cropStart = (width - height) / 2;
+			img = img.getSubimage(cropStart, 0, height, height);
+		}else if (width < height){
+			cropStart = (height - width) / 2;
+			img = img.getSubimage(0, cropStart, width, width);
+		}
+		return img;
+	}
+	
+	private BufferedImage resize(BufferedImage img, int width, int height) { 
+	    java.awt.Image tmp = img.getScaledInstance(width, height, java.awt.Image.SCALE_DEFAULT);
+	    BufferedImage newImg = new BufferedImage(width, height, img.getType());
+
+	    Graphics2D g2d = newImg.createGraphics();
+	    g2d.drawImage(tmp, 0, 0, null);
+	    g2d.dispose();
+
+	    return newImg;
+	}
+	
 }

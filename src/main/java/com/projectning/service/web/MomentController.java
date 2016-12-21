@@ -91,18 +91,40 @@ public class MomentController {
 
 	    //Graphics2D g = (Graphics2D) newImage.getGraphics();
 	    
-	    File img = new File("/Volumes/Data/images/15.jpg");
-		BufferedImage buffImg;
+	    File imgLeft = new File("/Volumes/Data/images/15.jpg");
+	    File imgRight = new File("/Volumes/Data/images/16.jpg");
+		BufferedImage buffImgLeft;
+		BufferedImage buffImgRight;
 		try {
-			buffImg = ImageIO.read(img);
-			buffImg = Scalr.resize(buffImg,  Scalr.Method.SPEED, Scalr.Mode.FIT_TO_WIDTH,
-                    60, 60, Scalr.OP_ANTIALIAS);
-			final ByteArrayOutputStream os = new ByteArrayOutputStream();
+			buffImgLeft = ImageIO.read(imgLeft);
+			System.out.println(buffImgLeft.getHeight() + " " + buffImgLeft.getWidth());
+			//buffImgLeft = Scalr.resize(buffImgLeft,  Scalr.Method.SPEED, Scalr.Mode.FIT_TO_WIDTH,
+            //        30, 60, Scalr.OP_ANTIALIAS);
+			
+			buffImgRight = ImageIO.read(imgRight);
+			buffImgRight = Scalr.resize(buffImgRight,  Scalr.Method.SPEED, Scalr.Mode.FIT_TO_WIDTH,
+                    30, 60, Scalr.OP_ANTIALIAS);
+			
+			BufferedImage newImage = new BufferedImage(60, 60,  buffImgLeft.getType());
+			Graphics2D g = (Graphics2D) newImage.getGraphics();
+		    g.drawImage(buffImgLeft, 0, 0, null);
+		    g.drawImage(buffImgRight, 30, 0, null);
+			
+			//buffImgLeft = resize(buffImgLeft, 900, 900);
+			//buffImgLeft = buffImgLeft.getSubimage(0, 0, 200, 200);
+		    
+		    buffImgLeft = cropImageToSquare(buffImgLeft);
+		    buffImgLeft = resize(buffImgLeft, 30, 30);
+		    
+			//final ByteArrayOutputStream os = new ByteArrayOutputStream();
 		    try {
-		        ImageIO.write(buffImg, "jpg", Base64.getEncoder().wrap(os));
-		        respond.put("img", os.toString(StandardCharsets.ISO_8859_1.name()));
+		    	File outputfile = new File("/Volumes/Data/images/30.jpg");
+		    	ImageIO.write(buffImgLeft, "jpg", outputfile);
+		    	
+		        //ImageIO.write(buffImgLeft, "jpg", Base64.getEncoder().wrap(os));
+		        //respond.put("img", os.toString(StandardCharsets.ISO_8859_1.name()));
 		    } catch (final IOException ioe) {
-		        //
+		        System.out.println("wrong");
 		    }
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -112,15 +134,29 @@ public class MomentController {
 		return new ResponseEntity<Map<String, Object>>(respond, HttpStatus.OK);
 	}
 	
-	private BufferedImage resize(BufferedImage img, int newW, int newH) { 
-	    Image tmp = img.getScaledInstance(newW, newH, Image.SCALE_DEFAULT);
-	    BufferedImage dimg = new BufferedImage(newW, newH, BufferedImage.TYPE_INT_ARGB);
+	private BufferedImage cropImageToSquare(BufferedImage img){
+		int width = img.getWidth();
+		int height = img.getHeight();
+		int cropStart;
+		if(width > height){
+			cropStart = (width - height) / 2;
+			img = img.getSubimage(cropStart, 0, height, height);
+		}else if (width < height){
+			cropStart = (height - width) / 2;
+			img = img.getSubimage(0, cropStart, width, width);
+		}
+		return img;
+	}
+	
+	private BufferedImage resize(BufferedImage img, int width, int height) { 
+	    Image tmp = img.getScaledInstance(width, height, Image.SCALE_DEFAULT);
+	    BufferedImage newImg = new BufferedImage(width, height, img.getType());
 
-	    Graphics2D g2d = dimg.createGraphics();
+	    Graphics2D g2d = newImg.createGraphics();
 	    g2d.drawImage(tmp, 0, 0, null);
 	    g2d.dispose();
 
-	    return dimg;
+	    return newImg;
 	} 
 
 }
