@@ -40,9 +40,16 @@ public class ImageController {
 				//
 			}
 			
-			String verifiedType = Util.verifyImageType((String)request.get("type"));
+			String verifiedType = "";
+			int typeMappingId = 0;
+			try{
+				verifiedType = Util.verifyImageType((String)request.get("type"));
+				typeMappingId = (int)request.get("typeMappingId");
+			}catch(NullPointerException e){
+				//
+			}
 			
-			imageManager.saveImage((String)request.get("image"), verifiedType, id, title);
+			imageManager.saveImage((String)request.get("image"), verifiedType, typeMappingId, id, title);
 			
 			respond.put("error", "");
 		}catch(Exception e){

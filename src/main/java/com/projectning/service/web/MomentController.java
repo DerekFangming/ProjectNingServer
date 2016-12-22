@@ -166,7 +166,7 @@ public class MomentController {
 			    g.drawImage(imgRightBot, 31, 31, null);
 			    g.dispose();
 			}
-			imageManager.saveImage(newImg, ImageType.MOMENT_COVER.getName(), id, "");
+			imageManager.saveImage(newImg, ImageType.MOMENT_COVER.getName(), momentId, id, "");
 			
 			respond.put("error","");
 		}catch(Exception e){
