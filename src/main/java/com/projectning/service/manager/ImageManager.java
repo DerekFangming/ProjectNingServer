@@ -1,5 +1,6 @@
 package com.projectning.service.manager;
 
+import java.awt.image.BufferedImage;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.List;
@@ -10,7 +11,7 @@ import com.projectning.service.exceptions.NotFoundException;
 public interface ImageManager {
 	
 	/**
-	 * Save an image as bitmap in local disk and record the image path in database
+	 * Save an image as jpg in local disk and record the image path in database
 	 * @param base64 the encoded image file
 	 * @param type the type of the image for the project. Defaulted to Others if type is not recognized
 	 * @param ownerId the owner of the image
@@ -19,6 +20,17 @@ public interface ImageManager {
 	 * @throws IOException if write image file process error
 	 */
 	public void saveImage(String base64, String type, int ownerId, String title) throws FileNotFoundException, IOException;
+	
+	/**
+	 * Save an image as jpg in local disk and record the image path in database
+	 * @param img the image data
+	 * @param type the type of the image for the project. Defaulted to Others if type is not recognized
+	 * @param ownerId the owner of the image
+	 * @param title the title of the image, if applicable. Defaulted to empty String if type is not recognized
+	 * @throws FileNotFoundException if the output file path is not available
+	 * @throws IOException if write image file process error
+	 */
+	public void saveImage(BufferedImage img, String type, int ownerId, String title) throws FileNotFoundException, IOException;
 
 	/**
 	 * Retrieve image by id

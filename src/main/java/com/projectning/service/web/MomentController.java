@@ -84,13 +84,34 @@ public class MomentController {
 		return new ResponseEntity<Map<String, Object>>(respond, HttpStatus.OK);
 	}
 	
-	@RequestMapping("/get_moment_cover_image")
+	@RequestMapping("/create_moment_cover_image")
     public ResponseEntity<Map<String, Object>> getMomentCoverImage(@RequestBody Map<String, Object> request) {
 		Map<String, Object> respond = new HashMap<String, Object>();
-		//BufferedImage newImage = new BufferedImage(60, 60, BufferedImage.TYPE_INT_ARGB);
-
-	    //Graphics2D g = (Graphics2D) newImage.getGraphics();
-	    
+		
+		try{
+			//userManager.validateAccessToken(request);
+			int momentId = (int)request.get("momentId");
+			List<Integer> imgIdList = imageManager.getImageIdListByTypeAndMappingId(ImageType.MOMENT.getName(), momentId, 4);
+			int imgCount = imgIdList.size();
+			
+			if(imgCount == 1){
+				File imgFile = new File(imageManager.retrieveImageById(imgIdList.get(0)).getLocation());
+				BufferedImage img = ImageIO.read(imgFile);
+				img = cropImageToSquare(img);
+				img = resize(img, 60, 60);
+				File outputfile = new File("/Volumes/Data/images/30.jpg");
+		    	ImageIO.write(img, "jpg", outputfile);
+			}else if (imgCount == 2){
+				
+			}else if (imgCount == 3){
+				
+			}else{
+				
+			}
+		}catch(Exception e){
+			respond = Util.createErrorRespondFromException(e);
+		}
+	    /*
 	    File imgLeft = new File("/Volumes/Data/images/15.jpg");
 	    File imgRight = new File("/Volumes/Data/images/16.jpg");
 		BufferedImage buffImgLeft;
@@ -130,7 +151,7 @@ public class MomentController {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-	    
+	    */
 		return new ResponseEntity<Map<String, Object>>(respond, HttpStatus.OK);
 	}
 	

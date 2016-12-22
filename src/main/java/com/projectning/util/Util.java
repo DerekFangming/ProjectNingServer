@@ -43,6 +43,7 @@ public class Util {
 			// test delay only
 		}else{
 			//TODO Put into db
+			e.printStackTrace();
 			respond.put("error", ErrorMessage.UNKNOWN_ERROR.getMsg());
 		}
 		return respond;

@@ -12,6 +12,8 @@ import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.imageio.ImageIO;
+
 import org.apache.commons.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -51,6 +53,24 @@ public class ImageManagerImpl implements ImageManager{
 		try (OutputStream stream = new FileOutputStream(Util.imagePath + Integer.toString(id) + ".jpg")) {
 		    stream.write(data);
 		}
+	}
+	
+	@Override
+	public void saveImage(BufferedImage img, String type, int ownerId, String title) throws IOException{
+		Image image = new Image();
+		image.setLocation("");
+		image.setType(Util.verifyImageType(type));
+		image.setCreatedAt(Instant.now());
+		image.setOwnerId(ownerId);
+		image.setEnabled(true);
+		image.setTitle(title);
+		
+		int id = imageDao.persist(image);
+		NVPair pair = new NVPair(ImageDao.Field.LOCATION.name, Util.imagePath + Integer.toString(id) + ".jpg");
+		imageDao.update(id, pair);
+		
+		File outputfile = new File(Util.imagePath + Integer.toString(id) + ".jpg");
+    	ImageIO.write(img, "jpg", outputfile);
 	}
 
 	@Override
