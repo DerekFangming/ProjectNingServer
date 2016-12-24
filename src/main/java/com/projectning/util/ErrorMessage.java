@@ -38,6 +38,7 @@ public enum ErrorMessage {
 	NO_MORE_MOMENTS_FOUND("There are no more moments."),
 	NO_MOMENT_TO_DELETE("The moement you are trying to delete does not exist."),
 	UNAUTHORIZED_MOMENT_DELETE("Cannot delete an image that is not yours."),
+	INVALID_MOMENT_COVER("This moment has an invalid cover image."),
 	//Test case related
 	SHOULD_NOT_PASS_ERROR("This method should fail, but passed."),;
 	

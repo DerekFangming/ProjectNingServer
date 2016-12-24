@@ -25,6 +25,7 @@ import com.projectning.service.exceptions.NotFoundException;
 import com.projectning.service.manager.ImageManager;
 import com.projectning.service.manager.MomentManager;
 import com.projectning.service.manager.UserManager;
+import com.projectning.util.ErrorMessage;
 import com.projectning.util.ImageType;
 import com.projectning.util.Util;
 
@@ -80,14 +81,36 @@ public class MomentController {
 		return new ResponseEntity<Map<String, Object>>(respond, HttpStatus.OK);
 	}
 	
+	@RequestMapping("/get_moment_cover_img")
+    public ResponseEntity<Map<String, Object>> getMomentCoverImg(@RequestBody Map<String, Object> request) {
+		Map<String, Object> respond = new HashMap<String, Object>();
+		try{
+			userManager.validateAccessToken(request);
+			int momentId = (int)request.get("momentId");
+			int userId = (int)request.get("userId");
+			List<Integer> imgList = imageManager.getImageIdListByTypeAndMappingId(ImageType.MOMENT_COVER.getName(), momentId, userId);
+			if(imgList.size() != 1)
+				throw new IllegalStateException(ErrorMessage.INVALID_MOMENT_COVER.getMsg());
+			
+			String imgData = imageManager.retrieveImageById(imgList.get(0)).getImageData();
+			
+			respond.put("image", imgData);
+			respond.put("error", "");
+			
+		}catch(Exception e){
+			respond = Util.createErrorRespondFromException(e);
+		}
+		return new ResponseEntity<Map<String, Object>>(respond, HttpStatus.OK);
+	}
+	
 	@RequestMapping("/create_moment_cover_image")
     public ResponseEntity<Map<String, Object>> getMomentCoverImage(@RequestBody Map<String, Object> request) {
 		Map<String, Object> respond = new HashMap<String, Object>();
-		
 		try{
-			int id = userManager.validateAccessToken(request);
+			int userId = userManager.validateAccessToken(request);
 			int momentId = (int)request.get("momentId");
-			List<Integer> imgIdList = imageManager.getImageIdListByTypeAndMappingId(ImageType.MOMENT.getName(), momentId, id);
+			List<Integer> imgIdList = 
+					imageManager.getImageIdListByTypeAndMappingId(ImageType.MOMENT.getName(), momentId, userId);
 			int imgCount = imgIdList.size();
 			BufferedImage newImg;
 			
@@ -166,7 +189,7 @@ public class MomentController {
 			    g.drawImage(imgRightBot, 31, 31, null);
 			    g.dispose();
 			}
-			imageManager.saveImage(newImg, ImageType.MOMENT_COVER.getName(), momentId, id, "");
+			imageManager.saveImage(newImg, ImageType.MOMENT_COVER.getName(), momentId, userId, "");
 			
 			respond.put("error","");
 		}catch(Exception e){
