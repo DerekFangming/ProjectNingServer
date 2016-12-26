@@ -93,6 +93,7 @@ public class MomentController {
 			List<Integer> idList = momentManager.getMomentPreviewImageIdList(userId);
 			
 			respond.put("idList", idList);
+			respond.put("error", "");
 		}catch(Exception e){
 			respond = Util.createErrorRespondFromException(e);
 		}
