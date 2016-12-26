@@ -8,6 +8,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.projectning.service.dao.ImageDao;
 import com.projectning.service.dao.MomentDao;
 import com.projectning.service.dao.impl.CoreTableType;
 import com.projectning.service.dao.impl.LogicalOpType;
@@ -21,6 +22,7 @@ import com.projectning.service.domain.Moment;
 import com.projectning.service.exceptions.NotFoundException;
 import com.projectning.service.manager.MomentManager;
 import com.projectning.util.ErrorMessage;
+import com.projectning.util.ImageType;
 
 @Component
 public class MomentManagerImpl implements MomentManager{
@@ -53,7 +55,7 @@ public class MomentManagerImpl implements MomentManager{
 	}
 	
 	@Override
-	public void softDeleteImage(int momentId, int ownerId) throws NotFoundException, IllegalStateException{
+	public void softDeleteMoment(int momentId, int ownerId) throws NotFoundException, IllegalStateException{
 		QueryTerm value = MomentDao.Field.ID.getQueryTerm(momentId);
 		Moment moment;
 		try{
@@ -86,5 +88,21 @@ public class MomentManagerImpl implements MomentManager{
 	    }
 	}
 
+	@Override
+	public List<Integer> getMomentPreviewImageIdList(int ownerId){
+		QueryBuilder qb = QueryType.getQueryBuilder(CoreTableType.IMAGES, QueryType.FIND);
+	    
+	    qb.addFirstQueryExpression(new QueryTerm(ImageDao.Field.OWNER_ID.name, RelationalOpType.EQ, ownerId));
+	    qb.addNextQueryExpression(LogicalOpType.AND,
+	    		new QueryTerm(ImageDao.Field.TYPE.name, RelationalOpType.EQ, ImageType.MOMENT_COVER.getName()));
+	    qb.setOrdering(ImageDao.Field.CREATED_AT.name, ResultsOrderType.DESCENDING);
+	    qb.setLimit(4);
+	    
+	    try{
+	    	return momentDao.findAllIds(qb.createQuery());
+	    }catch(NotFoundException e){
+	    	return new ArrayList<Integer>();
+	    }
+	}
 
 }

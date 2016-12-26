@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.imageio.ImageIO;
+import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -19,6 +20,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.projectning.service.domain.Moment;
 import com.projectning.service.exceptions.NotFoundException;
@@ -75,6 +77,22 @@ public class MomentController {
 			respond.put("momentList", processedMomentList);
 			respond.put("checkPoint", momentList.get(momentList.size() - 1).getCreatedAt().toString());
 			respond.put("error", "");
+		}catch(Exception e){
+			respond = Util.createErrorRespondFromException(e);
+		}
+		return new ResponseEntity<Map<String, Object>>(respond, HttpStatus.OK);
+	}
+	
+	@RequestMapping("/get_moment_preview_images")
+	public ResponseEntity<Map<String, Object>> getMomentPreviewImage(@RequestBody Map<String, Object> request) {
+		Map<String, Object> respond = new HashMap<String, Object>();
+		try{
+			userManager.validateAccessToken(request);
+			int userId = (int)request.get("userId");
+			
+			List<Integer> idList = momentManager.getMomentPreviewImageIdList(userId);
+			
+			respond.put("idList", idList);
 		}catch(Exception e){
 			respond = Util.createErrorRespondFromException(e);
 		}

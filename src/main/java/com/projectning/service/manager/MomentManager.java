@@ -31,7 +31,7 @@ public interface MomentManager {
 	 * @throws NotFoundException if the moment does not exist
 	 * @throws IllegalStateException if the user is not the owner of the image
 	 */
-	public void softDeleteImage(int momentId, int ownerId) throws NotFoundException, IllegalStateException;
+	public void softDeleteMoment(int momentId, int ownerId) throws NotFoundException, IllegalStateException;
 	
 	/**
 	 * Get a list of most recent moment by the provided date. The maximum number of moment returned
@@ -44,6 +44,12 @@ public interface MomentManager {
 	 */
 	public List<Moment> getRecentMomentByDate (int ownerId, Instant date, int limit) throws NotFoundException;
 	
-	
+	/**
+	 * Get moment preview image Ids. Will return 4 of them maximumly.
+	 * Ids are ordered by time.
+	 * @param ownerId the user that the moment images come from
+	 * @return a list of ids. If nothing, return empty list
+	 */
+	public List<Integer> getMomentPreviewImageIdList(int ownerId);
 	
 }
