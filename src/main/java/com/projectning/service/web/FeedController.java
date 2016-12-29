@@ -33,11 +33,11 @@ import com.projectning.util.Util;
 public class FeedController {
 	
 	@Autowired private UserManager userManager;
-	@Autowired private FeedManager momentManager;
+	@Autowired private FeedManager feedManager;
 	@Autowired private ImageManager imageManager;
 	
-	@RequestMapping("/get_recent_moments")
-    public ResponseEntity<Map<String, Object>> getRecentMoments(@RequestBody Map<String, Object> request) {
+	@RequestMapping("/get_recent_feeds")
+    public ResponseEntity<Map<String, Object>> getRecentFeeds(@RequestBody Map<String, Object> request) {
 		Map<String, Object> respond = new HashMap<String, Object>();
 		try{
 			userManager.validateAccessToken(request);
@@ -55,25 +55,25 @@ public class FeedController {
 			}catch(NullPointerException e){
 				//
 			}
-			List<Feed> momentList = momentManager.getRecentMomentByDate(userId, checkPoint, limit);
-			List<Map<String, Object>> processedMomentList = new ArrayList<Map<String, Object>>();
+			List<Feed> feedList = feedManager.getRecentFeedByDate(userId, checkPoint, limit);
+			List<Map<String, Object>> processedFeedList = new ArrayList<Map<String, Object>>();
 			
-			for(Feed m : momentList){
-				Map<String, Object> processedMoment = new HashMap<String, Object>();
-				processedMoment.put("momentId", m.getId());
-				processedMoment.put("momentBody", m.getBody());
-				processedMoment.put("createdAt", m.getCreatedAt().toString());
+			for(Feed m : feedList){
+				Map<String, Object> processedFeed = new HashMap<String, Object>();
+				processedFeed.put("feedId", m.getId());
+				processedFeed.put("feedBody", m.getBody());
+				processedFeed.put("createdAt", m.getCreatedAt().toString());
 				try{
-					imageManager.getImageIdListByTypeAndMappingId(ImageType.MOMENT.getName(), m.getId(), userId);
-					processedMoment.put("hasImage", true);
+					imageManager.getImageIdListByTypeAndMappingId(ImageType.FEED.getName(), m.getId(), userId);
+					processedFeed.put("hasImage", true);
 				}catch(NotFoundException e){
-					processedMoment.put("hasImage", false);
+					processedFeed.put("hasImage", false);
 				}
 				
-				processedMomentList.add(processedMoment);
+				processedFeedList.add(processedFeed);
 			}
-			respond.put("momentList", processedMomentList);
-			respond.put("checkPoint", momentList.get(momentList.size() - 1).getCreatedAt().toString());
+			respond.put("feedList", processedFeedList);
+			respond.put("checkPoint", feedList.get(feedList.size() - 1).getCreatedAt().toString());
 			respond.put("error", "");
 		}catch(Exception e){
 			respond = Util.createErrorRespondFromException(e);
@@ -81,14 +81,14 @@ public class FeedController {
 		return new ResponseEntity<Map<String, Object>>(respond, HttpStatus.OK);
 	}
 	
-	@RequestMapping("/get_moment_preview_images")
-	public ResponseEntity<Map<String, Object>> getMomentPreviewImage(@RequestBody Map<String, Object> request) {
+	@RequestMapping("/get_feed_preview_images")
+	public ResponseEntity<Map<String, Object>> getFeedPreviewImage(@RequestBody Map<String, Object> request) {
 		Map<String, Object> respond = new HashMap<String, Object>();
 		try{
 			userManager.validateAccessToken(request);
 			int userId = (int)request.get("userId");
 			
-			List<Integer> idList = momentManager.getMomentPreviewImageIdList(userId);
+			List<Integer> idList = feedManager.getFeedPreviewImageIdList(userId);
 			
 			respond.put("idList", idList);
 			respond.put("error", "");
@@ -98,16 +98,16 @@ public class FeedController {
 		return new ResponseEntity<Map<String, Object>>(respond, HttpStatus.OK);
 	}
 	
-	@RequestMapping("/get_moment_cover_img")
-    public ResponseEntity<Map<String, Object>> getMomentCoverImg(@RequestBody Map<String, Object> request) {
+	@RequestMapping("/get_feed_cover_img")
+    public ResponseEntity<Map<String, Object>> getFeedCoverImg(@RequestBody Map<String, Object> request) {
 		Map<String, Object> respond = new HashMap<String, Object>();
 		try{
 			userManager.validateAccessToken(request);
-			int momentId = (int)request.get("momentId");
+			int feedId = (int)request.get("feedId");
 			int userId = (int)request.get("userId");
-			List<Integer> imgList = imageManager.getImageIdListByTypeAndMappingId(ImageType.MOMENT_COVER.getName(), momentId, userId);
+			List<Integer> imgList = imageManager.getImageIdListByTypeAndMappingId(ImageType.FEED_COVER.getName(), feedId, userId);
 			if(imgList.size() != 1)
-				throw new IllegalStateException(ErrorMessage.INVALID_MOMENT_COVER.getMsg());
+				throw new IllegalStateException(ErrorMessage.INVALID_FEED_COVER.getMsg());
 			
 			String imgData = imageManager.retrieveImageById(imgList.get(0)).getImageData();
 			
@@ -120,14 +120,14 @@ public class FeedController {
 		return new ResponseEntity<Map<String, Object>>(respond, HttpStatus.OK);
 	}
 	
-	@RequestMapping("/create_moment_cover_image")
-    public ResponseEntity<Map<String, Object>> getMomentCoverImage(@RequestBody Map<String, Object> request) {
+	@RequestMapping("/create_feed_cover_image")
+    public ResponseEntity<Map<String, Object>> getFeedCoverImage(@RequestBody Map<String, Object> request) {
 		Map<String, Object> respond = new HashMap<String, Object>();
 		try{
 			int userId = userManager.validateAccessToken(request);
-			int momentId = (int)request.get("momentId");
+			int feedId = (int)request.get("feedId");
 			List<Integer> imgIdList = 
-					imageManager.getImageIdListByTypeAndMappingId(ImageType.MOMENT.getName(), momentId, userId);
+					imageManager.getImageIdListByTypeAndMappingId(ImageType.FEED.getName(), feedId, userId);
 			int imgCount = imgIdList.size();
 			BufferedImage newImg;
 			
@@ -206,7 +206,7 @@ public class FeedController {
 			    g.drawImage(imgRightBot, 31, 31, null);
 			    g.dispose();
 			}
-			imageManager.saveImage(newImg, ImageType.MOMENT_COVER.getName(), momentId, userId, "");
+			imageManager.saveImage(newImg, ImageType.FEED_COVER.getName(), feedId, userId, "");
 			
 			respond.put("error","");
 		}catch(Exception e){

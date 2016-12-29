@@ -41,7 +41,7 @@ CREATE TABLE user_details (
     whats_up varchar(200)
 );
 
-CREATE TABLE Moments (
+CREATE TABLE Feeds (
     id serial primary key,
     body varchar(400),
     owner_id integer NOT NULL,

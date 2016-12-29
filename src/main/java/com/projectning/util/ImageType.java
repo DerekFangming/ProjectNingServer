@@ -3,8 +3,8 @@ package com.projectning.util;
 public enum ImageType {
 	AVATAR("Avatar"),
 	COVER_IMG("Cover Image"),
-	MOMENT("Moment"),
-	MOMENT_COVER("Moment Cover"),
+	FEED("Feed"),
+	FEED_COVER("Feed Cover"),
 	OTHERS("Others");
 	
 	private final String name;

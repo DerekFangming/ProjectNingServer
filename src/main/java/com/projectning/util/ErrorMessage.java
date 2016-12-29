@@ -33,12 +33,12 @@ public enum ErrorMessage {
 	ALREADY_FRIEND("You are already friend of him/her."),
 	ALREADY_DENIED("You have already denied him/her."),
 	NO_MORE_USER("There are no more users. Please try again later."),
-	//Moment related
-	MOMENT_NOT_FOUND("The moment you are looking for does not exist."),
-	NO_MORE_MOMENTS_FOUND("There are no more moments."),
-	NO_MOMENT_TO_DELETE("The moement you are trying to delete does not exist."),
-	UNAUTHORIZED_MOMENT_DELETE("Cannot delete an image that is not yours."),
-	INVALID_MOMENT_COVER("This moment has an invalid cover image."),
+	//Feed related
+	FEED_NOT_FOUND("The feed you are looking for does not exist."),
+	NO_MORE_FEEDS_FOUND("There are no more feeds."),
+	NO_FEED_TO_DELETE("The feed you are trying to delete does not exist."),
+	UNAUTHORIZED_FEED_DELETE("Cannot delete an feed that is not yours."),
+	INVALID_FEED_COVER("This feed has an invalid cover image."),
 	//Test case related
 	SHOULD_NOT_PASS_ERROR("This method should fail, but passed."),;
 	

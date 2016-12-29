@@ -156,7 +156,7 @@ public class AuthController {
     }
 	
 	@RequestMapping(value = "/test_get_request", method = RequestMethod.GET)
-	public ResponseEntity<Map<String, Object>> getMomentPreviewImage(HttpServletRequest request) {
+	public ResponseEntity<Map<String, Object>> getFeedPreviewImage(HttpServletRequest request) {
 		Map<String, Object> respond = new HashMap<String, Object>();
 		try{
 			String a = (String)request.getParameter("haha");
