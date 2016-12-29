@@ -5,10 +5,10 @@ import java.util.List;
 
 import com.projectning.service.dao.impl.QueryTerm;
 import com.projectning.service.dao.impl.RelationalOpType;
-import com.projectning.service.domain.Moment;
+import com.projectning.service.domain.Feed;
 import com.projectning.util.Pair;
 
-public interface MomentDao extends CommonDao<Moment>{
+public interface FeedDao extends CommonDao<Feed>{
 	
 	enum Field implements DaoFieldEnum{
 		ID(true),

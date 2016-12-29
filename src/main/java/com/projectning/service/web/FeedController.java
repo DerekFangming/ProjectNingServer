@@ -12,7 +12,6 @@ import java.util.List;
 import java.util.Map;
 
 import javax.imageio.ImageIO;
-import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -20,22 +19,21 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 
-import com.projectning.service.domain.Moment;
+import com.projectning.service.domain.Feed;
 import com.projectning.service.exceptions.NotFoundException;
 import com.projectning.service.manager.ImageManager;
-import com.projectning.service.manager.MomentManager;
+import com.projectning.service.manager.FeedManager;
 import com.projectning.service.manager.UserManager;
 import com.projectning.util.ErrorMessage;
 import com.projectning.util.ImageType;
 import com.projectning.util.Util;
 
 @Controller
-public class MomentController {
+public class FeedController {
 	
 	@Autowired private UserManager userManager;
-	@Autowired private MomentManager momentManager;
+	@Autowired private FeedManager momentManager;
 	@Autowired private ImageManager imageManager;
 	
 	@RequestMapping("/get_recent_moments")
@@ -57,10 +55,10 @@ public class MomentController {
 			}catch(NullPointerException e){
 				//
 			}
-			List<Moment> momentList = momentManager.getRecentMomentByDate(userId, checkPoint, limit);
+			List<Feed> momentList = momentManager.getRecentMomentByDate(userId, checkPoint, limit);
 			List<Map<String, Object>> processedMomentList = new ArrayList<Map<String, Object>>();
 			
-			for(Moment m : momentList){
+			for(Feed m : momentList){
 				Map<String, Object> processedMoment = new HashMap<String, Object>();
 				processedMoment.put("momentId", m.getId());
 				processedMoment.put("momentBody", m.getBody());

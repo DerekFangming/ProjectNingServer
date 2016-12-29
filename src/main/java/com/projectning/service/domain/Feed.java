@@ -2,7 +2,7 @@ package com.projectning.service.domain;
 
 import java.time.Instant;
 
-public class Moment {
+public class Feed {
 	private int id;
 	private String body;
 	private int ownerId;

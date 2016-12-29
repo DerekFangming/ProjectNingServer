@@ -3,10 +3,10 @@ package com.projectning.service.manager;
 import java.time.Instant;
 import java.util.List;
 
-import com.projectning.service.domain.Moment;
+import com.projectning.service.domain.Feed;
 import com.projectning.service.exceptions.NotFoundException;
 
-public interface MomentManager {
+public interface FeedManager {
 	
 	/**
 	 * Create a moment and save into db
@@ -22,7 +22,7 @@ public interface MomentManager {
 	 * @return a moment object
 	 * @throws NotFoundException if the moment does not exist
 	 */
-	public Moment getMomentById(int momentId) throws NotFoundException;
+	public Feed getMomentById(int momentId) throws NotFoundException;
 	
 	/**
 	 * Soft delete a moment
@@ -42,7 +42,7 @@ public interface MomentManager {
 	 * @return a list of moment that meet the criteria
 	 * @throws NotFoundException if no moment meets the criteria
 	 */
-	public List<Moment> getRecentMomentByDate (int ownerId, Instant date, int limit) throws NotFoundException;
+	public List<Feed> getRecentMomentByDate (int ownerId, Instant date, int limit) throws NotFoundException;
 	
 	/**
 	 * Get moment preview image Ids. Will return 4 of them maximumly.
