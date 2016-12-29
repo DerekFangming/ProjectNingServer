@@ -233,8 +233,6 @@ public interface CommonDao<T extends Object>
   int getCount(QueryTerm term);
   int getCount(List<QueryTerm> terms);
   int getCount(QueryInstance qi);
-  
-  void requireBuilderUsed(T obj);
 
   //TODO: @NeedsAutority("SYS_ADMIN")
   int deleteById(int dbid);

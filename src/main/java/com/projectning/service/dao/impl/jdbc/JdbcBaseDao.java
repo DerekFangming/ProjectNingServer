@@ -33,11 +33,8 @@ import com.projectning.service.dao.impl.QueryType;
 import com.projectning.service.dao.impl.RelationalOpType;
 import com.projectning.service.dao.impl.SdkDataSourceImpl;
 import com.projectning.service.domain.EnumType;
-import com.projectning.service.domain.HasBuilder;
-import com.projectning.service.domain.ObjectOrigin;
 import com.projectning.service.exceptions.ExceptionsHelper;
 import com.projectning.service.exceptions.NotFoundException;
-import com.projectning.service.exceptions.NotUsingObjectBuilderException;
 
 //public abstract class JdbcBaseDao<T extends Object> implements CommonDao<T>
 /**
@@ -134,8 +131,6 @@ public abstract class JdbcBaseDao<T extends Object> implements CommonDao<T>
   @Override
   public int persist(T obj)
   {
-    this.requireBuilderUsed(obj);
-    
     int expectedCount = this.expectedValues;
     
     if (obj instanceof EnumType)
@@ -547,23 +542,6 @@ catch(Throwable t)
     return this.namedTemplate.queryForObject(qi.getQueryStr(), qi.getParams(), Integer.class);
   }
   
-  @Override
-  public void requireBuilderUsed(T obj) 
-  {
-    if (obj instanceof HasBuilder)
-    {
-      HasBuilder hb = (HasBuilder) obj;
-
-      if (hb.getObjectOrigin() != ObjectOrigin.BUILDER)
-      {
-        throw new NotUsingObjectBuilderException("You must use "
-          + obj.getClass().getName()
-          + ".Builder to create an object to persist."
-          );
-      }
-    }
-  }
-
   protected void initOnce(SdkDataSourceImpl dataSource, String tableName, List<String> expectedColNames)
   {
     // This is to protect us from ourselves.
