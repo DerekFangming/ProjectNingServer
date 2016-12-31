@@ -78,6 +78,8 @@ public class FeedManagerImpl implements FeedManager{
 	    qb.addFirstQueryExpression(new QueryTerm(FeedDao.Field.OWNER_ID.name, RelationalOpType.EQ, ownerId));
 	    qb.addNextQueryExpression(LogicalOpType.AND,
 	    		new QueryTerm(FeedDao.Field.CREATED_AT.name, RelationalOpType.LT, Timestamp.from(date)));
+	    qb.addNextQueryExpression(LogicalOpType.AND,
+	    		new QueryTerm(FeedDao.Field.ENABLED.name, RelationalOpType.EQ, true));
 	    qb.setOrdering(FeedDao.Field.CREATED_AT.name, ResultsOrderType.DESCENDING);
 	    qb.setLimit(limit);
 	    
@@ -95,6 +97,8 @@ public class FeedManagerImpl implements FeedManager{
 	    qb.addFirstQueryExpression(new QueryTerm(ImageDao.Field.OWNER_ID.name, RelationalOpType.EQ, ownerId));
 	    qb.addNextQueryExpression(LogicalOpType.AND,
 	    		new QueryTerm(ImageDao.Field.TYPE.name, RelationalOpType.EQ, ImageType.FEED_COVER.getName()));
+	    qb.addNextQueryExpression(LogicalOpType.AND,
+	    		new QueryTerm(FeedDao.Field.ENABLED.name, RelationalOpType.EQ, true));
 	    qb.setOrdering(ImageDao.Field.CREATED_AT.name, ResultsOrderType.DESCENDING);
 	    qb.setLimit(4);
 	    
