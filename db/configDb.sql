@@ -48,3 +48,13 @@ CREATE TABLE Feeds (
     enabled boolean NOT NULL DEFAULT true,
     created_at timestamp without time zone NOT NULL
 );
+
+CREATE TABLE comments (
+	id serial primary key,
+	body varchar(400),
+	type varchar(10),
+	type_mapping_id integer,
+	owner_id integer NOT NULL,
+	enabled boolean NOT NULL DEFAULT true,
+	created_at timestamp without time zone NOT NULL
+);

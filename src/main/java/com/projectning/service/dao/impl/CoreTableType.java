@@ -3,6 +3,7 @@ package com.projectning.service.dao.impl;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.projectning.service.dao.CommentDao;
 import com.projectning.service.dao.DataSourceRegistry;
 import com.projectning.service.dao.DataSourceType;
 import com.projectning.service.dao.FriendDao;
@@ -23,7 +24,8 @@ public enum CoreTableType implements SchemaTable
 	IMAGES(CoreDataSourceType.CORE, ImageDao.FieldTypes),
 	FRIENDS(CoreDataSourceType.CORE, FriendDao.FieldTypes),
 	RELATIONSHIPS(CoreDataSourceType.CORE, RelationshipDao.FieldTypes),
-	FEEDS(CoreDataSourceType.CORE, FeedDao.FieldTypes)
+	FEEDS(CoreDataSourceType.CORE, FeedDao.FieldTypes),
+	COMMENTS(CoreDataSourceType.CORE, CommentDao.FieldTypes)
 ;
 
 
