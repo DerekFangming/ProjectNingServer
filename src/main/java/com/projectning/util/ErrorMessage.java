@@ -39,6 +39,10 @@ public enum ErrorMessage {
 	NO_FEED_TO_DELETE("The feed you are trying to delete does not exist."),
 	UNAUTHORIZED_FEED_DELETE("Cannot delete an feed that is not yours."),
 	INVALID_FEED_COVER("This feed has an invalid cover image."),
+	//Comment related
+	COMMENT_NOT_FOUND("The comment you are looking for does not exist."),
+	NO_COMMENT_TO_DELETE("The comment you are trying to delete does not exist."),
+	UNAUTHORIZED_COMMENT_DELETE("Cannot delete a comment that is not yours."),
 	//Test case related
 	SHOULD_NOT_PASS_ERROR("This method should fail, but passed."),;
 	
