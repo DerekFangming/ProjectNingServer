@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import com.projectning.service.dao.CommentDao;
 import com.projectning.service.dao.impl.NVPair;
@@ -13,7 +14,9 @@ import com.projectning.service.domain.Comment;
 import com.projectning.service.exceptions.NotFoundException;
 import com.projectning.service.manager.CommentManager;
 import com.projectning.util.ErrorMessage;
+import com.projectning.util.Util;
 
+@Component
 public class CommentManagerImpl implements CommentManager{
 	
 	@Autowired private CommentDao commentDao;
