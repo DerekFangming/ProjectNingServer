@@ -28,7 +28,7 @@ public class JdbcCommentDao extends JdbcBaseDao<Comment> implements CommentDao{
 	    params.addValue(CommentDao.Field.BODY.name, obj.getBody());
 	    params.addValue(CommentDao.Field.OWNER_ID.name, obj.getOwnerId());
 	    params.addValue(CommentDao.Field.TYPE.name, obj.getType());
-	    params.addValue(CommentDao.Field.TYPE_MAPPING_ID.name, obj.getTypeMappingId());
+	    params.addNullableIntValue(CommentDao.Field.TYPE_MAPPING_ID.name, obj.getTypeMappingId());
 	    params.addValue(CommentDao.Field.ENABLED.name, obj.getEnabled());
 	    params.addValue(CommentDao.Field.CREATED_AT.name, Date.from(obj.getCreatedAt()));
 	        
