@@ -10,6 +10,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.projectning.service.domain.Comment;
 import com.projectning.service.manager.CommentManager;
 import com.projectning.service.manager.UserManager;
 import com.projectning.util.Util;
@@ -37,6 +38,42 @@ public class CommentController {
 			}
 			
 			commentManager.saveComment(body, type, mappingId, userId);
+			
+			respond.put("error", "");
+		}catch(Exception e){
+			respond = Util.createErrorRespondFromException(e);
+		}
+		return new ResponseEntity<Map<String, Object>>(respond, HttpStatus.OK);
+	}
+	
+	@RequestMapping("/get_comment_by_id")
+    public ResponseEntity<Map<String, Object>> getCommentById(@RequestBody Map<String, Object> request) {
+		Map<String, Object> respond = new HashMap<String, Object>();
+		try{
+			userManager.validateAccessToken(request);
+			
+			Comment comment = commentManager.getCommentById((int)request.get("commentId"));
+			
+			respond.put("commentBody", comment.getBody());
+			respond.put("commentType", comment.getType());
+			respond.put("mappingId", comment.getTypeMappingId());
+			respond.put("createdAt", comment.getCreatedAt().toString());
+			respond.put("error", "");
+		}catch(Exception e){
+			respond = Util.createErrorRespondFromException(e);
+		}
+		return new ResponseEntity<Map<String, Object>>(respond, HttpStatus.OK);
+	}
+	
+	@RequestMapping("/get_comment_ids_by_type")
+	public ResponseEntity<Map<String, Object>> getCommentIds(@RequestBody Map<String, Object> request) {
+		Map<String, Object> respond = new HashMap<String, Object>();
+		try{
+			userManager.validateAccessToken(request);
+			
+			int userId = (int)request.get("userId");
+			
+			respond.put("idList", commentManager.getCommentIdListByType((String)request.get("type"), userId));
 			
 			respond.put("error", "");
 		}catch(Exception e){
