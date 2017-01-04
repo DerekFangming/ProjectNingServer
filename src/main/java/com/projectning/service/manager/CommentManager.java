@@ -1,5 +1,7 @@
 package com.projectning.service.manager;
 
+import java.util.List;
+
 import com.projectning.service.domain.Comment;
 import com.projectning.service.exceptions.NotFoundException;
 
@@ -31,5 +33,24 @@ public interface CommentManager {
 	 * @throws IllegalStateException if the user is not the owner of the image
 	 */
 	public void softDeleteComment(int commentId, int ownerId) throws NotFoundException, IllegalStateException;
+	
+	/**
+	 * Get a list of comment IDs by comment type and owner id
+	 * @param type the type of the comment
+	 * @param ownerId the owner(user) id
+	 * @return a list of comment IDs that belongs to the user with the specific type
+	 * @throws NotFoundException when no id is found
+	 */
+	public List<Integer> getCommentIdListByType(String type, int ownerId) throws NotFoundException;
+	
+	/**
+	 * Get a list of IDs by comment type, owner id and the mapping id for the comment type
+	 * @param type the type of the comment
+	 * @param mappingId the mapping id for the comment type
+	 * @param ownerId the owner(user) id
+	 * @return a list of comment IDs that belongs to the user with the specific type and type mapping id
+	 * @throws NotFoundException  when no id is found
+	 */
+	public List<Integer> getCommentIdListByTypeAndMappingId(String type, int mappingId, int ownerId) throws NotFoundException;
 
 }

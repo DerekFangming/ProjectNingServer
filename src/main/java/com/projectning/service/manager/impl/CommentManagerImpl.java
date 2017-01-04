@@ -63,4 +63,26 @@ public class CommentManagerImpl implements CommentManager{
 		
 	}
 
+	@Override
+	public List<Integer> getCommentIdListByType(String type, int ownerId) throws NotFoundException {
+		return getCommentIdListByTypeAndMappingId(type, Util.nullInt, ownerId);
+	}
+
+	@Override
+	public List<Integer> getCommentIdListByTypeAndMappingId(String type, int mappingId, int ownerId)
+			throws NotFoundException {
+		List<QueryTerm> values = new ArrayList<QueryTerm>();
+		values.add(CommentDao.Field.TYPE.getQueryTerm(type));
+		values.add(CommentDao.Field.OWNER_ID.getQueryTerm(ownerId));
+		values.add(CommentDao.Field.ENABLED.getQueryTerm(true));
+		if(mappingId != Util.nullInt)
+			values.add(CommentDao.Field.TYPE_MAPPING_ID.getQueryTerm(mappingId));
+		
+		try{
+			return commentDao.findAllIds(values);
+		}catch(NotFoundException e){
+			throw new NotFoundException(ErrorMessage.COMMENT_NOT_FOUND.getMsg());
+		}
+	}
+
 }

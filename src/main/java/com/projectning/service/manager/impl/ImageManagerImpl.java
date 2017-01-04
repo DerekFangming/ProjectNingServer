@@ -120,7 +120,7 @@ public class ImageManagerImpl implements ImageManager{
 
 	@Override
 	public List<Integer> getImageIdListByType(String type, int ownerId) throws NotFoundException{
-		return getImageIdListByTypeAndMappingId(type, -1, ownerId);
+		return getImageIdListByTypeAndMappingId(type, Util.nullInt, ownerId);
 	}
 	
 	@Override
@@ -129,7 +129,7 @@ public class ImageManagerImpl implements ImageManager{
 		values.add(ImageDao.Field.TYPE.getQueryTerm(type));
 		values.add(ImageDao.Field.OWNER_ID.getQueryTerm(ownerId));
 		values.add(ImageDao.Field.ENABLED.getQueryTerm(true));
-		if(mappingId != -1)
+		if(mappingId != Util.nullInt)
 			values.add(ImageDao.Field.TYPE_MAPPING_ID.getQueryTerm(mappingId));
 		
 		try{
