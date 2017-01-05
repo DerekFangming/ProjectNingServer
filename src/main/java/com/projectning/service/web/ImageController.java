@@ -99,9 +99,11 @@ public class ImageController {
 	public ResponseEntity<Map<String, Object>> getImageIds(@RequestBody Map<String, Object> request) {
 		Map<String, Object> respond = new HashMap<String, Object>();
 		try{
-			int id = userManager.validateAccessToken(request);
+			userManager.validateAccessToken(request);
 			
-			respond.put("idList", imageManager.getImageIdListByType((String)request.get("type"), id));
+			int userId = (int)request.get("userId");
+			
+			respond.put("idList", imageManager.getImageIdListByType((String)request.get("type"), userId));
 			
 			respond.put("error", "");
 		}catch(Exception e){
