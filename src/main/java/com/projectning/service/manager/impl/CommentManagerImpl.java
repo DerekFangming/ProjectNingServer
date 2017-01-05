@@ -8,12 +8,20 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.projectning.service.dao.CommentDao;
+import com.projectning.service.dao.RelationshipDao;
+import com.projectning.service.dao.impl.CoreTableType;
+import com.projectning.service.dao.impl.ExistQueryTerm;
+import com.projectning.service.dao.impl.LogicalOpType;
 import com.projectning.service.dao.impl.NVPair;
+import com.projectning.service.dao.impl.QueryBuilder;
 import com.projectning.service.dao.impl.QueryTerm;
+import com.projectning.service.dao.impl.QueryType;
+import com.projectning.service.dao.impl.RelationalOpType;
 import com.projectning.service.domain.Comment;
 import com.projectning.service.exceptions.NotFoundException;
 import com.projectning.service.manager.CommentManager;
 import com.projectning.util.ErrorMessage;
+import com.projectning.util.RelationshipType;
 import com.projectning.util.Util;
 
 @Component
@@ -80,6 +88,31 @@ public class CommentManagerImpl implements CommentManager{
 		
 		try{
 			return commentDao.findAllIds(values);
+		}catch(NotFoundException e){
+			throw new NotFoundException(ErrorMessage.COMMENT_NOT_FOUND.getMsg());
+		}
+	}
+
+	@Override
+	public List<Integer> getRecentCommentFromFriends(String type, int mappingId, int ownerId) throws NotFoundException {
+		QueryBuilder qb = QueryType.getQueryBuilder(CoreTableType.COMMENTS, QueryType.FIND);
+	    qb.addFirstQueryExpression(new QueryTerm(CommentDao.Field.TYPE.name, RelationalOpType.EQ, type));
+	    qb.addNextQueryExpression(LogicalOpType.AND, 
+	    		new QueryTerm(CommentDao.Field.TYPE_MAPPING_ID.name, RelationalOpType.EQ, mappingId));
+	    
+	    QueryBuilder inner = qb.getInnerQueryBuilder(CoreTableType.RELATIONSHIPS, QueryType.FIND);
+	    inner.addFirstQueryExpression(new QueryTerm(RelationshipDao.Field.SENDER_ID.name, ownerId));
+	    inner.addNextQueryExpression(LogicalOpType.AND, 
+	    		new QueryTerm(RelationshipDao.Field.RECEIVER_ID.name, RelationalOpType.EQ, "3"));
+	    inner.addNextQueryExpression(LogicalOpType.AND, 
+	    		new QueryTerm(RelationshipDao.Field.TYPE.name, RelationalOpType.EQ, RelationshipType.FRIEND.getName()));
+	    inner.addNextQueryExpression(LogicalOpType.AND, 
+	    		new QueryTerm(RelationshipDao.Field.CONFIRMED.name, RelationalOpType.EQ, true));
+	    inner.setReturnField("1");
+	    
+	    qb.addNextQueryExpression(LogicalOpType.AND, new ExistQueryTerm(inner));
+		try{
+			return commentDao.findAllIds(qb.createQuery());
 		}catch(NotFoundException e){
 			throw new NotFoundException(ErrorMessage.COMMENT_NOT_FOUND.getMsg());
 		}

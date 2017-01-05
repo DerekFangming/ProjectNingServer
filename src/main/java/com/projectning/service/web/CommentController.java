@@ -81,5 +81,24 @@ public class CommentController {
 		}
 		return new ResponseEntity<Map<String, Object>>(respond, HttpStatus.OK);
 	}
+	
+	@RequestMapping("/get_recent_comment_from_friends")
+	public ResponseEntity<Map<String, Object>> getRecentCommentFromFriends(@RequestBody Map<String, Object> request) {
+		Map<String, Object> respond = new HashMap<String, Object>();
+		try{
+			//userManager.validateAccessToken(request);
+			
+			int ownerId = (int)request.get("ownerId");
+			int mappingId = (int)request.get("mappingId");
+			String type = (String)request.get("type");
+			
+			respond.put("idList", commentManager.getRecentCommentFromFriends(type, mappingId, ownerId));
+			
+			respond.put("error", "");
+		}catch(Exception e){
+			respond = Util.createErrorRespondFromException(e);
+		}
+		return new ResponseEntity<Map<String, Object>>(respond, HttpStatus.OK);
+	}
 
 }

@@ -99,6 +99,23 @@ public enum RelationalOpType
 	        .append(qi.getQueryStr())
 	        .append(")");        
 	    }
+	  },
+  EXT("EXISTS"){
+		  @Override
+		    public StringBuilder makeSymbolicTerm(QueryTerm term)
+		    {
+		      ExistQueryTerm iqt = (ExistQueryTerm) term;
+		      // Get the inner QB
+		      QueryBuilder iqb = iqt.getValue();
+		      // Get the inner query itself
+		      QueryInstance qi = iqb.createQuery();
+
+		      return new StringBuilder()
+		        //.append(term.getField())
+		        .append(" EXISTS (")
+		        .append(qi.getQueryStr())
+		        .append(")");        
+		    }
 	  };
 
   public String asString;
