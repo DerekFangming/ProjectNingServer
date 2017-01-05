@@ -116,6 +116,14 @@ public enum RelationalOpType
 		        .append(qi.getQueryStr())
 		        .append(")");        
 		    }
+	  },
+  SPE("Special Command"){
+		  @Override
+		    public StringBuilder makeSymbolicTerm(QueryTerm term)
+		    {
+			  QueryTerm iqt = (QueryTerm) term;
+			  return new StringBuilder().append(iqt.getField());       
+		    }
 	  };
 
   public String asString;

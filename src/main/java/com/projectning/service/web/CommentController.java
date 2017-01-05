@@ -86,7 +86,7 @@ public class CommentController {
 	public ResponseEntity<Map<String, Object>> getRecentCommentFromFriends(@RequestBody Map<String, Object> request) {
 		Map<String, Object> respond = new HashMap<String, Object>();
 		try{
-			//userManager.validateAccessToken(request);
+			userManager.validateAccessToken(request);
 			
 			int ownerId = (int)request.get("ownerId");
 			int mappingId = (int)request.get("mappingId");

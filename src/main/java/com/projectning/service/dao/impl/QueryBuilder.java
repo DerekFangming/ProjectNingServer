@@ -376,7 +376,7 @@ public class QueryBuilder
       
       for(QueryTerm term : terms)
       {
-        if(term.getOp() == RelationalOpType.IN)
+        if(term.getOp() == RelationalOpType.IN || term.getOp() == RelationalOpType.SPE)
         {
           continue;
         }

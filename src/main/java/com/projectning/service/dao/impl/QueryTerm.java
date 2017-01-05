@@ -16,6 +16,11 @@ public class QueryTerm extends NVPair
   {
     this(field, RelationalOpType.EQ, value);    
   }
+  
+  public QueryTerm(String special)
+  {
+	  this(special, RelationalOpType.SPE, "");
+  }
 
   // For backwards compatibility...
   public QueryTerm(Pair<String, Object> term)

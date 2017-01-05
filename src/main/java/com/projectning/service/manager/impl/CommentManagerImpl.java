@@ -103,7 +103,7 @@ public class CommentManagerImpl implements CommentManager{
 	    QueryBuilder inner = qb.getInnerQueryBuilder(CoreTableType.RELATIONSHIPS, QueryType.FIND);
 	    inner.addFirstQueryExpression(new QueryTerm(RelationshipDao.Field.SENDER_ID.name, ownerId));
 	    inner.addNextQueryExpression(LogicalOpType.AND, 
-	    		new QueryTerm(RelationshipDao.Field.RECEIVER_ID.name, RelationalOpType.EQ, "3"));
+	    		new QueryTerm("receiver_id = comments.owner_id"));
 	    inner.addNextQueryExpression(LogicalOpType.AND, 
 	    		new QueryTerm(RelationshipDao.Field.TYPE.name, RelationalOpType.EQ, RelationshipType.FRIEND.getName()));
 	    inner.addNextQueryExpression(LogicalOpType.AND, 
