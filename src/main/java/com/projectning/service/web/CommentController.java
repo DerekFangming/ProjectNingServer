@@ -1,6 +1,8 @@
 package com.projectning.service.web;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -88,12 +90,22 @@ public class CommentController {
 		try{
 			userManager.validateAccessToken(request);
 			
-			int ownerId = (int)request.get("ownerId");
+			int userId = (int)request.get("userId");
 			int mappingId = (int)request.get("mappingId");
 			String type = (String)request.get("type");
 			
-			respond.put("idList", commentManager.getRecentCommentFromFriends(type, mappingId, ownerId));
+			List<Comment> commentList = commentManager.getRecentCommentFromFriends(type, mappingId, userId);
+			List<Map<String, Object>> processedCommentList = new ArrayList<Map<String, Object>>();
+			for(Comment c : commentList){
+				Map<String, Object> processedComment = new HashMap<String, Object>();
+				processedComment.put("commentbody", c.getBody());
+				processedComment.put("ownerId", c.getOwnerId());
+				processedComment.put("ownerName", userManager.getUserDisplayedName(c.getOwnerId()));
+				processedComment.put("createdAt", c.getCreatedAt().toString());
+				processedCommentList.add(processedComment);
+			}
 			
+			respond.put("commentList", processedCommentList);
 			respond.put("error", "");
 		}catch(Exception e){
 			respond = Util.createErrorRespondFromException(e);

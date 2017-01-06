@@ -116,6 +116,15 @@ public interface UserManager {
 	public int validateAccessToken(Map<String, Object> request) 
 			throws NullPointerException, NotFoundException, IllegalStateException;
 	
+	/**
+	 * Get a name of a user for displaying purpose. This method will try to get nickname from user detail.
+	 * If there is no nickname, get real name. If there is no user detail, get the username.
+	 * @param userId the id of the user
+	 * @return a name in the preference order mentioned above
+	 * @throws NotFoundException if the user does not exist
+	 */
+	public String getUserDisplayedName(int userId) throws NotFoundException;
+	
 	/* The following methods are for user details*/
 
 	/**

@@ -234,6 +234,26 @@ public class UserManagerImpl implements UserManager{
 		}
 	}
 	
+	@Override
+	public String getUserDisplayedName(int userId) throws NotFoundException{
+		try{
+			UserDetail userDetail = getUserDetail(userId);
+			if(userDetail.getNickname() != null){
+				return userDetail.getNickname();
+			}else if(userDetail.getName() != null){
+				return userDetail.getName();
+			}else{
+				throw new NotFoundException();
+			}
+		}catch(NotFoundException e){
+			try{
+				return getUsername(userId);
+			}catch(NotFoundException ex){
+				throw new IllegalStateException(ErrorMessage.USER_NOT_FOUND.getMsg());
+			}
+		}
+	}
+	
 	/* The following methods are for user details*/
 
 	@Override

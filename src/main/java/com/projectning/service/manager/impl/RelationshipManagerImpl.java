@@ -20,7 +20,6 @@ import com.projectning.service.dao.impl.QueryTerm;
 import com.projectning.service.dao.impl.QueryType;
 import com.projectning.service.dao.impl.RelationalOpType;
 import com.projectning.service.domain.Relationship;
-import com.projectning.service.domain.UserDetail;
 import com.projectning.service.exceptions.NotFoundException;
 import com.projectning.service.manager.RelationshipManager;
 import com.projectning.service.manager.UserManager;
@@ -176,21 +175,9 @@ public class RelationshipManagerImpl implements RelationshipManager{
 			Map<String, Object> listItem = new HashMap<String, Object>();
 			String name;
 			try{
-				
-				UserDetail userDetail = userManager.getUserDetail(i);
-				if(userDetail.getNickname() != null){
-					name = userDetail.getNickname();
-				}else if(userDetail.getName() != null){
-					name = userDetail.getName();
-				}else{
-					throw new NotFoundException();
-				}
+				name = userManager.getUserDisplayedName(i);
 			}catch(NotFoundException e){
-				try{
-					name = userManager.getUsername(i);
-				}catch(NotFoundException ex){
-					throw new IllegalStateException(ErrorMessage.INTERNAL_LOGIC_ERROR.getMsg());
-				}
+				throw new IllegalStateException(ErrorMessage.INTERNAL_LOGIC_ERROR.getMsg());
 			}
 			listItem.put("id", i);
 			listItem.put("name", name.substring(0, 1).toUpperCase() + name.substring(1));

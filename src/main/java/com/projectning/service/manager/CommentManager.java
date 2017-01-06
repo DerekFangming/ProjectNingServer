@@ -54,14 +54,14 @@ public interface CommentManager {
 	public List<Integer> getCommentIdListByTypeAndMappingId(String type, int mappingId, int ownerId) throws NotFoundException;
 	
 	/**
-	 * Get a list of IDs by comment type and type mapping ID, ordered by date.
+	 * Get a list of Comment objects by comment type and type mapping ID, ordered by date.
 	 * Only comments owned by friends will be retrieved
 	 * @param type the type of the comment
 	 * @param mappingId the mapping id for the comment type
-	 * @param ownerId the owner(user) id
-	 * @return a list of comment IDs that belongs to the user with the specific type and type mapping ID
+	 * @param userId the user that friends' comments are retrieved from
+	 * @return a list of comment objects that belongs to the user with the specific type and type mapping ID
 	 * @throws NotFoundException when no ID is found
 	 */
-	public List<Integer> getRecentCommentFromFriends(String type, int mappingId, int ownerId) throws NotFoundException;
+	public List<Comment> getRecentCommentFromFriends(String type, int mappingId, int userId) throws NotFoundException;
 
 }

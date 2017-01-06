@@ -94,14 +94,14 @@ public class CommentManagerImpl implements CommentManager{
 	}
 
 	@Override
-	public List<Integer> getRecentCommentFromFriends(String type, int mappingId, int ownerId) throws NotFoundException {
+	public List<Comment> getRecentCommentFromFriends(String type, int mappingId, int userId) throws NotFoundException {
 		QueryBuilder qb = QueryType.getQueryBuilder(CoreTableType.COMMENTS, QueryType.FIND);
 	    qb.addFirstQueryExpression(new QueryTerm(CommentDao.Field.TYPE.name, RelationalOpType.EQ, type));
 	    qb.addNextQueryExpression(LogicalOpType.AND, 
 	    		new QueryTerm(CommentDao.Field.TYPE_MAPPING_ID.name, RelationalOpType.EQ, mappingId));
 	    
 	    QueryBuilder inner = qb.getInnerQueryBuilder(CoreTableType.RELATIONSHIPS, QueryType.FIND);
-	    inner.addFirstQueryExpression(new QueryTerm(RelationshipDao.Field.SENDER_ID.name, ownerId));
+	    inner.addFirstQueryExpression(new QueryTerm(RelationshipDao.Field.SENDER_ID.name, userId));
 	    inner.addNextQueryExpression(LogicalOpType.AND, 
 	    		new QueryTerm("receiver_id = comments.owner_id"));
 	    inner.addNextQueryExpression(LogicalOpType.AND, 
@@ -112,7 +112,7 @@ public class CommentManagerImpl implements CommentManager{
 	    
 	    qb.addNextQueryExpression(LogicalOpType.AND, new ExistQueryTerm(inner));
 		try{
-			return commentDao.findAllIds(qb.createQuery());
+			return commentDao.findAllObjects(qb.createQuery());
 		}catch(NotFoundException e){
 			throw new NotFoundException(ErrorMessage.COMMENT_NOT_FOUND.getMsg());
 		}
