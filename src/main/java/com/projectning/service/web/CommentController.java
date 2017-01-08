@@ -98,6 +98,7 @@ public class CommentController {
 			List<Map<String, Object>> processedCommentList = new ArrayList<Map<String, Object>>();
 			for(Comment c : commentList){
 				Map<String, Object> processedComment = new HashMap<String, Object>();
+				processedComment.put("commentId", c.getId());
 				processedComment.put("commentbody", c.getBody());
 				processedComment.put("ownerId", c.getOwnerId());
 				processedComment.put("ownerName", userManager.getUserDisplayedName(c.getOwnerId()));
