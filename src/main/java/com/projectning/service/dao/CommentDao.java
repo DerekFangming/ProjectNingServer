@@ -12,6 +12,7 @@ public interface CommentDao extends CommonDao<Comment>{
 	enum Field implements DaoFieldEnum{
 		ID(true),
 	    BODY,
+	    MENTIONED_USER_ID,
 	    TYPE,
 	    TYPE_MAPPING_ID,
 	    OWNER_ID,
@@ -48,6 +49,7 @@ public interface CommentDao extends CommonDao<Comment>{
 	List<Pair<Enum<?>, String>> FieldTypes = Arrays.asList(
 		    new Pair<Enum<?>, String>(Field.ID, "SERIAL NOT NULL"),
 		    new Pair<Enum<?>, String>(Field.BODY, "TEXT"),
+		    new Pair<Enum<?>, String>(Field.MENTIONED_USER_ID, "INTEGER"),
 		    new Pair<Enum<?>, String>(Field.TYPE, "TEXT"),
 		    new Pair<Enum<?>, String>(Field.TYPE_MAPPING_ID, "INTEGER"),
 		    new Pair<Enum<?>, String>(Field.OWNER_ID, "INTEGER NOT NULL"),

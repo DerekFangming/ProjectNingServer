@@ -52,6 +52,7 @@ CREATE TABLE Feeds (
 CREATE TABLE comments (
 	id serial primary key,
 	body varchar(400),
+	mentioned_user_id integer,
 	type varchar(10),
 	type_mapping_id integer,
 	owner_id integer NOT NULL,

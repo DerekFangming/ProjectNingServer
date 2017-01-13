@@ -5,6 +5,7 @@ import java.time.Instant;
 public class Comment {
 	private int id;
 	private String body;
+	private int mentionedUserId;
 	private String type;
 	private int typeMappingId;
 	private int ownerId;
@@ -25,6 +26,14 @@ public class Comment {
 	
 	public void setBody(String body){
 		this.body = body;
+	}
+	
+	public int getMentionedUserId(){
+		return mentionedUserId;
+	}
+	
+	public void setMentionedUserId(int mentionedUserId){
+		this.mentionedUserId = mentionedUserId;
 	}
 	
 	public String getType(){

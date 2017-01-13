@@ -24,8 +24,8 @@ public class JdbcCommentDao extends JdbcBaseDao<Comment> implements CommentDao{
 	  protected NVPairList getNVPairs(Comment obj)
 	  {
 	    NVPairList params = new NVPairList();
-	    
 	    params.addValue(CommentDao.Field.BODY.name, obj.getBody());
+	    params.addNullableIntValue(CommentDao.Field.MENTIONED_USER_ID.name, obj.getMentionedUserId());
 	    params.addValue(CommentDao.Field.OWNER_ID.name, obj.getOwnerId());
 	    params.addValue(CommentDao.Field.TYPE.name, obj.getType());
 	    params.addNullableIntValue(CommentDao.Field.TYPE_MAPPING_ID.name, obj.getTypeMappingId());
@@ -46,6 +46,7 @@ public class JdbcCommentDao extends JdbcBaseDao<Comment> implements CommentDao{
 	    	  Comment obj = new Comment();
 	    	  obj.setId(rs.getInt(CommentDao.Field.ID.name));
 	    	  obj.setBody(rs.getString(CommentDao.Field.BODY.name));
+	    	  obj.setMentionedUserId(rs.getInt(CommentDao.Field.MENTIONED_USER_ID.name));
 	    	  obj.setType(rs.getString(CommentDao.Field.TYPE.name));
 	    	  obj.setTypeMappingId(rs.getInt(CommentDao.Field.TYPE_MAPPING_ID.name));
 	    	  obj.setOwnerId(rs.getInt(CommentDao.Field.OWNER_ID.name));

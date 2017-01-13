@@ -32,6 +32,7 @@ public class CommentController {
 			String body = (String)request.get("commentBody");
 			String type = "";
 			int mappingId = Util.nullInt;
+			int mentionedUserId = Util.nullInt;
 			try{
 				type = (String)request.get("type");
 				mappingId = (int)request.get("mappingId");
@@ -39,7 +40,13 @@ public class CommentController {
 				//
 			}
 			
-			commentManager.saveComment(body, type, mappingId, userId);
+			try{
+				mentionedUserId = (int)request.get("mentionedUserId");
+			}catch(NullPointerException e){
+				//
+			}
+			
+			commentManager.saveComment(body, type, mappingId, userId, mentionedUserId);
 			
 			respond.put("error", "");
 		}catch(Exception e){
@@ -88,9 +95,8 @@ public class CommentController {
 	public ResponseEntity<Map<String, Object>> getRecentCommentFromFriends(@RequestBody Map<String, Object> request) {
 		Map<String, Object> respond = new HashMap<String, Object>();
 		try{
-			userManager.validateAccessToken(request);
+			int userId = userManager.validateAccessToken(request);
 			
-			int userId = (int)request.get("userId");
 			int mappingId = (int)request.get("mappingId");
 			String type = (String)request.get("type");
 			
@@ -100,6 +106,8 @@ public class CommentController {
 				Map<String, Object> processedComment = new HashMap<String, Object>();
 				processedComment.put("commentId", c.getId());
 				processedComment.put("commentbody", c.getBody());
+				processedComment.put("mentionedUserId", c.getMentionedUserId());
+				if (c.getMentionedUserId() != 0) processedComment.put("mentionedUserName", userManager.getUserDisplayedName(c.getMentionedUserId()));
 				processedComment.put("ownerId", c.getOwnerId());
 				processedComment.put("ownerName", userManager.getUserDisplayedName(c.getOwnerId()));
 				processedComment.put("createdAt", c.getCreatedAt().toString());

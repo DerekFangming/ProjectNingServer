@@ -13,9 +13,10 @@ public interface CommentManager {
 	 * @param type the type of this comment
 	 * @param typeMappingId the mapping Id for the comment type 
 	 * @param ownerId the user id of the owner of this comment
+	 * @param mentionedUserId the user that is mentioned in this comment
 	 * @return the id of this comment
 	 */
-	public int saveComment(String body, String type, int typeMappingId, int ownerId);
+	public int saveComment(String body, String type, int typeMappingId, int ownerId, int mentionedUserId);
 	
 	/**
 	 * Get comment object from comment id

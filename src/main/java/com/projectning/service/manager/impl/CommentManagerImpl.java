@@ -17,6 +17,7 @@ import com.projectning.service.dao.impl.QueryBuilder;
 import com.projectning.service.dao.impl.QueryTerm;
 import com.projectning.service.dao.impl.QueryType;
 import com.projectning.service.dao.impl.RelationalOpType;
+import com.projectning.service.dao.impl.ResultsOrderType;
 import com.projectning.service.domain.Comment;
 import com.projectning.service.exceptions.NotFoundException;
 import com.projectning.service.manager.CommentManager;
@@ -30,9 +31,10 @@ public class CommentManagerImpl implements CommentManager{
 	@Autowired private CommentDao commentDao;
 
 	@Override
-	public int saveComment(String body, String type, int typeMappingId, int ownerId) {
+	public int saveComment(String body, String type, int typeMappingId, int ownerId, int mentionedUserId) {
 		Comment comment = new Comment();
 		comment.setBody(body);
+		comment.setMentionedUserId(mentionedUserId);
 		comment.setType(type);
 		comment.setTypeMappingId(typeMappingId);
 		comment.setOwnerId(ownerId);
@@ -111,6 +113,7 @@ public class CommentManagerImpl implements CommentManager{
 	    inner.setReturnField("1");
 	    
 	    qb.addNextQueryExpression(LogicalOpType.AND, new ExistQueryTerm(inner));
+	    qb.setOrdering(CommentDao.Field.CREATED_AT.name, ResultsOrderType.ASCENDING);
 		try{
 			return commentDao.findAllObjects(qb.createQuery());
 		}catch(NotFoundException e){
