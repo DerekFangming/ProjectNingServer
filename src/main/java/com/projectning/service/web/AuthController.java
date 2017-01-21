@@ -64,6 +64,7 @@ public class AuthController {
 			String accessToken = helperManager.createAccessToken(username, exp);
 			userManager.updateAccessToken(username, accessToken);
 			
+			respond.put("userId", userManager.getUserId(username));
 			respond.put("username", username);
 			respond.put("accessToken", accessToken);
 			respond.put("expire", exp.toString());
@@ -134,6 +135,7 @@ public class AuthController {
 			
 			userManager.login(username, password, accessToken);
 			
+			respond.put("userId", userManager.getUserId(username));
 			respond.put("username", username);
 			respond.put("accessToken", accessToken);
 			respond.put("expire", exp.toString());

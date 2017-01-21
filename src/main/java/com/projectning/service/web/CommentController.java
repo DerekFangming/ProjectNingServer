@@ -46,7 +46,22 @@ public class CommentController {
 				//
 			}
 			
-			commentManager.saveComment(body, type, mappingId, userId, mentionedUserId);
+			commentManager.saveOrEnableComment(body, type, mappingId, userId, mentionedUserId);
+			
+			respond.put("error", "");
+		}catch(Exception e){
+			respond = Util.createErrorRespondFromException(e);
+		}
+		return new ResponseEntity<Map<String, Object>>(respond, HttpStatus.OK);
+	}
+	
+	@RequestMapping("/delete_comment")
+	public ResponseEntity<Map<String, Object>> deleteComment(@RequestBody Map<String, Object> request) {
+		Map<String, Object> respond = new HashMap<String, Object>();
+		try{
+			int userId = userManager.validateAccessToken(request);
+			
+			commentManager.softDeleteComment((int)request.get("commentId"), userId);
 			
 			respond.put("error", "");
 		}catch(Exception e){
@@ -116,39 +131,6 @@ public class CommentController {
 			
 			respond.put("commentList", processedCommentList);
 			respond.put("error", "");
-		}catch(Exception e){
-			respond = Util.createErrorRespondFromException(e);
-		}
-		return new ResponseEntity<Map<String, Object>>(respond, HttpStatus.OK);
-	}
-	
-	@RequestMapping("/create_or_delete_comment")
-	public ResponseEntity<Map<String, Object>> createOrDeleteComment(@RequestBody Map<String, Object> request) {
-		Map<String, Object> respond = new HashMap<String, Object>();
-		try{
-			int userId = userManager.validateAccessToken(request);
-			
-			String action = (String)request.get("action");
-			if(action.equals("create")){
-				String type = (String)request.get("type");
-				int mappingId = (int)request.get("mappingId");
-				String body = (String)request.get("commentBody");
-				int mentionedUserId = Util.nullInt;
-				try{
-					mentionedUserId = (int)request.get("mentionedUserId");
-				}catch(NullPointerException e){
-				}
-				
-				commentManager.saveOrEnableComment(body, type, mappingId, userId, mentionedUserId);
-				
-				respond.put("error", "");
-			}else if (action.equals("delete")){
-				commentManager.softDeleteComment((int)request.get("commentId"), userId);
-				
-				respond.put("error", "");
-			}else{
-				respond.put("error", "No such option ");
-			}
 		}catch(Exception e){
 			respond = Util.createErrorRespondFromException(e);
 		}
