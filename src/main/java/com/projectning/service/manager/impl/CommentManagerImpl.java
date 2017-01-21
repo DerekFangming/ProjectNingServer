@@ -42,6 +42,29 @@ public class CommentManagerImpl implements CommentManager{
 		comment.setCreatedAt(Instant.now());
 		return commentDao.persist(comment);
 	}
+	
+	public int saveOrEnableComment(String body, String type, int typeMappingId, int ownerId, int mentionedUserId) 
+			throws IllegalStateException{
+		List<QueryTerm> values = new ArrayList<QueryTerm>();
+		values.add(CommentDao.Field.BODY.getQueryTerm(body));
+		values.add(CommentDao.Field.TYPE.getQueryTerm(type));
+		values.add(CommentDao.Field.TYPE_MAPPING_ID.getQueryTerm(typeMappingId));
+		values.add(CommentDao.Field.OWNER_ID.getQueryTerm(ownerId));
+		values.add(CommentDao.Field.MENTIONED_USER_ID.getQueryTerm(mentionedUserId));
+		try{
+			Comment comment = commentDao.findObject(values);
+			if (comment.getEnabled()){
+				throw new IllegalStateException(ErrorMessage.COMMENT_ALREADY_EXISTS.getMsg());
+			}else{
+				List<NVPair> newValues = new ArrayList<NVPair>();
+				newValues.add(new NVPair(CommentDao.Field.ENABLED.name, true));
+				newValues.add(new NVPair(CommentDao.Field.CREATED_AT.name, Instant.now()));
+				commentDao.update(comment.getId(), newValues);
+			}
+		}catch(NotFoundException e){
+		}
+		return saveComment(body, type, typeMappingId, ownerId, mentionedUserId);
+	}
 
 	@Override
 	public Comment getCommentById(int commentId) throws NotFoundException {

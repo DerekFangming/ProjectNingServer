@@ -19,6 +19,21 @@ public interface CommentManager {
 	public int saveComment(String body, String type, int typeMappingId, int ownerId, int mentionedUserId);
 	
 	/**
+	 * Create a comment and save into db
+	 * If the same comment already exists but soft deleted, enable it.
+	 * The same means same value for all the five inputs
+	 * @param body the comment body of this
+	 * @param type the type of this comment
+	 * @param typeMappingId the mapping Id for the comment type 
+	 * @param ownerId the user id of the owner of this comment
+	 * @param mentionedUserId the user that is mentioned in this comment
+	 * @return the id of this comment
+	 * @throws IllegalStateException when the same comment exists but is trying to get enabled again
+	 */
+	public int saveOrEnableComment(String body, String type, int typeMappingId, int ownerId, int mentionedUserId) 
+			throws IllegalStateException;
+	
+	/**
 	 * Get comment object from comment id
 	 * @param commentId the DB ID of a comment
 	 * @return a comment object
