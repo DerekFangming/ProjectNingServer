@@ -46,8 +46,9 @@ public class CommentController {
 				//
 			}
 			
-			commentManager.saveOrEnableComment(body, type, mappingId, userId, mentionedUserId);
+			int commentId = commentManager.saveOrEnableComment(body, type, mappingId, userId, mentionedUserId);
 			
+			respond.put("commentId", commentId);
 			respond.put("error", "");
 		}catch(Exception e){
 			respond = Util.createErrorRespondFromException(e);
@@ -116,6 +117,8 @@ public class CommentController {
 			String type = (String)request.get("type");
 			
 			List<Comment> commentList = commentManager.getRecentCommentFromFriends(type, mappingId, userId);
+			
+			boolean likedByCurrentUser = false;
 			List<Map<String, Object>> processedCommentList = new ArrayList<Map<String, Object>>();
 			for(Comment c : commentList){
 				Map<String, Object> processedComment = new HashMap<String, Object>();
@@ -127,9 +130,13 @@ public class CommentController {
 				processedComment.put("ownerName", userManager.getUserDisplayedName(c.getOwnerId()));
 				processedComment.put("createdAt", c.getCreatedAt().toString());
 				processedCommentList.add(processedComment);
+				if(c.getOwnerId() == userId){
+					likedByCurrentUser = true;
+				}
 			}
 			
 			respond.put("commentList", processedCommentList);
+			respond.put("likedByCurrentUser", likedByCurrentUser);
 			respond.put("error", "");
 		}catch(Exception e){
 			respond = Util.createErrorRespondFromException(e);
