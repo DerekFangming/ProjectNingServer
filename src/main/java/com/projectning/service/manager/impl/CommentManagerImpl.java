@@ -1,5 +1,6 @@
 package com.projectning.service.manager.impl;
 
+import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
@@ -48,9 +49,11 @@ public class CommentManagerImpl implements CommentManager{
 		List<QueryTerm> values = new ArrayList<QueryTerm>();
 		values.add(CommentDao.Field.BODY.getQueryTerm(body));
 		values.add(CommentDao.Field.TYPE.getQueryTerm(type));
-		values.add(CommentDao.Field.TYPE_MAPPING_ID.getQueryTerm(typeMappingId));
+		if(typeMappingId != Util.nullInt)
+			values.add(CommentDao.Field.TYPE_MAPPING_ID.getQueryTerm(typeMappingId));
 		values.add(CommentDao.Field.OWNER_ID.getQueryTerm(ownerId));
-		values.add(CommentDao.Field.MENTIONED_USER_ID.getQueryTerm(mentionedUserId));
+		if(mentionedUserId != Util.nullInt)
+			values.add(CommentDao.Field.MENTIONED_USER_ID.getQueryTerm(mentionedUserId));
 		try{
 			Comment comment = commentDao.findObject(values);
 			if (comment.getEnabled()){
@@ -58,12 +61,13 @@ public class CommentManagerImpl implements CommentManager{
 			}else{
 				List<NVPair> newValues = new ArrayList<NVPair>();
 				newValues.add(new NVPair(CommentDao.Field.ENABLED.name, true));
-				newValues.add(new NVPair(CommentDao.Field.CREATED_AT.name, Instant.now()));
+				newValues.add(new NVPair(CommentDao.Field.CREATED_AT.name, Timestamp.from(Instant.now())));
 				commentDao.update(comment.getId(), newValues);
+				return comment.getId();
 			}
 		}catch(NotFoundException e){
+			return saveComment(body, type, typeMappingId, ownerId, mentionedUserId);
 		}
-		return saveComment(body, type, typeMappingId, ownerId, mentionedUserId);
 	}
 
 	@Override
@@ -120,10 +124,18 @@ public class CommentManagerImpl implements CommentManager{
 
 	@Override
 	public List<Comment> getRecentCommentFromFriends(String type, int mappingId, int userId) throws NotFoundException {
+		/* This is the example query from the following query builder
+	     * SELECT * FROM comments where type = 'Feed Like' and type_mapping_id = 3 and enabled = true and (exists
+		 * (select 1 from relationships where sender_id = 11 and receiver_id = comments.owner_id 
+		 * and type = 'Friend' and enabled = true)
+		 * or (owner_id = 11))
+	     */
 		QueryBuilder qb = QueryType.getQueryBuilder(CoreTableType.COMMENTS, QueryType.FIND);
 	    qb.addFirstQueryExpression(new QueryTerm(CommentDao.Field.TYPE.name, RelationalOpType.EQ, type));
 	    qb.addNextQueryExpression(LogicalOpType.AND, 
 	    		new QueryTerm(CommentDao.Field.TYPE_MAPPING_ID.name, RelationalOpType.EQ, mappingId));
+	    qb.addNextQueryExpression(LogicalOpType.AND, 
+	    		new QueryTerm(CommentDao.Field.ENABLED.name, RelationalOpType.EQ, true));
 	    
 	    QueryBuilder inner = qb.getInnerQueryBuilder(CoreTableType.RELATIONSHIPS, QueryType.FIND);
 	    inner.addFirstQueryExpression(new QueryTerm(RelationshipDao.Field.SENDER_ID.name, userId));
@@ -134,9 +146,19 @@ public class CommentManagerImpl implements CommentManager{
 	    inner.addNextQueryExpression(LogicalOpType.AND, 
 	    		new QueryTerm(RelationshipDao.Field.CONFIRMED.name, RelationalOpType.EQ, true));
 	    inner.setReturnField("1");
-	    
 	    qb.addNextQueryExpression(LogicalOpType.AND, new ExistQueryTerm(inner));
+	    /*------------------------------Or query------------------------------*/
+	    qb.addNextQueryExpression(LogicalOpType.OR, 
+	    		new QueryTerm(CommentDao.Field.OWNER_ID.name, RelationalOpType.EQ, userId));
+	    /*------------------------------Or query------------------------------*/
+	    qb.addNextQueryExpression(LogicalOpType.AND, 
+	    		new QueryTerm(CommentDao.Field.TYPE.name, RelationalOpType.EQ, type));
+	    qb.addNextQueryExpression(LogicalOpType.AND, 
+	    		new QueryTerm(CommentDao.Field.TYPE_MAPPING_ID.name, RelationalOpType.EQ, mappingId));
+	    qb.addNextQueryExpression(LogicalOpType.AND, 
+	    		new QueryTerm(CommentDao.Field.ENABLED.name, RelationalOpType.EQ, true));
 	    qb.setOrdering(CommentDao.Field.CREATED_AT.name, ResultsOrderType.ASCENDING);
+	    
 		try{
 			return commentDao.findAllObjects(qb.createQuery());
 		}catch(NotFoundException e){
