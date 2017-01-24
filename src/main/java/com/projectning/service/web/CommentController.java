@@ -124,8 +124,10 @@ public class CommentController {
 				Map<String, Object> processedComment = new HashMap<String, Object>();
 				processedComment.put("commentId", c.getId());
 				processedComment.put("commentbody", c.getBody());
-				processedComment.put("mentionedUserId", c.getMentionedUserId());
-				if (c.getMentionedUserId() != 0) processedComment.put("mentionedUserName", userManager.getUserDisplayedName(c.getMentionedUserId()));
+				if (c.getMentionedUserId() != 0) {
+					processedComment.put("mentionedUserId", c.getMentionedUserId());
+					processedComment.put("mentionedUserName", userManager.getUserDisplayedName(c.getMentionedUserId()));
+				}
 				processedComment.put("ownerId", c.getOwnerId());
 				processedComment.put("ownerName", userManager.getUserDisplayedName(c.getOwnerId()));
 				processedComment.put("createdAt", c.getCreatedAt().toString());
