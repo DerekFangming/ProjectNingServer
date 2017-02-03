@@ -124,6 +124,29 @@ public class CommentManagerImpl implements CommentManager{
 
 	@Override
 	public List<Comment> getRecentCommentFromFriends(String type, int mappingId, int userId) throws NotFoundException {
+		
+		QueryBuilder qb = getRecentCommentsHelper(type, mappingId, userId);
+	    
+		try{
+			return commentDao.findAllObjects(qb.createQuery());
+		}catch(NotFoundException e){
+			throw new NotFoundException(ErrorMessage.COMMENT_NOT_FOUND.getMsg());
+		}
+	}
+
+	@Override
+	public int getRecentCommentCountFromFriends(String type, int mappingId, int userId){
+		
+		QueryBuilder qb = getRecentCommentsHelper(type, mappingId, userId);
+	    
+		try{
+			return commentDao.getCount(qb.createQuery());
+		}catch(NotFoundException e){
+			return 0;
+		}
+	}
+	
+	private QueryBuilder getRecentCommentsHelper(String type, int mappingId, int userId){
 		/* This is the example query from the following query builder
 	     * SELECT * FROM comments where type = 'Feed Like' and type_mapping_id = 3 and enabled = true and (exists
 		 * (select 1 from relationships where sender_id = 11 and receiver_id = comments.owner_id 
@@ -158,12 +181,7 @@ public class CommentManagerImpl implements CommentManager{
 	    qb.addNextQueryExpression(LogicalOpType.AND, 
 	    		new QueryTerm(CommentDao.Field.ENABLED.name, RelationalOpType.EQ, true));
 	    qb.setOrdering(CommentDao.Field.CREATED_AT.name, ResultsOrderType.ASCENDING);
-	    
-		try{
-			return commentDao.findAllObjects(qb.createQuery());
-		}catch(NotFoundException e){
-			throw new NotFoundException(ErrorMessage.COMMENT_NOT_FOUND.getMsg());
-		}
+	    return qb;
 	}
 
 }

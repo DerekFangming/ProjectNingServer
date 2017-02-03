@@ -79,5 +79,14 @@ public interface CommentManager {
 	 * @throws NotFoundException when no ID is found
 	 */
 	public List<Comment> getRecentCommentFromFriends(String type, int mappingId, int userId) throws NotFoundException;
+	
+	/**
+	 * The same as above method but instead of a full list, only the count is return to optimize performance
+	 * @param type the type of the comment
+	 * @param mappingId the mapping id for the comment type
+	 * @param userId the user that friends' comments are retrieved from
+	 * @return the count of the list of comment objects that belongs to the user with the specific type and type mapping ID
+	 */
+	public int getRecentCommentCountFromFriends(String type, int mappingId, int userId);
 
 }

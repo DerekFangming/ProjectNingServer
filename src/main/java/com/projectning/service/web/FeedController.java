@@ -64,10 +64,13 @@ public class FeedController {
 				processedFeed.put("feedBody", m.getBody());
 				processedFeed.put("createdAt", m.getCreatedAt().toString());
 				try{
-					imageManager.getImageIdListByTypeAndMappingId(ImageType.FEED.getName(), m.getId(), userId);
+					List<Integer> idList = imageManager.getImageIdListByTypeAndMappingId(ImageType.FEED.getName(), 
+							m.getId(), userId);
 					processedFeed.put("hasImage", true);
+					processedFeed.put("imageIdList", idList);
 				}catch(NotFoundException e){
 					processedFeed.put("hasImage", false);
+					processedFeed.put("imageIdList", null);
 				}
 				
 				processedFeedList.add(processedFeed);

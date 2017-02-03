@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.projectning.service.domain.Comment;
+import com.projectning.service.exceptions.NotFoundException;
 import com.projectning.service.manager.CommentManager;
 import com.projectning.service.manager.UserManager;
 import com.projectning.util.Util;
@@ -139,6 +140,36 @@ public class CommentController {
 			
 			respond.put("commentList", processedCommentList);
 			respond.put("likedByCurrentUser", likedByCurrentUser);
+			respond.put("error", "");
+		}catch(Exception e){
+			respond = Util.createErrorRespondFromException(e);
+		}
+		return new ResponseEntity<Map<String, Object>>(respond, HttpStatus.OK);
+	}
+	
+	@RequestMapping("/get_comment_counts_from_friends")
+	public ResponseEntity<Map<String, Object>> getCommentCountsFromFriends(@RequestBody Map<String, Object> request) {
+		Map<String, Object> respond = new HashMap<String, Object>();
+		try{
+			int userId = userManager.validateAccessToken(request);
+			int mappingId = (int)request.get("mappingId");
+
+			boolean likedByCurrentUser = false;
+			List<Comment> commentLikeList = new ArrayList<Comment>();
+			try{
+				commentLikeList = commentManager.getRecentCommentFromFriends("Feed Like", mappingId, userId);
+				
+				for(Comment c : commentLikeList){
+					if(c.getOwnerId() == userId){
+						likedByCurrentUser = true;
+						break;
+					}
+				}
+			}catch (NotFoundException e){}
+			
+			respond.put("likedByCurrentUser", likedByCurrentUser);
+			respond.put("commentLikeCount", commentLikeList.size());
+			respond.put("commentCount", commentManager.getRecentCommentCountFromFriends("Feed", mappingId, userId));
 			respond.put("error", "");
 		}catch(Exception e){
 			respond = Util.createErrorRespondFromException(e);
