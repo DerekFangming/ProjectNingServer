@@ -155,6 +155,7 @@ public class CommentController {
 			int mappingId = (int)request.get("mappingId");
 
 			boolean likedByCurrentUser = false;
+			int likedCommentId = 0;
 			List<Comment> commentLikeList = new ArrayList<Comment>();
 			try{
 				commentLikeList = commentManager.getRecentCommentFromFriends("Feed Like", mappingId, userId);
@@ -162,12 +163,14 @@ public class CommentController {
 				for(Comment c : commentLikeList){
 					if(c.getOwnerId() == userId){
 						likedByCurrentUser = true;
+						likedCommentId = c.getId();
 						break;
 					}
 				}
 			}catch (NotFoundException e){}
 			
 			respond.put("likedByCurrentUser", likedByCurrentUser);
+			respond.put("likedCommentId", likedCommentId);
 			respond.put("commentLikeCount", commentLikeList.size());
 			respond.put("commentCount", commentManager.getRecentCommentCountFromFriends("Feed", mappingId, userId));
 			respond.put("error", "");

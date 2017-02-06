@@ -140,7 +140,8 @@ public class CommentManagerImpl implements CommentManager{
 		QueryBuilder qb = getRecentCommentsHelper(type, mappingId, userId);
 	    
 		try{
-			return commentDao.getCount(qb.createQuery());
+			//TODO: Why get count doesn't work
+			return commentDao.findAllObjects(qb.createQuery()).size();
 		}catch(NotFoundException e){
 			return 0;
 		}
