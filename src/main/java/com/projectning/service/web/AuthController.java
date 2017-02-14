@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.projectning.service.dao.UserDao;
+import com.projectning.service.domain.User;
 import com.projectning.service.exceptions.NotFoundException;
 import com.projectning.service.manager.HelperManager;
 import com.projectning.service.manager.UserManager;
@@ -68,7 +69,7 @@ public class AuthController {
 			respond.put("username", username);
 			respond.put("accessToken", accessToken);
 			respond.put("expire", exp.toString());
-			respond.put("emailConfirmed","false");
+			respond.put("emailConfirmed",false);
 			respond.put("error", "");
 		}catch(Exception e){
 			respond = Util.createErrorRespondFromException(e);
@@ -133,13 +134,13 @@ public class AuthController {
 			Instant exp = Instant.now().plus(Duration.ofDays(1));
 			String accessToken = helperManager.createAccessToken(username, exp);
 			
-			userManager.login(username, password, accessToken);
+			User user = userManager.login(username, password, accessToken);
 			
-			respond.put("userId", userManager.getUserId(username));//TODO really need this id?
+			respond.put("userId", user.getId());//TODO really need this id?
 			respond.put("username", username);
 			respond.put("accessToken", accessToken);
 			respond.put("expire", exp.toString());
-			respond.put("emailConfirmed","false");
+			respond.put("emailConfirmed",user.getEmailConfirmed());
 			respond.put("error", "");
 		}catch(Exception e){
 			respond = Util.createErrorRespondFromException(e);

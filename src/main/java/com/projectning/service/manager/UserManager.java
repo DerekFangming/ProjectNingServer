@@ -2,6 +2,7 @@ package com.projectning.service.manager;
 
 import java.util.Map;
 
+import com.projectning.service.domain.User;
 import com.projectning.service.domain.UserDetail;
 import com.projectning.service.exceptions.NotFoundException;
 
@@ -80,7 +81,7 @@ public interface UserManager {
 	 * @param accessToken the token string that need to be updated
 	 * @throws NotFoundException
 	 */
-	public void login (String username, String password, String accessToken) throws NotFoundException;
+	public User login (String username, String password, String accessToken) throws NotFoundException;
 
 	/**
 	 * Get user ID by username

@@ -167,7 +167,7 @@ public class UserManagerImpl implements UserManager{
 	}
 
 	@Override
-	public void login(String username, String password, String accessToken) throws NotFoundException {
+	public User login(String username, String password, String accessToken) throws NotFoundException {
 		List<QueryTerm> terms = new ArrayList<QueryTerm>();
 		terms.add(UserDao.Field.USERNAME.getQueryTerm(username));
 		terms.add(UserDao.Field.PASSWORD.getQueryTerm(password));
@@ -181,7 +181,8 @@ public class UserManagerImpl implements UserManager{
 		NVPair pair = new NVPair(UserDao.Field.AUTH_TOKEN.name, accessToken);
 		
 		userDao.update(user.getId(), pair);
-		
+		user.setAuthToken(accessToken);
+		return user;
 	}
 
 	@Override
