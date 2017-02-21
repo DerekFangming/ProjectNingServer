@@ -36,6 +36,24 @@ public class FeedController {
 	@Autowired private FeedManager feedManager;
 	@Autowired private ImageManager imageManager;
 	
+	@RequestMapping("/create_feed")
+    public ResponseEntity<Map<String, Object>> createFeed(@RequestBody Map<String, Object> request) {
+		Map<String, Object> respond = new HashMap<String, Object>();
+		try{
+			int userId = userManager.validateAccessToken(request);
+			String feedBody = (String)request.get("feedBody");
+			int feedId = feedManager.saveFeed(feedBody, userId);
+			respond.put("feedId", feedId);
+			respond.put("error", "");
+			
+		}catch(Exception e){
+			respond = Util.createErrorRespondFromException(e);
+		}
+		return new ResponseEntity<Map<String, Object>>(respond, HttpStatus.OK);
+		
+	}
+	
+	
 	@RequestMapping("/get_recent_feeds")
     public ResponseEntity<Map<String, Object>> getRecentFeeds(@RequestBody Map<String, Object> request) {
 		Map<String, Object> respond = new HashMap<String, Object>();

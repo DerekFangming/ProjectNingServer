@@ -66,11 +66,11 @@ public interface RelationshipManager {
 	 * Retrieve a List of friend maps with displayed name and id
 	 * Return empty list if no friend is found
 	 * Here is the structure of a sample list
-	 * [{"name" : "Alen", "id" : 3},
-	 * {"name" : "Alex", "id" : 31},
-	 * {"name" : "Amy", "id" : 68},
-	 * {"name" : "Bob", "id" : 14},
-	 * {"name" : "Tommy", "id" : 97},
+	 * [{"displayedName" : "Alen", "id" : 3},
+	 * {"displayedName" : "Alex", "id" : 31},
+	 * {"displayedName" : "Amy", "id" : 68},
+	 * {"displayedName" : "Bob", "id" : 14},
+	 * {"displayedName" : "Tommy", "id" : 97},
 	 *  ...
 	 * ]
 	 * @param userId

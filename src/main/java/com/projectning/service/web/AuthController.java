@@ -1,8 +1,10 @@
 package com.projectning.service.web;
 
+import java.sql.Timestamp;
 import java.time.Duration;
 import java.time.Instant;
 import java.time.format.DateTimeParseException;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -173,6 +175,11 @@ public class AuthController {
 	@RequestMapping("/test")
 	public ResponseEntity<String> test(@RequestBody Map<String, Object> request) {
 
+		
+		Instant a = Instant.now();
+		System.out.println(a.toString());
+		System.out.println(Date.from(a));
+		System.out.println(Timestamp.from(a));
 		
 		//relationshipManager.removeFriend(2, 3);
 		

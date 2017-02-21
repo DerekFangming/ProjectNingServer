@@ -180,7 +180,7 @@ public class RelationshipManagerImpl implements RelationshipManager{
 				throw new IllegalStateException(ErrorMessage.INTERNAL_LOGIC_ERROR.getMsg());
 			}
 			listItem.put("id", i);
-			listItem.put("name", name.substring(0, 1).toUpperCase() + name.substring(1));
+			listItem.put("displayedName", name.substring(0, 1).toUpperCase() + name.substring(1));
 			
 			result.add(listItem);
 		}

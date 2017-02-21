@@ -1,8 +1,8 @@
 package com.projectning.service.manager.impl;
 
-import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -61,7 +61,7 @@ public class CommentManagerImpl implements CommentManager{
 			}else{
 				List<NVPair> newValues = new ArrayList<NVPair>();
 				newValues.add(new NVPair(CommentDao.Field.ENABLED.name, true));
-				newValues.add(new NVPair(CommentDao.Field.CREATED_AT.name, Timestamp.from(Instant.now())));
+				newValues.add(new NVPair(CommentDao.Field.CREATED_AT.name, Date.from(Instant.now())));
 				commentDao.update(comment.getId(), newValues);
 				return comment.getId();
 			}
