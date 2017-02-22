@@ -1,5 +1,6 @@
 package com.projectning.service.dao.impl.jdbc;
 
+import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
@@ -28,7 +29,7 @@ public class JdbcFeedDao extends JdbcBaseDao<Feed> implements FeedDao{
 		params.addValue(FeedDao.Field.BODY.name, obj.getBody());
 	    params.addValue(FeedDao.Field.OWNER_ID.name, obj.getOwnerId());
 	    params.addValue(ImageDao.Field.ENABLED.name, obj.getEnabled());
-	    params.addValue(FeedDao.Field.CREATED_AT.name, obj.getCreatedAt());
+	    params.addValue(FeedDao.Field.CREATED_AT.name, Date.from(obj.getCreatedAt()));
 	        
 	    return params;
 	  }

@@ -36,10 +36,11 @@ public interface FeedManager {
 	/**
 	 * Get a list of most recent feed by the provided date. The maximum number of feed returned
 	 * is smaller or equal to the limit
+	 * All feeds are posted by the given user
 	 * @param ownerId the owner of the feed
 	 * @param date the date for the most recent line
 	 * @param limit the maximum of feed that will be returned at once
-	 * @return a list of feed that meet the criteria
+	 * @return a list of feeds that meet the criteria
 	 * @throws NotFoundException if no feed meets the criteria
 	 */
 	public List<Feed> getRecentFeedByDate (int ownerId, Instant date, int limit) throws NotFoundException;
@@ -47,9 +48,21 @@ public interface FeedManager {
 	/**
 	 * Get feed preview image Ids. Will return 4 of them maximumly.
 	 * Ids are ordered by time.
+	 * All feeds are posted by the given user
 	 * @param ownerId the user that the feed images come from
 	 * @return a list of ids. If nothing, return empty list
 	 */
 	public List<Integer> getFeedPreviewImageIdList(int ownerId);
 	
+	/**
+	 * Get a list of most recent feed by the provided date. The maximum number of feed returned
+	 * is smaller or equal to the limit
+	 * All feeds are posted by the friends of the given user or the user himself
+	 * @param userId the given user
+	 * @param date the date for the most recent line
+	 * @param limit the maximum of feed that will be returned at once
+	 * @return a list of feeds that meet the criteria above
+	 * @throws NotFoundException if no feed meets the criteria
+	 */
+	public List<Feed> getRecentFeedFromFriends(int userId, Instant date, int limit) throws NotFoundException;
 }

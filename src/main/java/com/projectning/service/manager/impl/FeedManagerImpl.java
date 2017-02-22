@@ -1,16 +1,18 @@
 package com.projectning.service.manager.impl;
 
-import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.projectning.service.dao.ImageDao;
+import com.projectning.service.dao.RelationshipDao;
 import com.projectning.service.dao.FeedDao;
 import com.projectning.service.dao.impl.CoreTableType;
+import com.projectning.service.dao.impl.InnerQueryTerm;
 import com.projectning.service.dao.impl.LogicalOpType;
 import com.projectning.service.dao.impl.NVPair;
 import com.projectning.service.dao.impl.QueryBuilder;
@@ -77,7 +79,7 @@ public class FeedManagerImpl implements FeedManager{
 	    
 	    qb.addFirstQueryExpression(new QueryTerm(FeedDao.Field.OWNER_ID.name, RelationalOpType.EQ, ownerId));
 	    qb.addNextQueryExpression(LogicalOpType.AND,
-	    		new QueryTerm(FeedDao.Field.CREATED_AT.name, RelationalOpType.LT, Timestamp.from(date)));
+	    		new QueryTerm(FeedDao.Field.CREATED_AT.name, RelationalOpType.LT, Date.from(date)));
 	    qb.addNextQueryExpression(LogicalOpType.AND,
 	    		new QueryTerm(FeedDao.Field.ENABLED.name, RelationalOpType.EQ, true));
 	    qb.setOrdering(FeedDao.Field.CREATED_AT.name, ResultsOrderType.DESCENDING);
@@ -106,6 +108,29 @@ public class FeedManagerImpl implements FeedManager{
 	    	return feedDao.findAllIds(qb.createQuery());
 	    }catch(NotFoundException e){
 	    	return new ArrayList<Integer>();
+	    }
+	}
+
+	@Override
+	public List<Feed> getRecentFeedFromFriends(int userId, Instant date, int limit) throws NotFoundException {
+		QueryBuilder qb = QueryType.getQueryBuilder(CoreTableType.FEEDS, QueryType.FIND);
+		
+		QueryBuilder inner = qb.getInnerQueryBuilder(CoreTableType.RELATIONSHIPS, QueryType.FIND);
+		inner.addFirstQueryExpression(new QueryTerm(RelationshipDao.Field.SENDER_ID.name, userId));
+		inner.setReturnField(RelationshipDao.Field.RECEIVER_ID.name);
+		
+		qb.addFirstQueryExpression(new InnerQueryTerm(FeedDao.Field.OWNER_ID.name, RelationalOpType.IN, inner));
+		qb.addNextQueryExpression(LogicalOpType.AND,
+	    		new QueryTerm(FeedDao.Field.CREATED_AT.name, RelationalOpType.LT, Date.from(date)));
+		qb.addNextQueryExpression(LogicalOpType.OR, new QueryTerm(FeedDao.Field.OWNER_ID.name, userId));
+		qb.addNextQueryExpression(LogicalOpType.AND,
+	    		new QueryTerm(FeedDao.Field.CREATED_AT.name, RelationalOpType.LT, Date.from(date)));
+		qb.setOrdering(FeedDao.Field.CREATED_AT.name, ResultsOrderType.DESCENDING);
+		qb.setLimit(limit);
+		try{
+	    	return feedDao.findAllObjects(qb.createQuery());
+	    }catch(NotFoundException e){
+	    	throw new NotFoundException(ErrorMessage.NO_MORE_FEEDS_FOUND.getMsg());
 	    }
 	}
 

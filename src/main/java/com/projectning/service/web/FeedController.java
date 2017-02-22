@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import com.projectning.service.domain.Feed;
 import com.projectning.service.exceptions.NotFoundException;
 import com.projectning.service.manager.ImageManager;
+import com.projectning.service.manager.CommentManager;
 import com.projectning.service.manager.FeedManager;
 import com.projectning.service.manager.UserManager;
 import com.projectning.util.ErrorMessage;
@@ -35,6 +36,7 @@ public class FeedController {
 	@Autowired private UserManager userManager;
 	@Autowired private FeedManager feedManager;
 	@Autowired private ImageManager imageManager;
+	@Autowired private CommentManager commentManager;
 	
 	@RequestMapping("/create_feed")
     public ResponseEntity<Map<String, Object>> createFeed(@RequestBody Map<String, Object> request) {
@@ -55,7 +57,7 @@ public class FeedController {
 	
 	
 	@RequestMapping("/get_recent_feeds")
-    public ResponseEntity<Map<String, Object>> getRecentFeeds(@RequestBody Map<String, Object> request) {
+    public ResponseEntity<Map<String, Object>> getRecentFeedsForUser(@RequestBody Map<String, Object> request) {
 		Map<String, Object> respond = new HashMap<String, Object>();
 		try{
 			userManager.validateAccessToken(request);
@@ -101,6 +103,62 @@ public class FeedController {
 		}
 		return new ResponseEntity<Map<String, Object>>(respond, HttpStatus.OK);
 	}
+	
+	@RequestMapping("/get_recent_feeds_from_friends")
+    public ResponseEntity<Map<String, Object>> getRecentFeedsFromFriends(@RequestBody Map<String, Object> request) {
+		Map<String, Object> respond = new HashMap<String, Object>();
+		try{
+			//userManager.validateAccessToken(request);
+			int userId = (int)request.get("userId");
+			int limit = 10;
+			try{
+				limit = (int)request.get("limit");
+			}catch(NullPointerException e){
+				//
+			}
+			Instant checkPoint = Instant.now();
+			try{
+				String timeStr = (String)request.get("checkPoint");
+				checkPoint = Instant.parse(timeStr);
+			}catch(NullPointerException e){
+				//
+			}
+
+			List<Feed> feedList = feedManager.getRecentFeedFromFriends(userId, checkPoint, limit);
+			List<Map<String, Object>> processedFeedList = new ArrayList<Map<String, Object>>();
+			
+			for(Feed m : feedList){
+				Map<String, Object> processedFeed = new HashMap<String, Object>();
+				processedFeed.put("feedId", m.getId());
+				processedFeed.put("feedBody", m.getBody());
+				processedFeed.put("createdAt", m.getCreatedAt().toString());
+				try{
+					List<Integer> idList = imageManager.getImageIdListByTypeAndMappingId(ImageType.FEED.getName(), 
+							m.getId(), userId);
+					processedFeed.put("hasImage", true);
+					processedFeed.put("imageIdList", idList);
+				}catch(NotFoundException e){
+					processedFeed.put("hasImage", false);
+					processedFeed.put("imageIdList", null);
+				}
+				
+				try{
+					//commentManager.getRecentCommentFromFriends("Feed", m.getId(), userId);
+				}catch(NotFoundException e){
+					
+				}
+				
+				processedFeedList.add(processedFeed);
+			}
+			respond.put("feedList", processedFeedList);
+			respond.put("checkPoint", feedList.get(feedList.size() - 1).getCreatedAt().toString());
+			respond.put("error", "");
+		}catch(Exception e){
+			respond = Util.createErrorRespondFromException(e);
+		}
+		return new ResponseEntity<Map<String, Object>>(respond, HttpStatus.OK);
+	}
+	
 	
 	@RequestMapping("/get_feed_preview_images")
 	public ResponseEntity<Map<String, Object>> getFeedPreviewImage(@RequestBody Map<String, Object> request) {
