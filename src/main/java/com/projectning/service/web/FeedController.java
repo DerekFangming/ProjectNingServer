@@ -20,6 +20,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.projectning.service.domain.Comment;
 import com.projectning.service.domain.Feed;
 import com.projectning.service.exceptions.NotFoundException;
 import com.projectning.service.manager.ImageManager;
@@ -139,14 +140,55 @@ public class FeedController {
 					processedFeed.put("imageIdList", idList);
 				}catch(NotFoundException e){
 					processedFeed.put("hasImage", false);
-					processedFeed.put("imageIdList", null);
 				}
-				
+				//Process comment for each feed
 				try{
-					//commentManager.getRecentCommentFromFriends("Feed", m.getId(), userId);
+					List<Comment> commentList = commentManager.getRecentCommentFromFriends("Feed", m.getId(), userId);
+					List<Map<String, Object>> processedCommentList = new ArrayList<Map<String, Object>>();
+					for(Comment c : commentList){
+						Map<String, Object> processedComment = new HashMap<String, Object>();
+						processedComment.put("commentId", c.getId());
+						processedComment.put("commentbody", c.getBody());
+						if (c.getMentionedUserId() != 0) {
+							processedComment.put("mentionedUserId", c.getMentionedUserId());
+							processedComment.put("mentionedUserName", userManager.getUserDisplayedName(c.getMentionedUserId()));
+						}
+						processedComment.put("ownerId", c.getOwnerId());
+						processedComment.put("ownerName", userManager.getUserDisplayedName(c.getOwnerId()));
+						processedComment.put("createdAt", c.getCreatedAt().toString());
+						processedCommentList.add(processedComment);
+					}
+					processedFeed.put("processedCommentList", processedCommentList);
 				}catch(NotFoundException e){
 					
 				}
+				//Process comment like for each feed
+				try{
+					List<Comment> commentList = commentManager.getRecentCommentFromFriends("Feed Like", m.getId(), userId);
+					List<Map<String, Object>> processedCommentLikeList = new ArrayList<Map<String, Object>>();
+					boolean likedByCurrentUser = false;
+					for(Comment c : commentList){
+						Map<String, Object> processedComment = new HashMap<String, Object>();
+						processedComment.put("commentId", c.getId());
+						processedComment.put("commentbody", c.getBody());
+						if (c.getMentionedUserId() != 0) {
+							processedComment.put("mentionedUserId", c.getMentionedUserId());
+							processedComment.put("mentionedUserName", userManager.getUserDisplayedName(c.getMentionedUserId()));
+						}
+						processedComment.put("ownerId", c.getOwnerId());
+						processedComment.put("ownerName", userManager.getUserDisplayedName(c.getOwnerId()));
+						processedComment.put("createdAt", c.getCreatedAt().toString());
+						if(c.getOwnerId() == userId){
+							likedByCurrentUser = true;
+						}
+						processedCommentLikeList.add(processedComment);
+					}
+					processedFeed.put("likedByCurrentUser", likedByCurrentUser);
+					processedFeed.put("processedCommentLikeList", processedCommentLikeList);
+				}catch(NotFoundException e){
+					
+				}
+				
 				
 				processedFeedList.add(processedFeed);
 			}
