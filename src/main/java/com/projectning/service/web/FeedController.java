@@ -110,7 +110,7 @@ public class FeedController {
 		Map<String, Object> respond = new HashMap<String, Object>();
 		try{
 			//userManager.validateAccessToken(request);
-			int userId = (int)request.get("userId");
+			int userId = userManager.validateAccessToken(request);
 			int limit = 10;
 			try{
 				limit = (int)request.get("limit");
@@ -132,6 +132,7 @@ public class FeedController {
 				Map<String, Object> processedFeed = new HashMap<String, Object>();
 				processedFeed.put("feedId", m.getId());
 				processedFeed.put("feedBody", m.getBody());
+				processedFeed.put("ownerId", m.getOwnerId());
 				processedFeed.put("createdAt", m.getCreatedAt().toString());
 				try{
 					List<Integer> idList = imageManager.getImageIdListByTypeAndMappingId(ImageType.FEED.getName(), 
