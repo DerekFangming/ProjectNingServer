@@ -133,13 +133,15 @@ public class FeedController {
 				processedFeed.put("feedId", m.getId());
 				processedFeed.put("feedBody", m.getBody());
 				processedFeed.put("ownerId", m.getOwnerId());
+				processedFeed.put("ownerDisplayedName", userManager.getUserDisplayedName(m.getOwnerId()));
 				processedFeed.put("createdAt", m.getCreatedAt().toString());
 				try{
 					List<Integer> idList = imageManager.getImageIdListByTypeAndMappingId(ImageType.FEED.getName(), 
-							m.getId(), userId);
+							m.getId(), m.getOwnerId());
 					processedFeed.put("hasImage", true);
 					processedFeed.put("imageIdList", idList);
 				}catch(NotFoundException e){
+					System.out.println("no img");
 					processedFeed.put("hasImage", false);
 				}
 				//Process comment for each feed
