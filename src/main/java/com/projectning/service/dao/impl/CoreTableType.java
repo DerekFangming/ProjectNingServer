@@ -12,6 +12,7 @@ import com.projectning.service.dao.FeedDao;
 import com.projectning.service.dao.RelationshipDao;
 import com.projectning.service.dao.SchemaTable;
 import com.projectning.service.dao.SdkDataSource;
+import com.projectning.service.dao.SgDao;
 import com.projectning.service.dao.UserDao;
 import com.projectning.service.dao.UserDetailDao;
 import com.projectning.util.Pair;
@@ -25,7 +26,8 @@ public enum CoreTableType implements SchemaTable
 	FRIENDS(CoreDataSourceType.CORE, FriendDao.FieldTypes),
 	RELATIONSHIPS(CoreDataSourceType.CORE, RelationshipDao.FieldTypes),
 	FEEDS(CoreDataSourceType.CORE, FeedDao.FieldTypes),
-	COMMENTS(CoreDataSourceType.CORE, CommentDao.FieldTypes)
+	COMMENTS(CoreDataSourceType.CORE, CommentDao.FieldTypes),
+	SG(CoreDataSourceType.CORE, SgDao.FieldTypes)
 ;
 
 

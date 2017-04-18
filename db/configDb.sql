@@ -59,3 +59,11 @@ CREATE TABLE comments (
 	enabled boolean NOT NULL DEFAULT true,
 	created_at timestamp without time zone NOT NULL
 );
+
+create table sg(
+id serial primary key,
+menu_id integer not null,
+title varchar(500),
+content varchar(10000),
+created_at timestamp without time zone
+);
