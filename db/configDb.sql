@@ -63,7 +63,7 @@ CREATE TABLE comments (
 create table sg(
 id serial primary key,
 menu_id integer not null,
-title varchar(500),
-content varchar(10000),
+title varchar(1000),
+content varchar(25000),
 created_at timestamp without time zone
 );
