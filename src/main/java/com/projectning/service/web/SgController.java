@@ -16,18 +16,21 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.projectning.service.dao.SgDao;
+import com.projectning.service.dao.SgReportDao;
 import com.projectning.service.dao.impl.CoreTableType;
 import com.projectning.service.dao.impl.QueryBuilder;
 import com.projectning.service.dao.impl.QueryTerm;
 import com.projectning.service.dao.impl.QueryType;
 import com.projectning.service.dao.impl.ResultsOrderType;
 import com.projectning.service.domain.Sg;
+import com.projectning.service.domain.SgReport;
 import com.projectning.service.exceptions.NotFoundException;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @Controller
 public class SgController {
 	@Autowired private SgDao sgDao;
+	@Autowired private SgReportDao sgReportDao;
 	
 	@SuppressWarnings("serial")
 	public static Map<String, String> versionInfo = new HashMap<String, String>(){
@@ -74,8 +77,8 @@ public class SgController {
 			
 			Sg sg = new Sg();
 			sg.setMenuId(menuId);
-			sg.setTitle((String)request.get("title"));
-			sg.setContent((String)request.get("content"));
+			sg.setTitle(title);
+			sg.setContent(content);
 			sg.setCreatedAt(Instant.now());
 			sgDao.persist(sg);
 			respond.put("error", "");
@@ -109,6 +112,34 @@ public class SgController {
 			respond.put("error", e.getStackTrace());
 		}
 		return new ResponseEntity<Map<String, Object>>(respond, HttpStatus.OK);
+	}
+	
+	@RequestMapping(value = "/add_sg_report", method = RequestMethod.POST)
+    public ResponseEntity<Map<String, Object>> addSgReport(@RequestBody Map<String, Object> request) {
+		Map<String, Object> respond = new HashMap<String, Object>();
+		try{
+			int menuId = (Integer)request.get("menuId");
+			String email = (String)request.get("email");
+			String report = (String)request.get("report");
+			
+			if (email == null || report == null) throw new IllegalStateException("Need a valid email or report");
+			if (email.length()>50 || report.length()>500) throw new IllegalStateException("Input too long");
+			
+			SgReport sgReport = new SgReport();
+			sgReport.setMenuId(menuId);
+			sgReport.setEmail(email);
+			sgReport.setReport(report);
+			sgReport.setCreatedAt(Instant.now());
+			sgReportDao.persist(sgReport);
+			respond.put("error", "");
+		}catch(IllegalStateException e){
+			respond.put("error", e.getMessage());
+		}catch(Exception e){
+			respond.put("error", e.getMessage());
+		}
+	
+		return new ResponseEntity<Map<String, Object>>(respond, HttpStatus.OK);
+		
 	}
 
 }

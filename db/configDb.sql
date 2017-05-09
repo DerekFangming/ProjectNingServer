@@ -67,3 +67,11 @@ title varchar(1000),
 content varchar(25000),
 created_at timestamp without time zone
 );
+
+create table sg_reports(
+id serial primary key,
+menu_id integer not null,
+email varchar(50),
+report varchar(500),
+created_at timestamp without time zone
+);
