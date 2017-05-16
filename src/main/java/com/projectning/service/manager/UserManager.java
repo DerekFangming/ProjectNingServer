@@ -136,4 +136,17 @@ public interface UserManager {
 	 */
 	public UserDetail getUserDetail(int userId) throws NotFoundException;
 	
+	/**
+	 * Save the detail of a user to database. Update current record if already exist
+	 * @param userId
+	 * @param name the real name
+	 * @param nickname
+	 * @param age
+	 * @param gender mail is M, female is F
+	 * @param location
+	 * @param whatsUp
+	 */
+	public void saveUserDetail(int userId, String name, String nickname, int age, String gender,
+			String location, String whatsUp);
+	
 }

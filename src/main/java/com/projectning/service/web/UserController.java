@@ -41,5 +41,23 @@ public class UserController {
 		return new ResponseEntity<Map<String, Object>>(respond, HttpStatus.OK);
 		
 	}
+	
+	@RequestMapping("/set_current_user_detail")
+    public ResponseEntity<Map<String, Object>> setCurrentUserDetail(@RequestBody Map<String, Object> request) {
+		Map<String, Object> respond = new HashMap<String, Object>();
+		try{
+			int userId = userManager.validateAccessToken(request);
+
+			int age = request.get("age") == null ? Util.nullInt : (int)request.get("age");
+			userManager.saveUserDetail(userId, (String)request.get("name"), (String)request.get("nickname"), age,
+					(String)request.get("gender"), (String)request.get("location"), (String)request.get("whatsUp"));
+			respond.put("error", "");
+			
+		}catch(Exception e){
+			respond = Util.createErrorRespondFromException(e);
+		}
+		return new ResponseEntity<Map<String, Object>>(respond, HttpStatus.OK);
+		
+	}
 
 }

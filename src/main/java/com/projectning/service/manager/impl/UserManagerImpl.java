@@ -175,7 +175,7 @@ public class UserManagerImpl implements UserManager{
 		try{
 			user = userDao.findObject(terms);
 		}catch(NotFoundException e){
-			throw new NotFoundException(ErrorMessage.USER_INTERN_ERROR.getMsg());
+			throw new NotFoundException(ErrorMessage.USER_NOT_FOUND.getMsg());
 		}
 		
 		NVPair pair = new NVPair(UserDao.Field.AUTH_TOKEN.name, accessToken);
@@ -267,6 +267,36 @@ public class UserManagerImpl implements UserManager{
 			throw new NotFoundException(ErrorMessage.USER_DETAIL_NOT_FOUND.getMsg());
 		}
 	}
+	
+	@Override
+	public void saveUserDetail(int userId, String name, String nickname, int age, String gender,
+			String location, String whatsUp){
+		List<QueryTerm> terms = new ArrayList<QueryTerm>();
+		terms.add(UserDetailDao.Field.USER_ID.getQueryTerm(userId));
+		try{
+			UserDetail userDetail = userDetailDao.findObject(terms);
+			userDetail.setName(name);
+			userDetail.setNickname(nickname);
+			userDetail.setAge(age);
+			userDetail.setGender(gender);
+			userDetail.setLocation(location);
+			userDetail.setWhatsUp(whatsUp);
+			userDetailDao.update(userId, userDetail);
+		}catch(NotFoundException e){
+			UserDetail userDetail = new UserDetail();
+			userDetail.setUserId(userId);
+			userDetail.setName(name);
+			userDetail.setNickname(nickname);
+			userDetail.setAge(age);
+			userDetail.setGender(gender);
+			userDetail.setLocation(location);
+			userDetail.setWhatsUp(whatsUp);
+			userDetailDao.persist(userDetail);
+		}
+		
+	}
+	
+	
 }
 
 	

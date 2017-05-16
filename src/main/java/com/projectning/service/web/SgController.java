@@ -32,13 +32,15 @@ public class SgController {
 	@Autowired private SgDao sgDao;
 	@Autowired private SgReportDao sgReportDao;
 	
+	public static String CURRENT_VERSION = "1.00";
 	@SuppressWarnings("serial")
 	public static Map<String, String> versionInfo = new HashMap<String, String>(){
 		{
-			put("0.00", "Outdated&App out of date&Please go to app store and download the newest version");
-			put("1.00", "Ok& & ");
+			put("0.00", "AppUpdate&App out of date&Please go to app store and download the newest version");
+			put(CURRENT_VERSION, "Ok& & ");
 		}
 	};
+	
 	
 	@RequestMapping(value = "/get_sg", method = RequestMethod.GET)
 	public ResponseEntity<Map<String, Object>> getSg(HttpServletRequest request) {
@@ -103,13 +105,14 @@ public class SgController {
 		    respond.put("status", values[0]);
 		    respond.put("title", values[1]);
 		    respond.put("msg", values[2]);
+		    respond.put("version", CURRENT_VERSION);
 		    respond.put("error", "");
 		}catch(NumberFormatException e){
 			respond.put("error", "Incorrect request format. Please use menuId as key and put number only as value");
 		}catch(NotFoundException e){
 			respond.put("error", "Article does not exist");
 		}catch(Exception e){
-			respond.put("error", e.getStackTrace());
+			respond.put("error", "Unknown error");
 		}
 		return new ResponseEntity<Map<String, Object>>(respond, HttpStatus.OK);
 	}
