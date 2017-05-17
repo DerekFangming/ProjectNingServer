@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.projectning.service.dao.UserDao;
 import com.projectning.service.domain.User;
+import com.projectning.service.domain.UserDetail;
 import com.projectning.service.exceptions.NotFoundException;
 import com.projectning.service.manager.HelperManager;
 import com.projectning.service.manager.UserManager;
@@ -143,6 +144,16 @@ public class AuthController {
 			respond.put("accessToken", accessToken);
 			respond.put("expire", exp.toString());
 			respond.put("emailConfirmed",user.getEmailConfirmed());
+			try{
+				UserDetail detail = userManager.getUserDetail(user.getId());
+				
+				respond.put("name", Util.nullToEmptyString(detail.getName()));
+				respond.put("nickname", Util.nullToEmptyString(detail.getNickname()));
+				respond.put("age", detail.getAge());
+				respond.put("gender", Util.nullToEmptyString(detail.getGender()));
+				respond.put("location", Util.nullToEmptyString(detail.getLocation()));
+				respond.put("whatsUp", Util.nullToEmptyString(detail.getWhatsUp()));
+			}catch(NotFoundException e){}
 			respond.put("error", "");
 		}catch(Exception e){
 			respond = Util.createErrorRespondFromException(e);

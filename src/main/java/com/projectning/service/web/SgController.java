@@ -25,6 +25,7 @@ import com.projectning.service.dao.impl.ResultsOrderType;
 import com.projectning.service.domain.Sg;
 import com.projectning.service.domain.SgReport;
 import com.projectning.service.exceptions.NotFoundException;
+import com.projectning.util.Util;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @Controller
@@ -121,7 +122,8 @@ public class SgController {
     public ResponseEntity<Map<String, Object>> addSgReport(@RequestBody Map<String, Object> request) {
 		Map<String, Object> respond = new HashMap<String, Object>();
 		try{
-			int menuId = (Integer)request.get("menuId");
+			int menuId = (int)request.get("menuId");
+			int userId = request.get("userId") == null ? Util.nullInt : (int)request.get("userId");
 			String email = (String)request.get("email");
 			String report = (String)request.get("report");
 			
@@ -129,6 +131,7 @@ public class SgController {
 			if (email.length()>50 || report.length()>500) throw new IllegalStateException("Input too long");
 			
 			SgReport sgReport = new SgReport();
+			sgReport.setUserId(userId);
 			sgReport.setMenuId(menuId);
 			sgReport.setEmail(email);
 			sgReport.setReport(report);

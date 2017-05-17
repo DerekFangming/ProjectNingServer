@@ -33,16 +33,16 @@ public class HelperManagerImpl implements HelperManager{
 
 	@Override
 	public void emailConfirm(String to, String code) {
-		String message = "Hi,";
+		String message = "Hi there,";
 		message += "\n";
-		message += "Thank you for registration Project Ning. Please click on the following link to confirm your email address.";
+		message += "Thank you for creating an account at fmning.com domain. Please click on the following link to confirm your email address.";
 		message += "\n\n";
-		message += "http://www.fmning.com:8080/projectNing/email/";
+		message += "http://wc.fmning.com/email/";
 		message += code;
 		message += "\n\n";
 		message += "Thank you.";
 		message += "\n";
-		message += "ProjectNing Team";
+		message += "Fmning Team";
 		sendEmail("no-reply@fmning.com", to, "ProjectNing Email Confirmation", message);
 	}
 	

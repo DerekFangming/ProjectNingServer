@@ -70,6 +70,7 @@ created_at timestamp without time zone
 
 create table sg_reports(
 id serial primary key,
+user_id integer,
 menu_id integer not null,
 email varchar(50),
 report varchar(500),

@@ -17,7 +17,7 @@ import com.projectning.service.domain.SgReport;
 public class JdbcSgReportDao extends JdbcBaseDao<SgReport> implements SgReportDao{
 	public JdbcSgReportDao()
 	  {
-	    super(CoreTableType.SG);
+	    super(CoreTableType.SG_REPORTS);
 	  }
 	
 	@Override
@@ -25,6 +25,7 @@ public class JdbcSgReportDao extends JdbcBaseDao<SgReport> implements SgReportDa
 	  {
 	    NVPairList params = new NVPairList();
 	    params.addValue(SgReportDao.Field.MENU_ID.name, obj.getMenuId());
+	    params.addNullableIntValue(SgReportDao.Field.USER_ID.name, obj.getUserId());
 	    params.addValue(SgReportDao.Field.EMAIL.name, obj.getEmail());
 	    params.addValue(SgReportDao.Field.REPORT.name, obj.getReport());
 	    params.addValue(SgReportDao.Field.CREATED_AT.name, Date.from(obj.getCreatedAt()));
@@ -42,6 +43,7 @@ public class JdbcSgReportDao extends JdbcBaseDao<SgReport> implements SgReportDa
 	      {
 	    	  SgReport obj = new SgReport();
 	    	  obj.setId(rs.getInt(SgReportDao.Field.ID.name));
+	    	  obj.setUserId(rs.getInt(SgReportDao.Field.USER_ID.name));
 	    	  obj.setMenuId(rs.getInt(SgReportDao.Field.MENU_ID.name));
 	    	  obj.setEmail(rs.getString(SgReportDao.Field.EMAIL.name));
 	    	  obj.setReport(rs.getString(SgReportDao.Field.REPORT.name));

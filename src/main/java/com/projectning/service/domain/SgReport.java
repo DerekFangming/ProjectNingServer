@@ -4,6 +4,7 @@ import java.time.Instant;
 
 public class SgReport {
 	private int id;
+	private int userId;
 	private int menuId;
 	private String email;
 	private String report;
@@ -15,6 +16,14 @@ public class SgReport {
 	
 	public void setId(int id){
 		this.id = id;
+	}
+	
+	public int getUserId(){
+		return userId;
+	}
+	
+	public void setUserId(int userId){
+		this.userId = userId;
 	}
 	
 	public int getMenuId(){

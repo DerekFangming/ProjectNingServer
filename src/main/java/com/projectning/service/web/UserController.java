@@ -42,8 +42,8 @@ public class UserController {
 		
 	}
 	
-	@RequestMapping("/set_current_user_detail")
-    public ResponseEntity<Map<String, Object>> setCurrentUserDetail(@RequestBody Map<String, Object> request) {
+	@RequestMapping("/save_current_user_detail")
+    public ResponseEntity<Map<String, Object>> saveCurrentUserDetail(@RequestBody Map<String, Object> request) {
 		Map<String, Object> respond = new HashMap<String, Object>();
 		try{
 			int userId = userManager.validateAccessToken(request);

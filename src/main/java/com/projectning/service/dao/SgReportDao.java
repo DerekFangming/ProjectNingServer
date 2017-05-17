@@ -11,6 +11,7 @@ import com.projectning.util.Pair;
 public interface SgReportDao extends CommonDao<SgReport>{
 	enum Field implements DaoFieldEnum{
 		ID(true),
+		USER_ID,
 		MENU_ID,
 	    EMAIL,
 	    REPORT,
@@ -45,6 +46,7 @@ public interface SgReportDao extends CommonDao<SgReport>{
 	
 	List<Pair<Enum<?>, String>> FieldTypes = Arrays.asList(
 		    new Pair<Enum<?>, String>(Field.ID, "SERIAL NOT NULL"),
+		    new Pair<Enum<?>, String>(Field.USER_ID, "INTEGER"),
 		    new Pair<Enum<?>, String>(Field.MENU_ID, "INTEGER NOT NULL"),
 		    new Pair<Enum<?>, String>(Field.EMAIL, "TEXT"),
 		    new Pair<Enum<?>, String>(Field.REPORT, "TEXT"),
