@@ -255,6 +255,28 @@ public class UserManagerImpl implements UserManager{
 		}
 	}
 	
+	@Override
+	public void changePassword(String username, String oldPwd, String newPwd, String accessToken) throws IllegalStateException, NotFoundException {
+		if(newPwd.length() != 32)
+			throw new IllegalStateException(ErrorMessage.USER_INTERN_ERROR.getMsg());
+		
+		List<QueryTerm> terms = new ArrayList<QueryTerm>();
+		terms.add(UserDao.Field.USERNAME.getQueryTerm(username));
+		terms.add(UserDao.Field.PASSWORD.getQueryTerm(oldPwd));
+		User user;
+		try{
+			user = userDao.findObject(terms);
+		}catch(NotFoundException e){
+			throw new NotFoundException(ErrorMessage.USER_NOT_FOUND.getMsg());
+		}
+		
+		List<NVPair> newValues = new ArrayList<NVPair>();
+		newValues.add(new NVPair(UserDao.Field.PASSWORD.name, newPwd));
+		newValues.add(new NVPair(UserDao.Field.AUTH_TOKEN.name, accessToken));
+		
+		userDao.update(user.getId(), newValues);
+	}
+	
 	/* The following methods are for user details*/
 
 	@Override

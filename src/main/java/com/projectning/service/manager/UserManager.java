@@ -126,6 +126,17 @@ public interface UserManager {
 	 */
 	public String getUserDisplayedName(int userId) throws NotFoundException;
 	
+	/**
+	 * Change the password of a given user
+	 * @param username the username
+	 * @param oldPwd original md5 encrypted password
+	 * @param newPwd the new md5 encrypted password
+	 * @throws IllegalStateException if password format is incorrect
+	 * @throws NotFoundException if the user does not exist
+	 */
+	public void changePassword(String username, String oldPwd, String newPwd, String accessToken) 
+			throws IllegalStateException, NotFoundException;
+	
 	/* The following methods are for user details*/
 
 	/**

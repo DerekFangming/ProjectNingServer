@@ -82,6 +82,27 @@ public class AuthController {
 		
 	}
 	
+	@RequestMapping("/send_email_confirmation")
+    public ResponseEntity<Map<String, Object>> sendEmailConfirmation(@RequestBody Map<String, Object> request) {
+		Map<String, Object> respond = new HashMap<String, Object>();
+		try{
+			int userId = userManager.validateAccessToken(request);
+			String username = userManager.getUsername(userId);
+			
+			String code = helperManager.getEmailConfirmCode(username);
+			userManager.updateVeriCode(username, code);
+			helperManager.emailConfirm(username, code.replace(".", "="));
+			
+			respond.put("error", "");
+		}catch(Exception e){
+			respond = Util.createErrorRespondFromException(e);
+		}
+	
+		return new ResponseEntity<Map<String, Object>>(respond, HttpStatus.OK);
+		
+	}
+	
+	
 	@RequestMapping("/email/*")
     public ResponseEntity<String> emailVerifivation(HttpServletRequest request) {
 		String code = request.getRequestURI().split("/email/")[1];
@@ -162,13 +183,31 @@ public class AuthController {
 		
 	}
 	
+	@RequestMapping("/change_password")
+    public ResponseEntity<Map<String, Object>> changePassword(@RequestBody Map<String, Object> request) {
+		Map<String, Object> respond = new HashMap<String, Object>();
+		try{
+			int userId = userManager.validateAccessToken(request);
+			String oldPwd = (String)request.get("oldPwd");
+			String newPwd = (String)request.get("newPwd");
+			String username = userManager.getUsername(userId);
+			Instant exp = Instant.now().plus(Duration.ofDays(1));
+			String accessToken = helperManager.createAccessToken(username, exp);
+			
+			userManager.changePassword(username, oldPwd, newPwd, accessToken);
+			respond.put("accessToken", accessToken);
+			respond.put("error", "");
+		}catch(Exception e){
+			respond = Util.createErrorRespondFromException(e);
+		}
+		return new ResponseEntity<Map<String, Object>>(respond, HttpStatus.OK);
+		
+	}
+	
+	
 	@RequestMapping("/auth/*")
     public ResponseEntity<String> home(HttpServletRequest request) {
-		
-        
-        
-        
-        return new ResponseEntity<String>(helperManager.getEmailConfirmedPage("Invalid code"), HttpStatus.OK);
+		return new ResponseEntity<String>(helperManager.getEmailConfirmedPage("Invalid code"), HttpStatus.OK);
     }
 	
 	@RequestMapping(value = "/test_get_request", method = RequestMethod.GET)
@@ -192,22 +231,6 @@ public class AuthController {
 		System.out.println(Date.from(a));
 		System.out.println(Timestamp.from(a));
 		
-		//relationshipManager.removeFriend(2, 3);
-		
-		
-//		
-//	    String a = "";
-//	    
-//	    for(User t : temp){
-//	    	a += Integer.toString(t.getId());
-//	    	a += " ";
-//	    }
-	    
-//		
-//		
-//		List<QueryTerm> values = new ArrayList<QueryTerm>();
-//		values.add(ImageDao.Field.ID.getQueryTerm(RelationalOpType.IN, l));
-//		List<User> temp = u.findAllObjects(values);
 		
 		return new ResponseEntity<String>("", HttpStatus.OK);
 	}
