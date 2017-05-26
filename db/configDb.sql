@@ -41,7 +41,7 @@ CREATE TABLE user_details (
     whats_up varchar(200)
 );
 
-CREATE TABLE Feeds (
+CREATE TABLE feeds (
     id serial primary key,
     body varchar(400),
     owner_id integer NOT NULL,
@@ -68,11 +68,21 @@ content varchar(25000),
 created_at timestamp without time zone
 );
 
-create table sg_reports(
-id serial primary key,
-user_id integer,
-menu_id integer not null,
-email varchar(50),
-report varchar(500),
-created_at timestamp without time zone
+create table wc_reports(
+	id serial primary key,
+	user_id integer,
+	menu_id integer not null,
+	email varchar(50),
+	report text,
+	created_at timestamp without time zone
+);
+
+create table wc_app_versions (
+	id serial primary key,
+	app_version varchar(6) not null,
+	sub_version integer not null,
+	status varchar(3) not null,
+	title varchar(50),
+	message varchar(500),
+	updates text
 );

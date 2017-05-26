@@ -16,14 +16,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.projectning.service.dao.SgDao;
-import com.projectning.service.dao.SgReportDao;
+import com.projectning.service.dao.WcReportDao;
 import com.projectning.service.dao.impl.CoreTableType;
 import com.projectning.service.dao.impl.QueryBuilder;
 import com.projectning.service.dao.impl.QueryTerm;
 import com.projectning.service.dao.impl.QueryType;
 import com.projectning.service.dao.impl.ResultsOrderType;
 import com.projectning.service.domain.Sg;
-import com.projectning.service.domain.SgReport;
+import com.projectning.service.domain.WcReport;
 import com.projectning.service.exceptions.NotFoundException;
 import com.projectning.util.Util;
 
@@ -31,7 +31,7 @@ import com.projectning.util.Util;
 @Controller
 public class SgController {
 	@Autowired private SgDao sgDao;
-	@Autowired private SgReportDao sgReportDao;
+	@Autowired private WcReportDao sgReportDao;
 	
 	public static String CURRENT_VERSION = "1.00";
 	@SuppressWarnings("serial")
@@ -102,7 +102,7 @@ public class SgController {
 			String menuId = request.getParameter("version");
 			String versionStr = versionInfo.get(menuId);
 			String[] values = versionStr.split("&");
-			
+			Thread.sleep(3000);
 		    respond.put("status", values[0]);
 		    respond.put("title", values[1]);
 		    respond.put("msg", values[2]);
@@ -130,7 +130,7 @@ public class SgController {
 			if (email == null || report == null) throw new IllegalStateException("Need a valid email or report");
 			if (email.length()>50 || report.length()>500) throw new IllegalStateException("Input too long");
 			
-			SgReport sgReport = new SgReport();
+			WcReport sgReport = new WcReport();
 			sgReport.setUserId(userId);
 			sgReport.setMenuId(menuId);
 			sgReport.setEmail(email);

@@ -2,7 +2,7 @@ package com.projectning.service.domain;
 
 import java.time.Instant;
 
-public class SgReport {
+public class WcReport {
 	private int id;
 	private int userId;
 	private int menuId;

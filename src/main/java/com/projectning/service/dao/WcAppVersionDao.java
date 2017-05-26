@@ -5,17 +5,18 @@ import java.util.List;
 
 import com.projectning.service.dao.impl.QueryTerm;
 import com.projectning.service.dao.impl.RelationalOpType;
-import com.projectning.service.domain.SgReport;
+import com.projectning.service.domain.WcAppVersion;
 import com.projectning.util.Pair;
 
-public interface SgReportDao extends CommonDao<SgReport>{
+public interface WcAppVersionDao extends CommonDao<WcAppVersion>{
 	enum Field implements DaoFieldEnum{
 		ID(true),
-		USER_ID,
-		MENU_ID,
-	    EMAIL,
-	    REPORT,
-	    CREATED_AT;
+		APP_VERSION,
+		SUB_VERSION,
+	    STATUS,
+	    TITLE,
+	    MESSAGE,
+	    UPDATES;
 		
 		public boolean isPK = false;
 	    public String name;
@@ -46,10 +47,11 @@ public interface SgReportDao extends CommonDao<SgReport>{
 	
 	List<Pair<Enum<?>, String>> FieldTypes = Arrays.asList(
 		    new Pair<Enum<?>, String>(Field.ID, "SERIAL NOT NULL"),
-		    new Pair<Enum<?>, String>(Field.USER_ID, "INTEGER"),
-		    new Pair<Enum<?>, String>(Field.MENU_ID, "INTEGER NOT NULL"),
-		    new Pair<Enum<?>, String>(Field.EMAIL, "TEXT"),
-		    new Pair<Enum<?>, String>(Field.REPORT, "TEXT"),
-		    new Pair<Enum<?>, String>(Field.CREATED_AT, "TIMESTAMP WITHOUT TIME ZONE"));
+		    new Pair<Enum<?>, String>(Field.APP_VERSION, "TEXT NOT NULL"),
+		    new Pair<Enum<?>, String>(Field.SUB_VERSION, "INTEGER NOT NULL"),
+		    new Pair<Enum<?>, String>(Field.STATUS, "TEXT NOT NULL"),
+		    new Pair<Enum<?>, String>(Field.TITLE, "TEXT"),
+		    new Pair<Enum<?>, String>(Field.MESSAGE, "TEXT"),
+		    new Pair<Enum<?>, String>(Field.UPDATES, "TEXT"));
 
 }
