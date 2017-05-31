@@ -3,7 +3,6 @@ package com.projectning.service.domain;
 public class WcAppVersion {
 	private int id;
 	String appVersion;
-	int subVersion;
 	String status;
 	String title;
 	String message;
@@ -23,14 +22,6 @@ public class WcAppVersion {
 	
 	public void setAppVersion(String appVersion){
 		this.appVersion = appVersion;
-	}
-	
-	public int getSubVersion(){
-		return subVersion;
-	}
-	
-	public void setSubVersion(int subVersion){
-		this.subVersion = subVersion;
 	}
 
 	public String getStatus(){

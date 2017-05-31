@@ -79,8 +79,7 @@ create table wc_reports(
 
 create table wc_app_versions (
 	id serial primary key,
-	app_version varchar(6) not null,
-	sub_version integer not null,
+	app_version varchar(10) not null,
 	status varchar(3) not null,
 	title varchar(50),
 	message varchar(500),

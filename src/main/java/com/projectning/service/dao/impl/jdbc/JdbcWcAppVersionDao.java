@@ -24,7 +24,6 @@ public class JdbcWcAppVersionDao extends JdbcBaseDao<WcAppVersion> implements Wc
 	  {
 	    NVPairList params = new NVPairList();
 	    params.addValue(WcAppVersionDao.Field.APP_VERSION.name, obj.getAppVersion());
-	    params.addValue(WcAppVersionDao.Field.SUB_VERSION.name, obj.getSubVersion());
 	    params.addValue(WcAppVersionDao.Field.STATUS.name, obj.getStatus());
 	    params.addValue(WcAppVersionDao.Field.TITLE.name, obj.getTitle());
 	    params.addValue(WcAppVersionDao.Field.MESSAGE.name, obj.getMessage());
@@ -44,7 +43,6 @@ public class JdbcWcAppVersionDao extends JdbcBaseDao<WcAppVersion> implements Wc
 	    	  WcAppVersion obj = new WcAppVersion();
 	    	  obj.setId(rs.getInt(WcAppVersionDao.Field.ID.name));
 	    	  obj.setAppVersion(rs.getString(WcAppVersionDao.Field.APP_VERSION.name));
-	    	  obj.setSubVersion(rs.getInt(WcAppVersionDao.Field.SUB_VERSION.name));
 	    	  obj.setStatus(rs.getString(WcAppVersionDao.Field.STATUS.name));
 	    	  obj.setTitle(rs.getString(WcAppVersionDao.Field.TITLE.name));
 	    	  obj.setMessage(rs.getString(WcAppVersionDao.Field.MESSAGE.name));

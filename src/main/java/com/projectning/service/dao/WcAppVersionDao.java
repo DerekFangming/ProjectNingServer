@@ -12,7 +12,6 @@ public interface WcAppVersionDao extends CommonDao<WcAppVersion>{
 	enum Field implements DaoFieldEnum{
 		ID(true),
 		APP_VERSION,
-		SUB_VERSION,
 	    STATUS,
 	    TITLE,
 	    MESSAGE,
@@ -48,7 +47,6 @@ public interface WcAppVersionDao extends CommonDao<WcAppVersion>{
 	List<Pair<Enum<?>, String>> FieldTypes = Arrays.asList(
 		    new Pair<Enum<?>, String>(Field.ID, "SERIAL NOT NULL"),
 		    new Pair<Enum<?>, String>(Field.APP_VERSION, "TEXT NOT NULL"),
-		    new Pair<Enum<?>, String>(Field.SUB_VERSION, "INTEGER NOT NULL"),
 		    new Pair<Enum<?>, String>(Field.STATUS, "TEXT NOT NULL"),
 		    new Pair<Enum<?>, String>(Field.TITLE, "TEXT"),
 		    new Pair<Enum<?>, String>(Field.MESSAGE, "TEXT"),

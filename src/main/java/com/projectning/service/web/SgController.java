@@ -1,7 +1,10 @@
 package com.projectning.service.web;
 
 import java.time.Instant;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -15,14 +18,19 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import com.projectning.service.dao.FeedDao;
 import com.projectning.service.dao.SgDao;
+import com.projectning.service.dao.WcAppVersionDao;
 import com.projectning.service.dao.WcReportDao;
 import com.projectning.service.dao.impl.CoreTableType;
+import com.projectning.service.dao.impl.LogicalOpType;
 import com.projectning.service.dao.impl.QueryBuilder;
 import com.projectning.service.dao.impl.QueryTerm;
 import com.projectning.service.dao.impl.QueryType;
+import com.projectning.service.dao.impl.RelationalOpType;
 import com.projectning.service.dao.impl.ResultsOrderType;
 import com.projectning.service.domain.Sg;
+import com.projectning.service.domain.WcAppVersion;
 import com.projectning.service.domain.WcReport;
 import com.projectning.service.exceptions.NotFoundException;
 import com.projectning.util.Util;
@@ -31,7 +39,8 @@ import com.projectning.util.Util;
 @Controller
 public class SgController {
 	@Autowired private SgDao sgDao;
-	@Autowired private WcReportDao sgReportDao;
+	@Autowired private WcReportDao wcReportDao;
+	@Autowired private WcAppVersionDao wcAppVersionDao;
 	
 	public static String CURRENT_VERSION = "1.00";
 	@SuppressWarnings("serial")
@@ -99,15 +108,27 @@ public class SgController {
 	public ResponseEntity<Map<String, Object>> getVersionInfo(HttpServletRequest request) {
 		Map<String, Object> respond = new HashMap<String, Object>();
 		try{
-			String menuId = request.getParameter("version");
-			String versionStr = versionInfo.get(menuId);
-			String[] values = versionStr.split("&");
-			Thread.sleep(3000);
-		    respond.put("status", values[0]);
-		    respond.put("title", values[1]);
-		    respond.put("msg", values[2]);
-		    respond.put("version", CURRENT_VERSION);
-		    respond.put("error", "");
+			String versionNo = request.getParameter("version");
+			
+			List<QueryTerm> values = new ArrayList<QueryTerm>();
+			values.add(WcAppVersionDao.Field.APP_VERSION.getQueryTerm(versionNo));
+			WcAppVersion version = wcAppVersionDao.findObject(values);
+			if(version.getStatus() == "OK"){
+				respond.put("status", "OK");
+		    	respond.put("error", "");
+			}else{
+				QueryBuilder qb = QueryType.getQueryBuilder(CoreTableType.WC_APP_VERSIONS, QueryType.FIND);
+			    
+			    qb.addFirstQueryExpression(new QueryTerm(WcAppVersionDao.Field.APP_VERSION.name, 
+			    		RelationalOpType.GE, versionNo));
+			    /*qb.addNextQueryExpression(LogicalOpType.AND,
+			    		new QueryTerm(FeedDao.Field.CREATED_AT.name, RelationalOpType.LT, Date.from(date)));
+			    qb.addNextQueryExpression(LogicalOpType.AND,
+			    		new QueryTerm(FeedDao.Field.ENABLED.name, RelationalOpType.EQ, true));*/
+			    qb.setOrdering(WcAppVersionDao.Field.APP_VERSION.name, ResultsOrderType.ASCENDING);
+			    //qb.setLimit(limit);
+			    List<WcAppVersion> versionList = wcAppVersionDao.findAllObjects(qb.createQuery());
+			}
 		}catch(NumberFormatException e){
 			respond.put("error", "Incorrect request format. Please use menuId as key and put number only as value");
 		}catch(NotFoundException e){
@@ -136,7 +157,7 @@ public class SgController {
 			sgReport.setEmail(email);
 			sgReport.setReport(report);
 			sgReport.setCreatedAt(Instant.now());
-			sgReportDao.persist(sgReport);
+			wcReportDao.persist(sgReport);
 			respond.put("error", "");
 		}catch(IllegalStateException e){
 			respond.put("error", e.getMessage());
