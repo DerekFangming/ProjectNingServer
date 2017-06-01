@@ -10,9 +10,11 @@
 	OK: Client is up to date.
 	AU: App Update required. This will happen when APP_VERSION get increased, namely, we push a new version to the store.
 	BM: Broadcast Message. A message that is sent to all clients.
-	IBM: Apple Broadcast Message. A message that is sent to all Apple clients.
-	ABM: Android Broadcast Message. A message that is sent to all Android clients.
+	IBM: Apple Broadcast Message. A message that is sent to all Apple clients.(not implemented)
+	ABM: Android Broadcast Message. A message that is sent to all Android clients.(not implemented)
 	CU: Content Update. Updates on contents of survival guide.
+	ICU: Apple Content Update. This should not be used unless necessary.(not implemented)
+	ACU: Android Content Update. This should not be used unless necessary.(not implemented)
 */
 
 INSERT INTO WC_APP_VERSIONS (APP_VERSION, STATUS, TITLE, MESSAGE, UPDATES)

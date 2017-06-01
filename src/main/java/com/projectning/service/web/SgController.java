@@ -113,26 +113,47 @@ public class SgController {
 			List<QueryTerm> values = new ArrayList<QueryTerm>();
 			values.add(WcAppVersionDao.Field.APP_VERSION.getQueryTerm(versionNo));
 			WcAppVersion version = wcAppVersionDao.findObject(values);
-			if(version.getStatus() == "OK"){
+			if(version.getStatus().equals("OK")){
 				respond.put("status", "OK");
 		    	respond.put("error", "");
+			}else if (version.getStatus().equals("AU")){
+				respond.put("status", "AU");
+				respond.put("title", version.getTitle());
+				respond.put("message", version.getMessage());
+				respond.put("error", "");
 			}else{
 				QueryBuilder qb = QueryType.getQueryBuilder(CoreTableType.WC_APP_VERSIONS, QueryType.FIND);
 			    
 			    qb.addFirstQueryExpression(new QueryTerm(WcAppVersionDao.Field.APP_VERSION.name, 
 			    		RelationalOpType.GE, versionNo));
-			    /*qb.addNextQueryExpression(LogicalOpType.AND,
-			    		new QueryTerm(FeedDao.Field.CREATED_AT.name, RelationalOpType.LT, Date.from(date)));
-			    qb.addNextQueryExpression(LogicalOpType.AND,
-			    		new QueryTerm(FeedDao.Field.ENABLED.name, RelationalOpType.EQ, true));*/
 			    qb.setOrdering(WcAppVersionDao.Field.APP_VERSION.name, ResultsOrderType.ASCENDING);
-			    //qb.setLimit(limit);
 			    List<WcAppVersion> versionList = wcAppVersionDao.findAllObjects(qb.createQuery());
+			    
+			    int versionSize = versionList.size();
+				if(versionSize < 2){
+					respond.put("error", "Internal server error. Please contact admin@fmning.com for help");
+				}else{
+					String updates = "";
+				    for(WcAppVersion av : versionList){
+				    	if(av.getUpdates() != null){
+				    		updates += av.getUpdates();
+				    	}
+				    }
+					WcAppVersion verCheck = versionList.get(versionSize - 2);
+					if(verCheck.getStatus().equals("BM")){
+						respond.put("status", "BM");
+						respond.put("title", verCheck.getTitle());
+						respond.put("message", verCheck.getMessage());
+					}else{
+						respond.put("status", "CU");
+					}
+					respond.put("newVersion", versionList.get(versionSize - 1).getAppVersion());
+					respond.put("updates", updates);
+					respond.put("error", "");
+				}
 			}
-		}catch(NumberFormatException e){
-			respond.put("error", "Incorrect request format. Please use menuId as key and put number only as value");
 		}catch(NotFoundException e){
-			respond.put("error", "Article does not exist");
+			respond.put("error", "Version does not exist");
 		}catch(Exception e){
 			respond.put("error", "Unknown error");
 		}
