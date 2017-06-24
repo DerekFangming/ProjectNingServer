@@ -85,3 +85,12 @@ create table wc_app_versions (
 	message varchar(500),
 	updates text
 );
+
+create table wc_articles (
+	id serial primary key,
+	title text not null,
+	article text not null,
+	menu_id integer not null,
+	user_id integer not null,
+	created_at timestamp without time zone not null
+);

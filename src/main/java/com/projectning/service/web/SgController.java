@@ -2,7 +2,6 @@ package com.projectning.service.web;
 
 import java.time.Instant;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -18,12 +17,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import com.projectning.service.dao.FeedDao;
 import com.projectning.service.dao.SgDao;
 import com.projectning.service.dao.WcAppVersionDao;
+import com.projectning.service.dao.WcArticleDao;
 import com.projectning.service.dao.WcReportDao;
 import com.projectning.service.dao.impl.CoreTableType;
-import com.projectning.service.dao.impl.LogicalOpType;
 import com.projectning.service.dao.impl.QueryBuilder;
 import com.projectning.service.dao.impl.QueryTerm;
 import com.projectning.service.dao.impl.QueryType;
@@ -31,8 +29,10 @@ import com.projectning.service.dao.impl.RelationalOpType;
 import com.projectning.service.dao.impl.ResultsOrderType;
 import com.projectning.service.domain.Sg;
 import com.projectning.service.domain.WcAppVersion;
+import com.projectning.service.domain.WcArticle;
 import com.projectning.service.domain.WcReport;
 import com.projectning.service.exceptions.NotFoundException;
+import com.projectning.service.manager.UserManager;
 import com.projectning.util.Util;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
@@ -40,7 +40,9 @@ import com.projectning.util.Util;
 public class SgController {
 	@Autowired private SgDao sgDao;
 	@Autowired private WcReportDao wcReportDao;
+	@Autowired private WcArticleDao wcArticleDao;
 	@Autowired private WcAppVersionDao wcAppVersionDao;
+	@Autowired private UserManager userManager;
 	
 	public static String CURRENT_VERSION = "1.00";
 	@SuppressWarnings("serial")
@@ -187,7 +189,34 @@ public class SgController {
 		}
 	
 		return new ResponseEntity<Map<String, Object>>(respond, HttpStatus.OK);
-		
+	}
+	
+	@RequestMapping(value = "/add_sg_article", method = RequestMethod.POST)
+    public ResponseEntity<Map<String, Object>> addSgArticle(@RequestBody Map<String, Object> request) {
+		Map<String, Object> respond = new HashMap<String, Object>();
+		try{
+			int userId = userManager.validateAccessToken(request);
+			int menuId = (int)request.get("menuId");
+			String title = (String)request.get("title");
+			String article = (String)request.get("article");
+			
+			if (title == null || article == null) throw new IllegalStateException("Need a valid title and article");
+			
+			WcArticle sgArticle = new WcArticle();
+			sgArticle.setUserId(userId);
+			sgArticle.setMenuId(menuId);
+			sgArticle.setTitle(title);
+			sgArticle.setArticle(article);
+			sgArticle.setCreatedAt(Instant.now());
+			wcArticleDao.persist(sgArticle);
+			respond.put("error", "");
+		}catch(IllegalStateException e){
+			respond.put("error", e.getMessage());
+		}catch(Exception e){
+			respond.put("error", e.getMessage());
+		}
+	
+		return new ResponseEntity<Map<String, Object>>(respond, HttpStatus.OK);
 	}
 
 }

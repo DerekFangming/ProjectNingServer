@@ -17,6 +17,7 @@ import com.projectning.service.dao.WcReportDao;
 import com.projectning.service.dao.UserDao;
 import com.projectning.service.dao.UserDetailDao;
 import com.projectning.service.dao.WcAppVersionDao;
+import com.projectning.service.dao.WcArticleDao;
 import com.projectning.util.Pair;
 
 
@@ -31,7 +32,8 @@ public enum CoreTableType implements SchemaTable
 	COMMENTS(CoreDataSourceType.CORE, CommentDao.FieldTypes),
 	SG(CoreDataSourceType.CORE, SgDao.FieldTypes),
 	WC_REPORTS(CoreDataSourceType.CORE, WcReportDao.FieldTypes),
-	WC_APP_VERSIONS(CoreDataSourceType.CORE, WcAppVersionDao.FieldTypes)
+	WC_APP_VERSIONS(CoreDataSourceType.CORE, WcAppVersionDao.FieldTypes),
+	WC_ARTICLES(CoreDataSourceType.CORE, WcArticleDao.FieldTypes)
 ;
 
 
