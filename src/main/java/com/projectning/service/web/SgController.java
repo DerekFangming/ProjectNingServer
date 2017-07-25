@@ -32,6 +32,7 @@ import com.projectning.service.domain.WcAppVersion;
 import com.projectning.service.domain.WcArticle;
 import com.projectning.service.domain.WcReport;
 import com.projectning.service.exceptions.NotFoundException;
+import com.projectning.service.manager.HelperManager;
 import com.projectning.service.manager.UserManager;
 import com.projectning.util.Util;
 
@@ -43,6 +44,7 @@ public class SgController {
 	@Autowired private WcArticleDao wcArticleDao;
 	@Autowired private WcAppVersionDao wcAppVersionDao;
 	@Autowired private UserManager userManager;
+	@Autowired private HelperManager helperManager;
 	
 	public static String CURRENT_VERSION = "1.00";
 	@SuppressWarnings("serial")
@@ -181,6 +183,12 @@ public class SgController {
 			sgReport.setReport(report);
 			sgReport.setCreatedAt(Instant.now());
 			wcReportDao.persist(sgReport);
+			String emailList = "fning@wpi.edu,sxie@wpi.edu,ysong5@wpi.edu";
+			String emailContent = "Sender: ";
+			emailContent += email == null ? "Anonymity" : email;
+			emailContent += "\nReport: " + report;
+			emailContent += "\n\n\n\n\nPlease reply this email to unsubscribe";
+			helperManager.sendEmail("admin@fmning.com", emailList, "WPI CSA app user report", emailContent);
 			respond.put("error", "");
 		}catch(IllegalStateException e){
 			respond.put("error", e.getMessage());

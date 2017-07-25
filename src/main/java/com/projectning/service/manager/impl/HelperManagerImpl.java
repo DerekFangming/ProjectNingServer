@@ -56,7 +56,11 @@ public class HelperManagerImpl implements HelperManager{
 	      try{
 	         MimeMessage message = new MimeMessage(session);
 	         message.setFrom(new InternetAddress(from));
-	         message.addRecipient(Message.RecipientType.TO, new InternetAddress(to));
+	         if (to.indexOf(',') > 0){
+	        	 message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(to));   
+	         } else {
+	        	 message.setRecipient(Message.RecipientType.TO, new InternetAddress(to));
+	         }
 	         message.setSubject(subject);
 	         message.setText(content);
 	         Transport.send(message);
