@@ -9,6 +9,12 @@ import com.projectning.service.exceptions.NotFoundException;
 import com.projectning.service.exceptions.SessionExpiredException;
 
 public class Util {
+	
+	//************************* PROD
+	//public final static String emailValidationPath = "http://wc.fmning.com/email/";
+	//************************* TEST
+	public final static String emailValidationPath = "https://wcservice.fmning.com/email/";
+	
 	public final static String imagePath = "/Volumes/Data/images/";
 	public final static int nullInt = -1;
 

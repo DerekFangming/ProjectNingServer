@@ -104,8 +104,8 @@ public class AuthController {
 	}
 	
 	
-	@RequestMapping("/email/*")
-    public ResponseEntity<String> emailVerifivation(HttpServletRequest request) {
+	@RequestMapping(value = "/email/*", method = RequestMethod.GET)
+    public String emailVerifivation(HttpServletRequest request, ModelMap model) {
 		String code = request.getRequestURI().split("/email/")[1];
 		code = code.replace("=", ".");
 		String respond = "";
@@ -131,8 +131,21 @@ public class AuthController {
 		}catch(NotFoundException e){
 			respond = e.getMessage();
 		}
-		//TODO Crazy hack to get the page displayed
-		return new ResponseEntity<String>(helperManager.getEmailConfirmedPage(respond), HttpStatus.OK);
+		
+		if (respond.equals("success")) {
+			model.addAttribute("msg", "Your email address has been confirmed");
+		} else if (respond.equals("resend")) {
+			model.addAttribute("msgFont", "text-danger");
+			model.addAttribute("msg", "Your confirmation code has expired");
+			model.addAttribute("extraMsg", "<div class=\"intro-lead-in\">A new confirmation email has been sent to your inbox</div>");
+		} else {
+			model.addAttribute("msgFont", "text-danger");
+			model.addAttribute("msg", respond);
+			model.addAttribute("extraMsg", "<div class=\"intro-lead-in\">Please email <a href=\"mailto:admin@fmning.com?Subject="
+					+ respond.replace(" ", "%20") + "\" target=\"_top\">admin@fmning.com</a> for support</div>");
+		}
+		
+		return "emailConfirm";
 	}
 	
 	@RequestMapping("/login_for_salt")

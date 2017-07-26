@@ -25,6 +25,7 @@ import com.projectning.auth.JWTVerifyException;
 import com.projectning.service.exceptions.SessionExpiredException;
 import com.projectning.service.manager.HelperManager;
 import com.projectning.util.ErrorMessage;
+import com.projectning.util.Util;
 
 @Component
 public class HelperManagerImpl implements HelperManager{
@@ -37,7 +38,7 @@ public class HelperManagerImpl implements HelperManager{
 		message += "\n";
 		message += "Thank you for creating an account at fmning.com domain. Please click on the following link to confirm your email address.";
 		message += "\n\n";
-		message += "http://wc.fmning.com/email/";
+		message += Util.emailValidationPath;
 		message += code;
 		message += "\n\n";
 		message += "Thank you.";
