@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -210,7 +211,7 @@ public class AuthController {
 		return new ResponseEntity<String>(helperManager.getEmailConfirmedPage("Invalid code"), HttpStatus.OK);
     }
 	
-	@RequestMapping(value = "/test_get_request", method = RequestMethod.GET)
+	@RequestMapping(value = "/get", method = RequestMethod.GET)
 	public ResponseEntity<Map<String, Object>> getFeedPreviewImage(HttpServletRequest request) {
 		Map<String, Object> respond = new HashMap<String, Object>();
 		try{
@@ -220,6 +221,16 @@ public class AuthController {
 			respond = Util.createErrorRespondFromException(e);
 		}
 		return new ResponseEntity<Map<String, Object>>(respond, HttpStatus.OK);
+	}
+	
+	@RequestMapping(value="/build", method = RequestMethod.GET)
+	public String goToBuilder(HttpServletRequest request, ModelMap model){
+		//Pair<Cookie, Cookie> cookies = cookieManager.extractPartnerCookies(request);
+		//model.addAttribute("username",cookies.getFirst().getValue());
+		String a = (String)request.getParameter("haha");
+		model.addAttribute("message", "Hello Spring MVC Framework!");
+		model.addAttribute("color", a);
+		return "emailConfirm";
 	}
 	
 	@RequestMapping("/test")
